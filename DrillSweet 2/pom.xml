@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>DrillSweet2</groupId>
 	<artifactId>DrillSweet2</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
@@ -29,4 +29,6 @@
 			<version>4.2</version>
 		</dependency>
 	</dependencies>
+	<name>DrillSweet 2</name>
+	<url>https://github.com/EbMinor3/DrillSweet2</url>
 </project>
