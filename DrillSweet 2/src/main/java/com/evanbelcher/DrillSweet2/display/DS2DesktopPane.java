@@ -192,6 +192,14 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 					g.drawString(Main.getCurrentPage().getDots().get(p), p.x, p.y - dotSize / 2);
 			}
 		}
+		
+		if (dragging && activePoint != null) {
+			g.setColor(Color.RED);
+			Point p = MouseInfo.getPointerInfo().getLocation();
+			Point q = getLocationOnScreen();
+			p.translate(-q.x, -q.y);
+			g.fillOval(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize);
+		}
 	}
 	
 	/**

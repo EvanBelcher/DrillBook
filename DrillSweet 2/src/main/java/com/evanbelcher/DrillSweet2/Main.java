@@ -60,6 +60,17 @@ public class Main {
 		graphicsRunner = new GraphicsRunner();
 		graphicsRunner.setWindowTitle("DrillSweet 2 - " + pagesFileName);
 		new Thread(graphicsRunner, "GraphicsThread").start();
+		new Thread(() -> {
+			while (true) {
+				try {
+					Thread.sleep(120000);
+					State.print("printing... " + System.currentTimeMillis());
+					save("autosave.pages.json", "autosave.state");
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}, "AutosaveThread").start();
 	}
 	
 	/**
@@ -133,22 +144,34 @@ public class Main {
 	 * 
 	 * @since 1.0
 	 */
-	public static void save() {
+	public static void save(String... filenames) {
+		if (filenames.length != 0 && filenames.length != 2)
+			throw new IllegalArgumentException("filenames needs to either be the two filenames or nothing at all.");
 		new File(filePath).mkdirs();
-		savePages();
-		saveState();
+		if (filenames.length == 0) {
+			savePages();
+			saveState();
+		} else {
+			savePages(filenames[0]);
+			saveState(filenames[1]);
+		}
+		
 	}
 	
 	/**
 	 * Saves the pages in the json file
 	 * 
+	 * @param filenames
+	 * 
 	 * @return the thread used to save the pages
 	 * @since 1.0
 	 */
-	public static Thread savePages() {
+	public static Thread savePages(String... filename) {
+		if (filename.length != 0 && filename.length != 1)
+			throw new IllegalArgumentException("You can only pass in one filename, or none at all.");
 		Runnable r = () -> {
 			String str = gson.toJson(pages);
-			File f = new File(getFilePath() + getPagesFileName());
+			File f = new File(getFilePath() + (filename.length == 0 ? getPagesFileName() : filename[0]));
 			state.setCurrentFileName(getPagesFileName());
 			State.print("Saving:" + getFilePath() + getPagesFileName());
 			BufferedWriter bw;
@@ -168,13 +191,15 @@ public class Main {
 	/**
 	 * Saves the state in the STATE file in json format
 	 * 
+	 * @param filename
+	 * 
 	 * @since 1.0
 	 */
-	private static void saveState() {
+	private static void saveState(String... filename) {
 		Runnable r = () -> {
 			synchronized (state) {
 				String str = gson.toJson(state);
-				File f = new File(filePath + stateFileName);
+				File f = new File(filePath + (filename.length == 0 ? stateFileName : filename[0]));
 				BufferedWriter bw;
 				try {
 					bw = new BufferedWriter(new FileWriter(f));
