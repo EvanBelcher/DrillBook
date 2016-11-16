@@ -1,13 +1,13 @@
 
-package com.evanbelcher.DrillSweet2.graphics;
+package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.Dimension;
 import java.awt.event.*;
 import java.io.File;
 import java.util.*;
 import javax.swing.*;
-import com.evanbelcher.DrillSweet2.*;
-import com.evanbelcher.DrillSweet2.data.State;
+import main.java.com.evanbelcher.DrillSweet2.*;
+import main.java.com.evanbelcher.DrillSweet2.data.State;
 
 /**
  * Custom JMenuBar holding the miscellaneous controls

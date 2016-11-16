@@ -1,5 +1,5 @@
 
-package com.evanbelcher.DrillSweet2;
+package main.java.com.evanbelcher.DrillSweet2;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
-import com.evanbelcher.DrillSweet2.graphics.*;
+import main.java.com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
+import main.java.com.evanbelcher.DrillSweet2.display.*;
 
 /**
  * Creates dot sheets for all dots

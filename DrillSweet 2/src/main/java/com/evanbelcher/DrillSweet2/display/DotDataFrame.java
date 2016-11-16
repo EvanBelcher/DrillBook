@@ -1,12 +1,12 @@
 
-package com.evanbelcher.DrillSweet2.graphics;
+package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import com.evanbelcher.DrillSweet2.Main;
-import com.evanbelcher.DrillSweet2.data.Page;
+import main.java.com.evanbelcher.DrillSweet2.Main;
+import main.java.com.evanbelcher.DrillSweet2.data.Page;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -311,9 +311,14 @@ public class DotDataFrame extends JInternalFrame {
 		instrument.setSelectedItem(String.valueOf(Main.getCurrentPage().getDots().get(mdp.getActivePoint()).replaceAll("[0-9]", "").charAt(0)));
 		number.setEnabled(true);
 		number.setValue(Integer.parseInt(Main.getCurrentPage().getDots().get(mdp.getActivePoint()).replaceAll("[A-Za-z]", "")));
+		
+		Rectangle field = DS2DesktopPane.getField();
+		
 		xPos.setEnabled(true);
+		xPos.setModel(new SpinnerNumberModel(mdp.getActivePoint().x, field.x, field.width + field.x, 1));
 		xPos.setValue(mdp.getActivePoint().x);
 		yPos.setEnabled(true);
+		yPos.setModel(new SpinnerNumberModel(mdp.getActivePoint().y, field.y, field.height + field.y, 1));
 		yPos.setValue(mdp.getActivePoint().y);
 		position.setEnabled(true);
 		updatePosition();

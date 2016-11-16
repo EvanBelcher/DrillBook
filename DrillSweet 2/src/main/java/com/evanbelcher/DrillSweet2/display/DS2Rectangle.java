@@ -1,5 +1,5 @@
 
-package com.evanbelcher.DrillSweet2.graphics;
+package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.Rectangle;
 

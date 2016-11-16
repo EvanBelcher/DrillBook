@@ -1,5 +1,5 @@
 
-package com.evanbelcher.DrillSweet2.graphics;
+package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -7,8 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
-import com.evanbelcher.DrillSweet2.Main;
-import com.evanbelcher.DrillSweet2.data.*;
+import main.java.com.evanbelcher.DrillSweet2.Main;
+import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 /**
  * Custom JDesktopPane to display the field
@@ -56,12 +56,61 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	 * @since 1.0
 	 */
 	private void getImage() throws IOException {
-		img = ImageIO.read(new File("Blank_Marching_Band_Drill_Design_Paper-1.jpg"));
+		img = ImageIO.read(Main.getFile("field.png"));
 		double scaleFactor = Math.min(getSize().getWidth() / img.getWidth(), getSize().getHeight() / img.getHeight());
 		imgWidth = (int) (img.getWidth() * scaleFactor);
 		imgHeight = (int) (img.getHeight() * scaleFactor);
-		scaleFactor = scaleFactor / 0.7426415094339622;
-		field = new DS2Rectangle(field.x * scaleFactor, field.y * scaleFactor, field.width * scaleFactor, field.height * scaleFactor);
+	}
+	
+	/**
+	 * Sets the field.
+	 * 
+	 * @since 1.0
+	 */
+	private void getFieldSize() {
+		BufferedImage bi = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = bi.createGraphics();
+		g.drawImage(img, (getSize().width - imgWidth) / 2, (getSize().height - imgHeight) / 2, imgWidth, imgHeight, null);
+		g.dispose();
+		
+		int startX = 0, startY = 0, endX = 0, endY = 0;
+		
+		//		System.out.println(bi.getWidth() + " " + bi.getHeight());
+		
+		a:
+		for (int i = 0; i < bi.getWidth(); i++) {
+			for (int x = 0; x <= i; x++) {
+				int y = i - x;
+				Color c = new Color(bi.getRGB(x, y));
+				//				System.out.println("beginning " + i + " " + x + " " + y + " " + c);
+				if (c.getRed() > c.getGreen() + c.getBlue() + 50) {
+					startX = x;
+					startY = y;
+					break a;
+				}
+			}
+		}
+		
+		b:
+		for (int i = bi.getWidth() - 1; i >= 0; i--) {
+			for (int x = bi.getWidth() - 1; x >= i; x--) {
+				int y = bi.getHeight() - 1 - (x - i);
+				//				System.out.print("end " + i + " " + x + " " + y + " ");
+				Color c = new Color(bi.getRGB(x, y));
+				//				System.out.println(c);
+				if (c.getRed() > c.getGreen() + c.getBlue() + 50) {
+					endX = x;
+					endY = y;
+					break b;
+				}
+			}
+		}
+		
+		//scaleFactor = scaleFactor / 0.7426415094339622;
+		//field = new DS2Rectangle(field.x * scaleFactor, field.y * scaleFactor, field.width * scaleFactor, field.height * scaleFactor);
+		field = new DS2Rectangle(startX, startY, endX - startX, endY - startY);
+		
+		System.out.println(field);
 		//field = new Rectangle(field.x * getSize().getWidth() / 1914, field.y * getSize().getHeight() / 984)
 	}
 	
@@ -101,8 +150,8 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 		if (Main.getState().isShowGrid()) {
 			if (first) {
 				try {
-					
 					getImage();
+					getFieldSize();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -259,6 +308,7 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 					Main.getCurrentPage().getDots().put(p, s);
 					activePoint = p;
 				}
+				ddf.updateAll(activePoint);
 				break;
 			case 3:
 				boolean intersects = false;

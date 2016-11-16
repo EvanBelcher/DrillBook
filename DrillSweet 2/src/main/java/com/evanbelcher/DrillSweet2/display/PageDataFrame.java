@@ -1,4 +1,4 @@
-package com.evanbelcher.DrillSweet2.graphics;
+package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.*;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.event.*;
-import com.evanbelcher.DrillSweet2.Main;
-import com.evanbelcher.DrillSweet2.data.*;
+import main.java.com.evanbelcher.DrillSweet2.Main;
+import main.java.com.evanbelcher.DrillSweet2.data.*;
 import net.miginfocom.swing.MigLayout;
 
 /**

@@ -1,10 +1,10 @@
 
-package com.evanbelcher.DrillSweet2.graphics;
+package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.event.*;
 import javax.swing.JComboBox;
-import com.evanbelcher.DrillSweet2.Main;
-import com.evanbelcher.DrillSweet2.data.Page;
+import main.java.com.evanbelcher.DrillSweet2.Main;
+import main.java.com.evanbelcher.DrillSweet2.data.Page;
 
 /**
  * Custom ItemListener for the navigation JComboBox (Page Data).

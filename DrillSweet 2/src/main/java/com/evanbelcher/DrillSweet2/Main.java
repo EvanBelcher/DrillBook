@@ -1,12 +1,12 @@
 
-package com.evanbelcher.DrillSweet2;
+package main.java.com.evanbelcher.DrillSweet2;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.filechooser.FileSystemView;
-import com.evanbelcher.DrillSweet2.data.*;
-import com.evanbelcher.DrillSweet2.graphics.GraphicsRunner;
+import main.java.com.evanbelcher.DrillSweet2.data.*;
+import main.java.com.evanbelcher.DrillSweet2.display.GraphicsRunner;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
@@ -312,6 +312,11 @@ public class Main {
 	 */
 	public static void setPagesFileName(String pagesFileName) {
 		Main.pagesFileName = pagesFileName;
+	}
+	
+	public static File getFile(String file) {
+		ClassLoader classLoader = Main.class.getClassLoader();
+		return new File(classLoader.getResource(file).getFile().replaceAll("%20", " "));
 	}
 	
 }

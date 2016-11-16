@@ -1,5 +1,5 @@
 
-package com.evanbelcher.DrillSweet2.data;
+package main.java.com.evanbelcher.DrillSweet2.data;
 
 import java.awt.Point;
 import java.text.DecimalFormat;
