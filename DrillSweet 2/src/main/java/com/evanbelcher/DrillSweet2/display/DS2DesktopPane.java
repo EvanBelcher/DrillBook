@@ -32,6 +32,7 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	
 	private boolean dragging = false;
 	private boolean mouseOk = true;
+	private boolean cancel = false;
 	
 	/**
 	 * Constructs DS2DesktopPane
@@ -43,8 +44,9 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 		setFocusable(true);
 		setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 		addMouseListener(this);
-		createPageDataFrame();
+		PageDataFrame pdf = createPageDataFrame();
 		createDotDataFrame();
+		ddf.setLocation(pdf.getLocation().x, pdf.getLocation().y + pdf.getSize().height);
 		activePoint = null;
 	}
 	
@@ -75,14 +77,11 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 		
 		int startX = 0, startY = 0, endX = 0, endY = 0;
 		
-		//		System.out.println(bi.getWidth() + " " + bi.getHeight());
-		
 		a:
 		for (int i = 0; i < bi.getWidth(); i++) {
 			for (int x = 0; x <= i; x++) {
 				int y = i - x;
 				Color c = new Color(bi.getRGB(x, y));
-				//				System.out.println("beginning " + i + " " + x + " " + y + " " + c);
 				if (c.getRed() > c.getGreen() + c.getBlue() + 50) {
 					startX = x;
 					startY = y;
@@ -95,9 +94,7 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 		for (int i = bi.getWidth() - 1; i >= 0; i--) {
 			for (int x = bi.getWidth() - 1; x >= i; x--) {
 				int y = bi.getHeight() - 1 - (x - i);
-				//				System.out.print("end " + i + " " + x + " " + y + " ");
 				Color c = new Color(bi.getRGB(x, y));
-				//				System.out.println(c);
 				if (c.getRed() > c.getGreen() + c.getBlue() + 50) {
 					endX = x;
 					endY = y;
@@ -106,12 +103,9 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 			}
 		}
 		
-		//scaleFactor = scaleFactor / 0.7426415094339622;
-		//field = new DS2Rectangle(field.x * scaleFactor, field.y * scaleFactor, field.width * scaleFactor, field.height * scaleFactor);
 		field = new DS2Rectangle(startX, startY, endX - startX, endY - startY);
 		
-		System.out.println(field);
-		//field = new Rectangle(field.x * getSize().getWidth() / 1914, field.y * getSize().getHeight() / 984)
+		State.print(field);
 	}
 	
 	/**
@@ -130,13 +124,14 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	 * 
 	 * @since 1.0
 	 */
-	private void createPageDataFrame() {
+	private PageDataFrame createPageDataFrame() {
 		PageDataFrame frame = new PageDataFrame();
 		frame.setVisible(true);
 		add(frame);
 		try {
 			frame.setSelected(true);
 		} catch (java.beans.PropertyVetoException e) {}
+		return frame;
 	}
 	
 	/**
@@ -281,6 +276,10 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 				}
 				ddf.updateAll(activePoint);
 			}
+			if (dragging && arg0.getButton() == 3) {
+				cancel = true;
+				dragging = false;
+			}
 			
 			mouseOk = true;
 			
@@ -319,24 +318,27 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 				ddf.updateAll(activePoint);
 				break;
 			case 3:
-				boolean intersects = false;
-				Point q = null;
-				for (Point p : Main.getCurrentPage().getDots().keySet()) {
-					if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(arg0.getX(), arg0.getY())) {
-						intersects = true;
-						q = p;
-						break;
+				if (!cancel) {
+					boolean intersects = false;
+					Point q = null;
+					for (Point p : Main.getCurrentPage().getDots().keySet()) {
+						if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(arg0.getX(), arg0.getY())) {
+							intersects = true;
+							q = p;
+							break;
+						}
 					}
-				}
-				if (intersects) {
-					Main.getCurrentPage().getDots().remove(q);
-					if (activePoint == null)
-						ddf.updateAll(activePoint);
-					if (activePoint.equals(q)) {
-						activePoint = null;
-						ddf.updateAll(activePoint);
+					if (intersects) {
+						Main.getCurrentPage().getDots().remove(q);
+						if (activePoint == null)
+							ddf.updateAll(activePoint);
+						if (activePoint.equals(q)) {
+							activePoint = null;
+							ddf.updateAll(activePoint);
+						}
 					}
-				}
+				} else
+					cancel = false;
 				break;
 		}
 		mouseOk = true;

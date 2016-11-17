@@ -20,8 +20,6 @@ public class DotDataFrame extends JInternalFrame {
 	
 	private static final long serialVersionUID = -5792479023645647921L;
 	
-	private static final int padding = 50;
-	
 	JComboBox<String> instrument;
 	JSpinner number;
 	JSpinner xPos;
@@ -68,9 +66,6 @@ public class DotDataFrame extends JInternalFrame {
 		
 		//...Then set the window size or call pack...
 		pack();
-		
-		//Set the window's location.
-		setLocation(GraphicsRunner.SCREEN_SIZE.width - getSize().width - padding, padding * 9);
 	}
 	
 	/**

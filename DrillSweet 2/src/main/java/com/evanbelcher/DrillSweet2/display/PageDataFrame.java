@@ -34,7 +34,6 @@ public class PageDataFrame extends JInternalFrame {
 	private JSpinner textY;
 	
 	private Page currentPage;
-	private static int padding = 50;
 	private static boolean deleting = false;
 	
 	/**
@@ -101,7 +100,7 @@ public class PageDataFrame extends JInternalFrame {
 		pack();
 		
 		//Set the window's location.
-		setLocation(GraphicsRunner.SCREEN_SIZE.width - getSize().width - padding, padding);
+		setLocation(GraphicsRunner.SCREEN_SIZE.width - getSize().width, 0);
 	}
 	
 	/**
