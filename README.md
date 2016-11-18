@@ -25,3 +25,5 @@ Drill Sweet 2 is a marching band drill creation software. It is designed to help
 ##FAQ
 ###What happened to Drill Sweet 1?
 Nobody needs to know.
+
+###Drill Sweet 2 was written by [Evan Belcher](http://evanbelcher.com) in [2016](https://www.youtube.com/watch?v=G9t2H1fC2hY).
