@@ -5,11 +5,11 @@
 
 ##Terminology
 - Page
-	- Individual sheet of drill paper. Also known as a set. A page has [a set of information](../master/Usage.md/editing-the-page) associated with it.
+	- Individual sheet of drill paper. Also known as a set. A page has [a set of information](../master/Usage.md#editing-the-page) associated with it.
 - Show
 	- Set of pages. An entire show is stored in one JSON file.
 - Dot
-	- Individual person represented on a page. A dot has a [a set of information](../master/Usage.md/editing-dots) associated with it.
+	- Individual person represented on a page. A dot has a [a set of information](../master/Usage.md#editing-dots) associated with it.
 - DrillSweet directory
 	- **Documents/DrillSweet 2/** by default
 
@@ -74,7 +74,7 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 
 ##File menu
 - New
-	- Create a new show in the [DrillSweet directory](../master/Usage.md/terminology). It will ask you for a filename for the new page. You don't need to give it the ".json" extension.
+	- Create a new show in the [DrillSweet directory](../master/Usage.md#terminology). It will ask you for a filename for the new page. You don't need to give it the ".json" extension.
 - Open
 	- Open an existing show in the DrillSweet directory.
 - Save
