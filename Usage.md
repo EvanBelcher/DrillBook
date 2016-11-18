@@ -31,33 +31,36 @@ Notes:
 ##Editing the page
 The "Page Data" pane on the right side of the screen contains controls for the entire page.
 - Navigation
-	- 
+	- Pages are shown in the format:
+	
+		> \<Page Number> | \<Song Title>, m.\<Starting Measure>-\<Ending Measure>
+	- Select a page to display that page. You don't need to save the page you're working on before you do this, but it never hurts.
 - Page Number
-	- 
+	- Just shows the page number... You didn't really have a question about this one, right?
 - Song Title
-	- 
+	- Edit the song title here and watch as it magically updates the navigation box and text box.
 - Starting Measure
-	- 
+	- ^
 - Ending Measure
-	- 
+	- ^
 - Counts
-	- 
+	- ^
 - Notes
-	- 
+	- Write whatever you want. It will be shown in the text box.
 - Text X Position
-	- 
+	- Move the text box horizontally.
 - Text Y Position
-	- 
+	- Move the text box vertically.
 - Clear Page
-	- 
+	- Remove all dots from the page. **Does not save automatically, so if you somehow managed to do this accidentally, just close without saving and re-open.**
 - Delete Page
-	- 
+	- Remove this page and change the number of other pages to remove the hole. Band directors hate holes. **Does not save automatically, so if you somehow managed to do this accidentally, just close without saving and re-open.**
 
 ##Display settings
 - Toggle Gridlines
-	- 
+	- Click it once and the grid disappears. Click it again and it's back. Abracadabra!
 - Toggle Dot Names
-	- 
+	- Clap on. Dot names disappear. Clap off. Dot names re-appear.
 
 ##File menu
 - New
