@@ -3,6 +3,16 @@
 ##Installation
 ????????????????????
 
+##Terminology
+- Page
+	- Individual sheet of drill paper. Also known as a set. A page has [a set of information](../master/Usage.md/editing-the-page) associated with it.
+- Show
+	- Set of pages. An entire show is stored in one JSON file.
+- Dot
+	- Individual person represented on a page. A dot has a [a set of information](../master/Usage.md/editing-dots) associated with it.
+- DrillSweet directory
+	- **Documents/DrillSweet 2/** by default
+
 ##Placing and moving dots
 - Click in the bounds of the field to place a dot. It will be automatically selected.
 - Click on an existing dot to select it.
@@ -64,16 +74,16 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 
 ##File menu
 - New
-	- 
+	- Create a new show in the [DrillSweet directory](../master/Usage.md/terminology). It will ask you for a filename for the new page. You don't need to give it the ".json" extension.
 - Open
-	- 
+	- Open an existing show in the DrillSweet directory.
 - Save
-	- 
+	- Save the current show under the current filename. The current filename is displayed in the title bar and taskbar next to "DrillSweet 2".
 - Print Current Page
-	- 
+	- Saves the current show as a PNG file in the DrillSweet directory. Takes current "toggle gridlines" and "toggle dot names" states into account.
 - Print Show
-	- 
+	- Saves every page as a PNG file in a folder in the DrillSweet directory. The name of the folder will be the same as the name of the file of the show.
 - Print Dot Sheets
-	- 
+	- Saves dot sheets for every player as a PNG file in a folder called "Dot Sheets" inside a folder titled as the name of the file of the show inside of the DrillSweet directory. Hope you got all that.
 - Quit
-	- 
+	- Now why would you want to do that?
