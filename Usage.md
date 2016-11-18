@@ -30,11 +30,11 @@ Notes:
 
 ##Editing the page
 The "Page Data" pane on the right side of the screen contains controls for the entire page.
--Navigation
+- Navigation
 	- 
--Page Number
+- Page Number
 	- 
--Song Title
+- Song Title
 	- 
 - Starting Measure
 	- 
