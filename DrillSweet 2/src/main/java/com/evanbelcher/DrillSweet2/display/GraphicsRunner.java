@@ -31,15 +31,64 @@ public class GraphicsRunner extends JFrame implements Runnable {
 	public void run() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		
-		try {
-			desktop = new DS2DesktopPane();
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
+		//set up the frame
+		desktop = new DS2DesktopPane();
 		setContentPane(desktop);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(SCREEN_SIZE);
 		setResizable(false);
+		
+		handleClosing();
+		
+		setJMenuBar(new DS2MenuBar(this, desktop));
+		
+		try {
+			setIconImage(ImageIO.read(Main.getFile("icon.png")));
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		
+		setVisible(true);
+		
+		//thread-safety pauses
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		
+		//normal loop - infinite
+		while (true) {
+			try {
+				desktop.repaint(); //call paint() method for graphics
+			} catch (NullPointerException e) {}
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	/**
+	 * Sets the name and title of the JFrame
+	 * 
+	 * @param str
+	 *            the name to use
+	 * @since 1.0
+	 */
+	public void setWindowTitle(String str) {
+		setName(str);
+		setTitle(str);
+	}
+	
+	/**
+	 * Ask us if we want to save our work on close.
+	 * 
+	 * @since 1.0
+	 */
+	private void handleClosing() {
 		addWindowListener(new WindowListener() {
 			
 			@Override
@@ -82,45 +131,6 @@ public class GraphicsRunner extends JFrame implements Runnable {
 			}
 			
 		});
-		setJMenuBar(new DS2MenuBar(this, desktop));
-		try {
-			setIconImage(ImageIO.read(Main.getFile("icon.png")));
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
-		setVisible(true);
-		
-		//thread-safety pause
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		
-		//game loop - infinite
-		while (true) {
-			try {
-				desktop.repaint(); //call paint() method for graphics
-			} catch (NullPointerException e) {}
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
-	
-	/**
-	 * Sets the name and title of the JFrame
-	 * 
-	 * @param str
-	 *            the name to use
-	 * @since 1.0
-	 */
-	public void setWindowTitle(String str) {
-		setName(str);
-		setTitle(str);
 	}
 	
 }

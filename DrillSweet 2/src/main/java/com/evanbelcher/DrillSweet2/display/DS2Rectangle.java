@@ -32,6 +32,8 @@ public class DS2Rectangle extends Rectangle {
 	}
 	
 	/**
+	 * Override inside() to include the edges of the rectangle
+	 * 
 	 * @param X
 	 *            x coordinate
 	 * @param Y

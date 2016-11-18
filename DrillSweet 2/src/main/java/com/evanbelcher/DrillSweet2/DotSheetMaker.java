@@ -13,6 +13,7 @@ import main.java.com.evanbelcher.DrillSweet2.display.*;
 
 /**
  * Creates dot sheets for all dots
+ * 
  * @author Evan Belcher
  * @version 1.0
  * @since 1.0
@@ -20,14 +21,15 @@ import main.java.com.evanbelcher.DrillSweet2.display.*;
 public class DotSheetMaker extends JPanel {
 	
 	private static final long serialVersionUID = 6371967053629285090L;
-	ConcurrentHashMap<String, HashMap<Integer, String>> map;
-	HashMap<Integer, String> currentMap;
-	String currentName;
-	final int WIDTH = 300;
-	final int HEIGHT = 1600;
+	private ConcurrentHashMap<String, HashMap<Integer, String>> map;
+	private HashMap<Integer, String> currentMap;
+	private String currentName;
+	public final int WIDTH = 300;
+	public final int HEIGHT = 1600;
 	
 	/**
 	 * Constructs object. Automatically runs getDotSheetData().
+	 * 
 	 * @since 1.0
 	 */
 	public DotSheetMaker() {
@@ -37,6 +39,7 @@ public class DotSheetMaker extends JPanel {
 	
 	/**
 	 * Gets data for the dot sheet and stores it in map.
+	 * 
 	 * @since 1.0
 	 */
 	private void getDotSheetData() {
@@ -54,6 +57,7 @@ public class DotSheetMaker extends JPanel {
 	
 	/**
 	 * Prints an individual dot sheet for the currentName and currentMap
+	 * 
 	 * @since 1.0
 	 */
 	@Override
@@ -92,10 +96,12 @@ public class DotSheetMaker extends JPanel {
 	
 	/**
 	 * Prints all dot sheets
+	 * 
 	 * @param
 	 * @return
 	 * @throws
-	 * @since 1.0
+	 * 			@since
+	 *             1.0
 	 */
 	public void printAll() {
 		int height = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).createGraphics().getFontMetrics().getHeight();

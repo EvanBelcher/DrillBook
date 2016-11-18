@@ -15,9 +15,9 @@ import main.java.com.evanbelcher.DrillSweet2.data.Page;
  */
 public class NavigationItemListener implements ItemListener {
 	
-	JComboBox<String> nav;
-	PageDataFrame pdf;
-	Page currentPage;
+	private JComboBox<String> nav;
+	private PageDataFrame pdf;
+	private Page currentPage;
 	
 	/**
 	 * Constructs the NavigationItemListener

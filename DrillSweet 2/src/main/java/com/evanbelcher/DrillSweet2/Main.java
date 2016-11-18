@@ -86,10 +86,10 @@ public class Main {
 			savePages();
 		} else {
 			try {
-				boolean b = state == null;
+				boolean nullState = state == null;
 				loadState();
 				State.print(state);
-				if (b)
+				if (nullState)
 					pagesFileName = state.getCurrentFileName();
 			} catch (FileNotFoundException e) {
 				System.out.println("State file not found: " + filePath + stateFileName);
@@ -196,6 +196,8 @@ public class Main {
 	 * @since 1.0
 	 */
 	private static void saveState(String... filename) {
+		if (filename.length != 0 && filename.length != 1)
+			throw new IllegalArgumentException("You can only pass in one filename, or none at all.");
 		Runnable r = () -> {
 			synchronized (state) {
 				String str = gson.toJson(state);

@@ -49,6 +49,7 @@ public class PageDataFrame extends JInternalFrame {
 		
 		getCurrentPage();
 		
+		//set up components
 		navigation = getNavigation();
 		number = getNumber();
 		song = getSong();
@@ -58,21 +59,10 @@ public class PageDataFrame extends JInternalFrame {
 		notes = getNotes();
 		textX = getTextX();
 		textY = getTextY();
-		clear = new JButton("Clear Page");
-		clear.addActionListener((ActionEvent e) -> {
-			int i = JOptionPane.showConfirmDialog(this, "Are you sure you want to clear this page?", "Clear Page", JOptionPane.YES_NO_OPTION);
-			if (i == 0) {
-				clearPage();
-			}
-		});
-		delete = new JButton("Delete Page");
-		delete.addActionListener((ActionEvent e) -> {
-			int i = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this page?", "Delete Page", JOptionPane.YES_NO_OPTION);
-			if (i == 0) {
-				deletePage();
-			}
-		});
+		clear = getClear();
+		delete = getDelete();
 		
+		//add components to layout
 		setLayout(new MigLayout("wrap 2"));
 		add(new JLabel("Navigation:"));
 		add(navigation, "span 2");
@@ -122,12 +112,16 @@ public class PageDataFrame extends JInternalFrame {
 	 */
 	private JComboBox<String> getNavigation() {
 		ConcurrentHashMap<Integer, Page> pages = Main.getPages();
+		
+		//get each value in pages. sort in descending order, with "New Page" at the bottom
 		String[] vals = new String[pages.size() + 1];
 		for (int i = 1; i <= pages.size(); i++) {
 			vals[pages.size() - i] = pages.get(i).toDisplayString();
 		}
 		vals[pages.size()] = "New Page";
 		JComboBox<String> nav = new JComboBox<String>(vals);
+		
+		//Set the selected index to the current page
 		nav.setSelectedIndex(nav.getItemCount() - Main.getState().getCurrentPage() - 1);
 		nav.addItemListener(new NavigationItemListener(this, nav, currentPage));
 		return nav;
@@ -170,6 +164,8 @@ public class PageDataFrame extends JInternalFrame {
 		JTextField song = new JTextField(50);
 		song.setText(currentPage.getSong());
 		song.setEditable(true);
+		
+		//update the navigation with the most recent song
 		song.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
@@ -305,6 +301,17 @@ public class PageDataFrame extends JInternalFrame {
 		return textY;
 	}
 	
+	private JButton getClear() {
+		JButton clear = new JButton("Clear Page");
+		clear.addActionListener((ActionEvent e) -> {
+			int i = JOptionPane.showConfirmDialog(this, "Are you sure you want to clear this page?", "Clear Page", JOptionPane.YES_NO_OPTION);
+			if (i == 0) {
+				clearPage();
+			}
+		});
+		return clear;
+	}
+	
 	/**
 	 * Clears the current page
 	 * 
@@ -317,19 +324,33 @@ public class PageDataFrame extends JInternalFrame {
 		deleting = false;
 	}
 	
+	private JButton getDelete() {
+		JButton delete = new JButton("Delete Page");
+		delete.addActionListener((ActionEvent e) -> {
+			int i = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this page?", "Delete Page", JOptionPane.YES_NO_OPTION);
+			if (i == 0) {
+				deletePage();
+			}
+		});
+		return delete;
+	}
+	
 	/**
 	 * Deletes the current page
 	 * 
 	 * @since 1.0
 	 */
 	public void deletePage() {
+		//if there's only one page, just clear the page instead.
 		if (Main.getPages().size() == 1) {
 			clearPage();
 			return;
 		}
+		
 		deleting = true;
 		navigation.removeItemListener(navigation.getItemListeners()[0]);
 		
+		//for each page # in pages, if it's greater than the number of the page we are deleting, add a correctly numbered new page to pages
 		int num = currentPage.getNumber();
 		ConcurrentHashMap<Integer, Page> oldPages = new ConcurrentHashMap<>(Main.getPages());
 		for (int i : Main.getPages().keySet()) {
@@ -342,6 +363,8 @@ public class PageDataFrame extends JInternalFrame {
 		Main.getRealPages().remove(Main.getPages().size());
 		
 		getCurrentPage();
+		
+		//update navigation
 		ConcurrentHashMap<Integer, Page> pages = Main.getPages();
 		String[] vals = new String[pages.size() + 1];
 		for (int i = 1; i <= pages.size(); i++) {

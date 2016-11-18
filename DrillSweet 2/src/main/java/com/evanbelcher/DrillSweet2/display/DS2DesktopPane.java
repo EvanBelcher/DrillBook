@@ -31,7 +31,6 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	private DotDataFrame ddf;
 	
 	private boolean dragging = false;
-	private boolean mouseOk = true;
 	private boolean cancel = false;
 	
 	/**
@@ -39,14 +38,16 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	 * 
 	 * @since 1.0
 	 */
-	public DS2DesktopPane() throws IOException {
+	public DS2DesktopPane() {
 		super();
 		setFocusable(true);
 		setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 		addMouseListener(this);
+		
 		PageDataFrame pdf = createPageDataFrame();
 		createDotDataFrame();
 		ddf.setLocation(pdf.getLocation().x, pdf.getLocation().y + pdf.getSize().height);
+		
 		activePoint = null;
 	}
 	
@@ -77,6 +78,7 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 		
 		int startX = 0, startY = 0, endX = 0, endY = 0;
 		
+		//Loop diagonally from top-left corner and find red pixel.
 		a:
 		for (int i = 0; i < bi.getWidth(); i++) {
 			for (int x = 0; x <= i; x++) {
@@ -90,6 +92,7 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 			}
 		}
 		
+		//same, except start at the bottom-right corner
 		b:
 		for (int i = bi.getWidth() - 1; i >= 0; i--) {
 			for (int x = bi.getWidth() - 1; x >= i; x--) {
@@ -104,7 +107,6 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 		}
 		
 		field = new DS2Rectangle(startX, startY, endX - startX, endY - startY);
-		
 		State.print(field);
 	}
 	
@@ -142,21 +144,27 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, GraphicsRunner.SCREEN_SIZE.width, GraphicsRunner.SCREEN_SIZE.height);
-		if (Main.getState().isShowGrid()) {
-			if (first) {
-				try {
-					getImage();
-					getFieldSize();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				finally {
-					first = false;
-				}
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, GraphicsRunner.SCREEN_SIZE.width, GraphicsRunner.SCREEN_SIZE.height);
+		
+		//if it's the first thing, get the image and get the bounds of the field
+		if (first) {
+			try {
+				getImage();
+				getFieldSize();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			
+			finally {
+				first = false;
+			}
+		}
+		
+		if (Main.getState().isShowGrid()) {
+			//draw the grid
 			g.drawImage(img, (getSize().width - imgWidth) / 2, (getSize().height - imgHeight) / 2, imgWidth, imgHeight, null);
 			
+			//draw the text
 			if (!PageDataFrame.getDeleting()) {
 				Page p = Main.getCurrentPage();
 				String str = "Page " + p.getNumber() + " - " + p.getSong() + "\nMeasures " + p.getStartingMeasure() + "-" + p.getEndingMeasure() + ", " + p.getCounts() + " count" + (p.getCounts() == 1 ? "" : "s") + "\n" + p.getNotes();
@@ -179,6 +187,7 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 			
 		}
 		
+		//Draw the points and their names
 		if (!PageDataFrame.getDeleting() && !DotDataFrame.getDeleting()) {
 			for (Point p : Main.getCurrentPage().getDots().keySet()) {
 				g.setColor((p.equals(activePoint)) ? Color.RED : Color.BLACK);
@@ -188,6 +197,7 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 			}
 		}
 		
+		//Draw the dragged point
 		if (dragging && activePoint != null) {
 			g.setColor(Color.RED);
 			Point p = MouseInfo.getPointerInfo().getLocation();
@@ -208,6 +218,7 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 		String folder = "";
 		if (makeFolder)
 			folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 5), 0) + "/";
+		
 		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 5) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"), 0);
 		File f = new File(Main.getFilePath() + folder + fileName + ".png");
 		f.mkdirs();
@@ -234,33 +245,27 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	 */
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		State.print(arg0.getX() + " " + arg0.getY());
+		//Forgive a one-pixel click out of bounds error
 		Point clickPoint = new Point(arg0.getPoint());
 		if (clickPoint.x == field.width + field.x + 1)
 			clickPoint.translate(-1, 0);
 		if (clickPoint.y == field.height + field.y + 1)
 			arg0.getPoint().translate(0, -1);
 		State.print(clickPoint);
+		
 		if (field.contains(clickPoint)) {
-			while (mouseOk == false) {
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
 			
 			if (arg0.getButton() == 1) {
-				boolean b = true;
+				boolean intersects = false;
 				for (Point p : Main.getCurrentPage().getDots().keySet()) {
 					if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(arg0.getX(), arg0.getY())) {
 						dragging = true;
 						activePoint = p;
-						b = false;
+						intersects = true;
 						break;
 					}
 				}
-				if (b) {
+				if (!intersects) {
 					if (activePoint == null) {
 						activePoint = arg0.getPoint();
 						Main.getCurrentPage().getDots().put(activePoint, "A1");
@@ -276,12 +281,10 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 				}
 				ddf.updateAll(activePoint);
 			}
-			if (dragging && arg0.getButton() == 3) {
+			if (dragging && arg0.getButton() == 3) { //cancel drag
 				cancel = true;
 				dragging = false;
 			}
-			
-			mouseOk = true;
 			
 		} else {
 			State.print("click outside boundaries");
@@ -296,17 +299,11 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	 */
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		while (mouseOk == false) {
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 		
 		switch (arg0.getButton()) {
 			case 1:
 				if (dragging) {
+					//Move the point to where you released
 					int x = Math.min(Math.max(arg0.getX(), field.x), field.width + field.x);
 					int y = Math.min(Math.max(arg0.getY(), field.y), field.height + field.y);
 					Point p = new Point(x, y);
@@ -319,29 +316,23 @@ public class DS2DesktopPane extends JDesktopPane implements MouseListener {
 				break;
 			case 3:
 				if (!cancel) {
-					boolean intersects = false;
-					Point q = null;
+					//remove the selected point
 					for (Point p : Main.getCurrentPage().getDots().keySet()) {
 						if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(arg0.getX(), arg0.getY())) {
-							intersects = true;
-							q = p;
+							Main.getCurrentPage().getDots().remove(p);
+							if (activePoint == null)
+								ddf.updateAll(activePoint);
+							if (activePoint.equals(p)) {
+								activePoint = null;
+								ddf.updateAll(activePoint);
+							}
 							break;
 						}
 					}
-					if (intersects) {
-						Main.getCurrentPage().getDots().remove(q);
-						if (activePoint == null)
-							ddf.updateAll(activePoint);
-						if (activePoint.equals(q)) {
-							activePoint = null;
-							ddf.updateAll(activePoint);
-						}
-					}
-				} else
+				} else //forgive the right click release (dont remove another point)
 					cancel = false;
 				break;
 		}
-		mouseOk = true;
 		dragging = false;
 	}
 	

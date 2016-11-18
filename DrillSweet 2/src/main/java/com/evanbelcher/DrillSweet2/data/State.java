@@ -10,7 +10,7 @@ package main.java.com.evanbelcher.DrillSweet2.data;
  */
 public class State {
 	
-	private final static boolean DEBUG_MODE = false;
+	private static final boolean DEBUG_MODE = false;
 	private int currentPage;
 	private boolean showGrid = true;
 	private boolean showNames = true;

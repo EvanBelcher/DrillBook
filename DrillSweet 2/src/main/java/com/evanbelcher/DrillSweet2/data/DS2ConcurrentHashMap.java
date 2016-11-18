@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DS2ConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	
 	private static final long serialVersionUID = -4762144215147408857L;
-
+	
 	public DS2ConcurrentHashMap() {
 		super();
 	}

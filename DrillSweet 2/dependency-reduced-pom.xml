@@ -8,6 +8,14 @@
   <url>https://github.com/EbMinor3/DrillSweet2</url>
   <build>
     <sourceDirectory>src</sourceDirectory>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -20,6 +28,10 @@
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
         <version>2.3</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.1</version>
       </plugin>
     </plugins>
   </build>

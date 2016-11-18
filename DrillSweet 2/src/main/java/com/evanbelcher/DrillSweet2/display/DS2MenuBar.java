@@ -19,8 +19,8 @@ import main.java.com.evanbelcher.DrillSweet2.data.State;
 public class DS2MenuBar extends JMenuBar implements ActionListener {
 	
 	private static final long serialVersionUID = -48484928431063770L;
-	GraphicsRunner gr;
-	DS2DesktopPane desktop;
+	private GraphicsRunner gr;
+	private DS2DesktopPane desktop;
 	
 	/**
 	 * Constructs DS2MenuBar. Adds the menu and menuitems.
@@ -37,12 +37,12 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		gr = graphicsRunner;
 		this.desktop = desktop;
 		
-		//Set up the lone menu.
+		//Set up the menu
 		JMenu menu = new JMenu("File");
 		menu.setMnemonic(KeyEvent.VK_D);
 		add(menu);
 		
-		//Set up the first menu item.
+		//Set up the menu items.
 		JMenuItem menuItem = new JMenuItem("New");
 		menuItem.setMnemonic(KeyEvent.VK_N);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
@@ -95,6 +95,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 		
+		//add these to the menubar itself
 		menuItem = new JMenuItem("Toggle Gridlines");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
 		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
@@ -120,16 +121,9 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		State.print(arg0.getActionCommand());
 		switch (arg0.getActionCommand()) {
 			case "new":
-				int i = JOptionPane.showConfirmDialog(this, "Would you like to save your work first?", "Unsaved Work", JOptionPane.YES_NO_CANCEL_OPTION);
-				if (i == 2)
-					break;
-				if (i == 0) {
-					try {
-						Main.savePages().join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
+				//Try to save work, open new show
+				askToSave();
+				System.out.println("hit");
 				try {
 					newShow();
 				} catch (InterruptedException e) {
@@ -137,16 +131,9 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				}
 				break;
 			case "open":
-				int i2 = JOptionPane.showConfirmDialog(this, "Would you like to save your work first?", "Unsaved Work", JOptionPane.YES_NO_CANCEL_OPTION);
-				if (i2 == 2)
-					break;
-				if (i2 == 0) {
-					try {
-						Main.savePages().join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
+				//Try to save work, get new whow
+				askToSave();
+				System.out.println("hit");
 				try {
 					openShow();
 				} catch (InterruptedException e) {
@@ -174,8 +161,22 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			case "togglenames":
 				Main.getState().setShowNames(!Main.getState().isShowNames());
 				break;
+			case "quit":
 			default:
 				gr.dispatchEvent(new WindowEvent(gr, WindowEvent.WINDOW_CLOSING));
+		}
+	}
+	
+	private void askToSave() {
+		int i = JOptionPane.showConfirmDialog(this, "Would you like to save your work first?", "Unsaved Work", JOptionPane.YES_NO_CANCEL_OPTION);
+		if (i == 2)
+			throw new UnsupportedOperationException("They don't want to do that");
+		if (i == 0) {
+			try {
+				Main.savePages().join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -250,7 +251,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * @since 1.0
 	 */
 	private void openShow() throws InterruptedException {
-		
 		File f = new File(Main.getFilePath());
 		String[] files = f.list();
 		String[] arr = new String[files.length - 1];
