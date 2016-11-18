@@ -19,7 +19,7 @@ Drill Sweet 2 is a marching band drill creation software. It is designed to help
 - Easily print an individual page or the whole show
 - Print dot sheets for every player with one click
 
-[##Usage](../Usage.md)
+[##Usage](../master/Usage.md)
 
 
 ##FAQ
