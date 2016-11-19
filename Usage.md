@@ -80,9 +80,9 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 - Save
 	- Save the current show under the current filename. The current filename is displayed in the title bar and taskbar next to "DrillSweet 2".
 - Print Current Page
-	- Saves the current show as a PNG file in the DrillSweet directory. Takes current "toggle gridlines" and "toggle dot names" states into account.
+	- Saves the current show as a PDF file in the DrillSweet directory. Takes current "toggle gridlines" and "toggle dot names" states into account.
 - Print Show
-	- Saves every page as a PNG file in a folder in the DrillSweet directory. The name of the folder will be the same as the name of the file of the show.
+	- Saves every page as a PDF file. The name of the PDF file will be the same as the name of the file of the show.
 - Print Dot Sheets
 	- Saves dot sheets for every player as a PNG file in a folder called "Dot Sheets" inside a folder titled as the name of the file of the show inside of the DrillSweet directory. Hope you got all that.
 - Quit
