@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
+
 import main.java.com.evanbelcher.DrillSweet2.Main;
 import main.java.com.evanbelcher.DrillSweet2.data.Page;
 import net.miginfocom.swing.MigLayout;
@@ -26,7 +27,6 @@ public class DotDataFrame extends JInternalFrame {
 	JTextArea position;
 
 	DS2DesktopPane mdp;
-	private Page currentPage;
 	static boolean deleting;
 
 	/**
@@ -75,8 +75,7 @@ public class DotDataFrame extends JInternalFrame {
 	 * @since 1.0
 	 */
 	public Page getCurrentPage() {
-		currentPage = Main.getCurrentPage();
-		return currentPage;
+		return Main.getCurrentPage();
 	}
 
 	/**
@@ -295,12 +294,8 @@ public class DotDataFrame extends JInternalFrame {
 		position.setEnabled(true);
 		updatePosition();
 
-		instrument.addItemListener((ItemEvent e) -> {
-			Main.getCurrentPage().getDots().put(mdp.getActivePoint(), (String) instrument.getSelectedItem() + (int) number.getValue());
-		});
-		number.addChangeListener((ChangeEvent e) -> {
-			Main.getCurrentPage().getDots().put(mdp.getActivePoint(), (String) instrument.getSelectedItem() + (int) number.getValue());
-		});
+		instrument.addItemListener((ItemEvent e) -> Main.getCurrentPage().getDots().put(mdp.getActivePoint(), (String) instrument.getSelectedItem() + (int) number.getValue()));
+		number.addChangeListener((ChangeEvent e) -> Main.getCurrentPage().getDots().put(mdp.getActivePoint(), (String) instrument.getSelectedItem() + (int) number.getValue()));
 	}
 
 	/**

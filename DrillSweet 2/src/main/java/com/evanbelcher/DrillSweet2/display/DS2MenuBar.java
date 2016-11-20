@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
+
 import main.java.com.evanbelcher.DrillSweet2.*;
 import main.java.com.evanbelcher.DrillSweet2.data.State;
 
@@ -25,7 +26,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Constructs DS2MenuBar. Adds the menu and menuitems.
 	 *
 	 * @param graphicsRunner the JFrame that created this
-	 * @param desktop the DS2DesktopPane in the JFrame
+	 * @param desktop        the DS2DesktopPane in the JFrame
 	 * @since 1.0
 	 */
 	public DS2MenuBar(GraphicsRunner graphicsRunner, DS2DesktopPane desktop) {
@@ -113,8 +114,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 *
 	 * @since 1.0
 	 */
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	@Override public void actionPerformed(ActionEvent arg0) {
 		State.print(arg0.getActionCommand());
 		switch (arg0.getActionCommand()) {
 			case "new":
@@ -229,13 +229,13 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Makes the given file name valid for a Windows operating system.
 	 *
 	 * @param filename the file name to be cleansed
-	 * @param count the count of times this has been called in the same operation.
+	 * @param count    the count of times this has been called in the same operation.
 	 * @return the cleansed file name
 	 * @since 1.0
 	 */
 	public static String cleanseFileName(String filename, int count) {
 		filename = filename.trim();
-		filename = filename.replaceAll("[<>:\"\\/\\\\|?*]", "");
+		filename = filename.replaceAll("[<>:\"/\\\\|?*]", "");
 		filename = filename.trim();
 		if (!filename.isEmpty() && filename.charAt(filename.length() - 1) == '.')
 			filename = filename.substring(0, filename.length() - 1);
@@ -256,21 +256,24 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	private void openShow() throws InterruptedException {
 		File f = new File(Main.getFilePath());
 		String[] files = f.list();
-		String[] arr = new String[files.length - 1];
-		int n = 0;
-		for (int i = 0; i < files.length; i++) {
-			if (files[i].equals("STATE"))
-				n++;
-			else
-				arr[i] = files[i - n];
+		String[] arr;
+		if (files != null) {
+			arr = new String[files.length - 1];
+			int n = 0;
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].equals("STATE"))
+					n++;
+				else
+					arr[i] = files[i - n];
+			}
+			int i = JOptionPane.showOptionDialog(this, "Open show:", "Open", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, arr, "pages.json");
+			if (i == -1)
+				return;
+			String selected = arr[i];
+			Main.setPagesFileName(selected);
+			Main.load();
+			Main.savePages().join();
 		}
-		int i = JOptionPane.showOptionDialog(this, "Open show:", "Open", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, arr, "pages.json");
-		if (i == -1)
-			return;
-		String selected = arr[i];
-		Main.setPagesFileName(selected);
-		Main.load();
-		Main.savePages().join();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
+
 import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -19,7 +20,8 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
  * @author Evan Belcher
  * @version 1.0
  */
-class DS2DesktopPane extends JDesktopPane implements MouseListener {
+@SuppressWarnings("ConstantConditions") class DS2DesktopPane extends JDesktopPane
+		implements MouseListener {
 
 	private static final long serialVersionUID = -6004681236445735439L;
 
@@ -146,8 +148,7 @@ class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	 *
 	 * @since 1.0
 	 */
-	@Override
-	public void paintComponent(Graphics g) {
+	@Override public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, GraphicsRunner.SCREEN_SIZE.width, GraphicsRunner.SCREEN_SIZE.height);
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, GraphicsRunner.SCREEN_SIZE.width, GraphicsRunner.SCREEN_SIZE.height);
@@ -159,8 +160,7 @@ class DS2DesktopPane extends JDesktopPane implements MouseListener {
 				getFieldSize();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			finally {
+			} finally {
 				first = false;
 			}
 		}
@@ -224,7 +224,7 @@ class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	 * @since 1.0
 	 * @deprecated
 	 */
-	protected void printCurrentPage(boolean makeFolder) {
+	@SuppressWarnings("unused") protected void printCurrentPage(boolean makeFolder) {
 		activePoint = null;
 		ddf.updateAll(activePoint);
 		String folder = "";
@@ -291,8 +291,7 @@ class DS2DesktopPane extends JDesktopPane implements MouseListener {
 
 			contentStream.close();
 			doc.save(f);
-		}
-		finally {
+		} finally {
 			if (doc != null)
 				doc.close();
 		}
@@ -358,8 +357,7 @@ class DS2DesktopPane extends JDesktopPane implements MouseListener {
 			doc.save(f);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			if (doc != null)
 				doc.close();
 			pdf.updateAfterPrintAll();
@@ -368,8 +366,7 @@ class DS2DesktopPane extends JDesktopPane implements MouseListener {
 
 	//Mouselistener
 
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	@Override public void mouseClicked(MouseEvent arg0) {
 	}
 
 	/**
@@ -377,8 +374,7 @@ class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	 *
 	 * @since 1.0
 	 */
-	@Override
-	public void mousePressed(MouseEvent arg0) {
+	@Override public void mousePressed(MouseEvent arg0) {
 		//Forgive a one-pixel click out of bounds error
 		Point clickPoint = new Point(arg0.getPoint());
 		if (clickPoint.x == field.width + field.x + 1)
@@ -431,8 +427,7 @@ class DS2DesktopPane extends JDesktopPane implements MouseListener {
 	 *
 	 * @since 1.0
 	 */
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
+	@Override public void mouseReleased(MouseEvent arg0) {
 
 		switch (arg0.getButton()) {
 			case 1:
@@ -476,12 +471,10 @@ class DS2DesktopPane extends JDesktopPane implements MouseListener {
 		dragging = false;
 	}
 
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
+	@Override public void mouseEntered(MouseEvent arg0) {
 	}
 
-	@Override
-	public void mouseExited(MouseEvent arg0) {
+	@Override public void mouseExited(MouseEvent arg0) {
 	}
 
 	/**

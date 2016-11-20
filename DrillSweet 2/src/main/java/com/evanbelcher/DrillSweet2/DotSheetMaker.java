@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+
 import be.quodlibet.boxable.BaseTable;
 import be.quodlibet.boxable.datatable.DataTable;
 import main.java.com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
@@ -77,8 +78,7 @@ public class DotSheetMaker extends JPanel {
 	 * @since 1.0
 	 * @deprecated
 	 */
-	@Override
-	public void paintComponent(Graphics g) {
+	@Override public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, WIDTH, HEIGHT);
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -117,7 +117,7 @@ public class DotSheetMaker extends JPanel {
 	 * @since 1.0
 	 * @deprecated
 	 */
-	public void printAll() {
+	@SuppressWarnings("unused") public void printAll() {
 		int height = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).createGraphics().getFontMetrics().getHeight();
 		String folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 5), 0) + "/Dot Sheets/";
 		File f = new File(Main.getFilePath() + folder);
@@ -132,6 +132,7 @@ public class DotSheetMaker extends JPanel {
 
 			BufferedImage bi = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
+			//noinspection deprecation
 			paintComponent(g);
 			g.dispose();
 			try {
@@ -172,8 +173,7 @@ public class DotSheetMaker extends JPanel {
 						PDPage page = new PDPage();
 						doc.addPage(page);
 
-						@SuppressWarnings({ "rawtypes", "unchecked" })
-						List<List> data = new ArrayList();
+						@SuppressWarnings({ "rawtypes", "unchecked" }) List<List> data = new ArrayList();
 
 						PDFont font = PDType1Font.HELVETICA_BOLD;
 						PDPageContentStream contentStream = new PDPageContentStream(doc, page);
@@ -208,11 +208,10 @@ public class DotSheetMaker extends JPanel {
 							float margin = 10;
 							float tableWidth = page.getMediaBox().getWidth() - (2 * margin);
 							float yStartNewPage = page.getMediaBox().getHeight() - (3 * margin);
-							boolean drawContent = true;
-							boolean drawLines = true;
+							//noinspection UnnecessaryLocalVariable
 							float yStart = yStartNewPage;
 							float bottomMargin = 70;
-							BaseTable baseTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, drawLines, drawContent);
+							BaseTable baseTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, true, true);
 							DataTable dataTable = new DataTable(baseTable, page);
 							dataTable.addListToTable(data, DataTable.HASHEADER);
 							baseTable.draw();
@@ -226,9 +225,9 @@ public class DotSheetMaker extends JPanel {
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
-		finally {
-			doc.close();
+		} finally {
+			if (doc != null)
+				doc.close();
 		}
 		printing = false;
 	}
@@ -247,6 +246,7 @@ public class DotSheetMaker extends JPanel {
 
 	/**
 	 * Returns printing
+	 *
 	 * @since 1.0
 	 */
 	public static boolean isPrinting() {

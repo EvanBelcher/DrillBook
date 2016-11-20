@@ -4,6 +4,7 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.filechooser.FileSystemView;
+
 import main.java.com.evanbelcher.DrillSweet2.data.*;
 import main.java.com.evanbelcher.DrillSweet2.display.GraphicsRunner;
 import com.google.gson.*;
@@ -17,7 +18,7 @@ import com.google.gson.reflect.TypeToken;
  * @version 1.0
  * @since 1.0
  */
-public class Main {
+@SuppressWarnings("SynchronizeOnNonFinalField") public class Main {
 
 	private static ConcurrentHashMap<Integer, Page> pages;
 	private static State state;
@@ -65,6 +66,7 @@ public class Main {
 		graphicsRunner.setWindowTitle("DrillSweet 2 - " + pagesFileName);
 		new Thread(graphicsRunner, "GraphicsThread").start();
 		new Thread(() -> {
+			//noinspection InfiniteLoopStatement
 			while (true) {
 				try {
 					Thread.sleep(120000);
@@ -118,7 +120,7 @@ public class Main {
 	 * Loads the state from the STATE file
 	 *
 	 * @throws FileNotFoundException if the STATE file cannot be found; this is handled by the
-	 *             load() method
+	 *                               load() method
 	 * @since 1.0
 	 */
 	private static void loadState() throws FileNotFoundException {
@@ -131,7 +133,7 @@ public class Main {
 	 * Loads the pages from the json file
 	 *
 	 * @throws FileNotFoundException if the json file cannot be found; this is handled by the load()
-	 *             method
+	 *                               method
 	 * @since 1.0
 	 */
 	private static void loadPages() throws FileNotFoundException {
@@ -233,10 +235,10 @@ public class Main {
 	 * Add the given page at the given index
 	 *
 	 * @param index the index for the page
-	 * @param page the page to be added
+	 * @param page  the page to be added
 	 * @since 1.0
 	 */
-	public static void addPage(int index, Page page) {
+	@SuppressWarnings("unused") public static void addPage(int index, Page page) {
 		pages.put(index, page);
 	}
 
@@ -246,7 +248,7 @@ public class Main {
 	 * @since 1.0
 	 */
 	public static ConcurrentHashMap<Integer, Page> getPages() {
-		return new ConcurrentHashMap<Integer, Page>(pages);
+		return new ConcurrentHashMap<>(pages);
 	}
 
 	/**
@@ -332,7 +334,7 @@ public class Main {
 	 * @return requested file
 	 * @since 1.0
 	 */
-	public static File getFile(String file) {
+	@SuppressWarnings("ConstantConditions") public static File getFile(String file) {
 		ClassLoader classLoader = Main.class.getClassLoader();
 		return new File(classLoader.getResource(file).getFile().replaceAll("%20", " "));
 	}

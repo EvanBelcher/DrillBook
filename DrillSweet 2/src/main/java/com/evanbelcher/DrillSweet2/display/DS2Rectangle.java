@@ -9,7 +9,7 @@ import java.awt.Rectangle;
  * @version 1.0
  * @since 1.0
  */
-public class DS2Rectangle extends Rectangle {
+@SuppressWarnings("unused") public class DS2Rectangle extends Rectangle {
 
 	private static final long serialVersionUID = 8209060786988503451L;
 
@@ -38,7 +38,7 @@ public class DS2Rectangle extends Rectangle {
 	 * @return whether the given coordinates fall inside or on the edges of this rectangle
 	 * @since 1.0
 	 */
-	@Override
+	@SuppressWarnings("deprecation") @Override
 	public boolean inside(int X, int Y) {
 		int w = this.width;
 		int h = this.height;

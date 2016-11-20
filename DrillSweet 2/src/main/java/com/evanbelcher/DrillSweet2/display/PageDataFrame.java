@@ -28,8 +28,6 @@ public class PageDataFrame extends JInternalFrame {
 	private JSpinner endingMeasure;
 	private JSpinner counts;
 	private JTextArea notes;
-	private JButton delete;
-	private JButton clear;
 	private JSpinner textX;
 	private JSpinner textY;
 
@@ -59,8 +57,8 @@ public class PageDataFrame extends JInternalFrame {
 		notes = getNotes();
 		textX = getTextX();
 		textY = getTextY();
-		clear = getClear();
-		delete = getDelete();
+		JButton clear = getClear();
+		JButton delete = getDelete();
 
 		//add components to layout
 		setLayout(new MigLayout("wrap 2"));
@@ -346,13 +344,11 @@ public class PageDataFrame extends JInternalFrame {
 		//for each page # in pages, if it's greater than the number of the page we are deleting, add a correctly numbered new page to pages
 		int num = currentPage.getNumber();
 		ConcurrentHashMap<Integer, Page> oldPages = new ConcurrentHashMap<>(Main.getPages());
-		for (int i : Main.getPages().keySet()) {
-			if (i > num) {
-				Page p = oldPages.get(i);
-				p.setNumber(i - 1);
-				Main.getRealPages().put(i - 1, p);
-			}
-		}
+		Main.getPages().keySet().stream().filter(i -> i > num).forEachOrdered(i -> {
+			Page p = oldPages.get(i);
+			p.setNumber(i - 1);
+			Main.getRealPages().put(i - 1, p);
+		});
 		Main.getRealPages().remove(Main.getPages().size());
 
 		getCurrentPage();
@@ -365,8 +361,8 @@ public class PageDataFrame extends JInternalFrame {
 		}
 		vals[pages.size()] = "New Page";
 		navigation.removeAllItems();
-		for (int i = 0; i < vals.length; i++)
-			navigation.addItem(vals[i]);
+		for (String val : vals)
+			navigation.addItem(val);
 		navigation.setSelectedIndex(navigation.getItemCount() - Main.getState().getCurrentPage() - 1);
 
 		navigation.addItemListener(new NavigationItemListener(this, navigation, currentPage));
@@ -406,8 +402,8 @@ public class PageDataFrame extends JInternalFrame {
 		}
 		vals[pages.size()] = "New Page";
 		navigation.removeAllItems();
-		for (int i = 0; i < vals.length; i++)
-			navigation.addItem(vals[i]);
+		for (String val : vals)
+			navigation.addItem(val);
 		navigation.setSelectedIndex(navigation.getItemCount() - Main.getState().getCurrentPage() - 1);
 
 		navigation.addItemListener(new NavigationItemListener(this, navigation, currentPage));

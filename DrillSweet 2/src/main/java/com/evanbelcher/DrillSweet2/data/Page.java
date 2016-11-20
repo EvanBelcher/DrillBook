@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
  * @version 1.0
  * @since 1.0
  */
-public class Page {
+@SuppressWarnings("unused") public class Page {
 
 	private int number;
 	private String song;
@@ -42,10 +42,10 @@ public class Page {
 	 * Constructs the page object with the given number, song, starting measure, and dots. Uses the
 	 * starting measure as both the starting and ending measures. All other fields are default.
 	 *
-	 * @param number the page number
-	 * @param song the song title
+	 * @param number          the page number
+	 * @param song            the song title
 	 * @param startingMeasure he starting measure number
-	 * @param dots the map of dots
+	 * @param dots            the map of dots
 	 * @since 1.0
 	 */
 	public Page(int number, String song, int startingMeasure, DS2ConcurrentHashMap<Point, String> dots) {
@@ -62,14 +62,14 @@ public class Page {
 	/**
 	 * Constructs the page object with no default values.
 	 *
-	 * @param number the page number
-	 * @param song the song title
+	 * @param number          the page number
+	 * @param song            the song title
 	 * @param startingMeasure the starting measure
-	 * @param endingMeasure the ending measure
-	 * @param counts the counts
-	 * @param notes the notes
-	 * @param textPoint the top-left corner for the page text to be drawn at
-	 * @param dots the map of dots
+	 * @param endingMeasure   the ending measure
+	 * @param counts          the counts
+	 * @param notes           the notes
+	 * @param textPoint       the top-left corner for the page text to be drawn at
+	 * @param dots            the map of dots
 	 * @since 1.0
 	 */
 	public Page(int number, String song, int startingMeasure, int endingMeasure, int counts, String notes, Point textPoint, DS2ConcurrentHashMap<Point, String> dots) {
@@ -251,8 +251,7 @@ public class Page {
 	 * @return String representation of this object
 	 * @since 1.0
 	 */
-	@Override
-	public String toString() {
+	@Override public String toString() {
 		return "Page [number=" + number + ", song=" + song + ", startingMeasure=" + startingMeasure + ", endingMeasure=" + endingMeasure + ", counts=" + counts + ", notes=" + notes + ", dots=" + dots + "]";
 	}
 

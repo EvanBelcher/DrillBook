@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import main.java.com.evanbelcher.DrillSweet2.DotSheetMaker;
 import main.java.com.evanbelcher.DrillSweet2.Main;
 import main.java.com.evanbelcher.DrillSweet2.data.State;
@@ -21,19 +22,16 @@ public class GraphicsRunner extends JFrame implements Runnable {
 	private static final long serialVersionUID = 9006087905794888130L;
 	public static final Rectangle SCREEN_SIZE = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 
-	private DS2DesktopPane desktop;
-
 	/**
 	 * Initializes and sets up frame
 	 *
 	 * @since 1.0
 	 */
-	@Override
-	public void run() {
+	@Override public void run() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 
 		//set up the frame
-		desktop = new DS2DesktopPane();
+		DS2DesktopPane desktop = new DS2DesktopPane();
 		setContentPane(desktop);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(SCREEN_SIZE);
@@ -59,6 +57,7 @@ public class GraphicsRunner extends JFrame implements Runnable {
 		}
 
 		//normal loop - infinite
+		//noinspection InfiniteLoopStatement
 		while (true) {
 			try {
 				desktop.repaint(); //call paint() method for graphics
@@ -93,16 +92,13 @@ public class GraphicsRunner extends JFrame implements Runnable {
 	private void handleClosing() {
 		addWindowListener(new WindowListener() {
 
-			@Override
-			public void windowActivated(WindowEvent arg0) {
+			@Override public void windowActivated(WindowEvent arg0) {
 			}
 
-			@Override
-			public void windowClosed(WindowEvent e) {
+			@Override public void windowClosed(WindowEvent e) {
 			}
 
-			@Override
-			public void windowClosing(WindowEvent e) {
+			@Override public void windowClosing(WindowEvent e) {
 				setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 				if (!State.isDebugMode()) {
 					int i2 = JOptionPane.showConfirmDialog(null, "Would you like to save your work first?", "Unsaved Work", JOptionPane.YES_NO_CANCEL_OPTION);
@@ -122,20 +118,16 @@ public class GraphicsRunner extends JFrame implements Runnable {
 				}
 			}
 
-			@Override
-			public void windowDeactivated(WindowEvent e) {
+			@Override public void windowDeactivated(WindowEvent e) {
 			}
 
-			@Override
-			public void windowDeiconified(WindowEvent e) {
+			@Override public void windowDeiconified(WindowEvent e) {
 			}
 
-			@Override
-			public void windowIconified(WindowEvent e) {
+			@Override public void windowIconified(WindowEvent e) {
 			}
 
-			@Override
-			public void windowOpened(WindowEvent e) {
+			@Override public void windowOpened(WindowEvent e) {
 			}
 
 		});
