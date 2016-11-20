@@ -30,8 +30,8 @@ public class DotSheetMaker extends JPanel {
 	private HashMap<String, HashMap<Integer, String>> map;
 	private HashMap<Integer, String> currentMap;
 	private String currentName;
-	public final int WIDTH = 300;
-	public final int HEIGHT = 1600;
+	private final int WIDTH = 300;
+	private final int HEIGHT = 1600;
 	private Comparator<String> nameComparator = (String o1, String o2) -> {
 		String name1 = o1.replaceAll("[0-9]", "");
 		String name2 = o2.replaceAll("[0-9]", "");
@@ -120,7 +120,7 @@ public class DotSheetMaker extends JPanel {
 	public void printAll() {
 		int height = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).createGraphics().getFontMetrics().getHeight();
 		String folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 5), 0) + "/Dot Sheets/";
-		File f = new File(folder);
+		File f = new File(Main.getFilePath() + folder);
 		f.mkdirs();
 		for (String s : map.keySet()) {
 			String fileName = DS2MenuBar.cleanseFileName(s, 0);
@@ -134,12 +134,6 @@ public class DotSheetMaker extends JPanel {
 			Graphics g = bi.createGraphics();
 			paintComponent(g);
 			g.dispose();
-			f.mkdirs();
-			try {
-				f.createNewFile();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
 			try {
 				ImageIO.write(bi, "png", f);
 			} catch (Exception e) {
