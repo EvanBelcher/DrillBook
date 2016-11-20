@@ -82,7 +82,7 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 - Print Current Page
 	- Saves the current show as a PDF file in the DrillSweet directory. Takes current "toggle gridlines" and "toggle dot names" states into account.
 - Print Show
-	- Saves every page as a PDF file. The name of the PDF file will be the same as the name of the file of the show.
+	- Saves every page as a PDF file. The name of the PDF file will be the same as the name of the file of the show, plus "full show".
 - Print Dot Sheets
 	- Saves dot sheets for every player as PDF files named by their instrument letter. These are all put in a folder called the name of your show "Dot Sheets". Hope you got all that.
 - Quit
