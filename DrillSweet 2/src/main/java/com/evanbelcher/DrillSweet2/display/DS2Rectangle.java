@@ -1,43 +1,40 @@
-
 package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.Rectangle;
 
 /**
  * Custom Rectangle whose contain method includes the bounds
- * 
+ *
  * @author Evan Belcher
  * @version 1.0
  * @since 1.0
  */
 public class DS2Rectangle extends Rectangle {
-	
+
 	private static final long serialVersionUID = 8209060786988503451L;
-	
+
 	public DS2Rectangle(Rectangle r) {
 		super(r);
 	}
-	
+
 	public DS2Rectangle(int i, int j, int k, int l) {
 		super(i, j, k, l);
 	}
-	
+
 	/**
 	 * Constructor that takes doubles for convenience / cleanliness
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	public DS2Rectangle(double d, double e, double f, double g) {
 		super((int) d, (int) e, (int) f, (int) g);
 	}
-	
+
 	/**
 	 * Override inside() to include the edges of the rectangle
-	 * 
-	 * @param X
-	 *            x coordinate
-	 * @param Y
-	 *            y coordinate
+	 *
+	 * @param X x coordinate
+	 * @param Y y coordinate
 	 * @return whether the given coordinates fall inside or on the edges of this rectangle
 	 * @since 1.0
 	 */
@@ -60,5 +57,5 @@ public class DS2Rectangle extends Rectangle {
 		//    overflow || intersect
 		return ((w < x || w >= X) && (h < y || h >= Y));
 	}
-	
+
 }

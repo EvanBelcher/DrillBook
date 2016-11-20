@@ -1,4 +1,3 @@
-
 package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.*;
@@ -11,30 +10,29 @@ import net.miginfocom.swing.MigLayout;
 
 /**
  * Custom JInternal Frame to hold controls for the selected dot;
- * 
+ *
  * @author Evan Belcher
  * @version 1.0
  * @since 1.0
  */
 public class DotDataFrame extends JInternalFrame {
-	
+
 	private static final long serialVersionUID = -5792479023645647921L;
-	
+
 	JComboBox<String> instrument;
 	JSpinner number;
 	JSpinner xPos;
 	JSpinner yPos;
 	JTextArea position;
-	
+
 	DS2DesktopPane mdp;
 	private Page currentPage;
 	static boolean deleting;
-	
+
 	/**
 	 * Constructs the object. Adds components.
-	 * 
-	 * @param mdp
-	 *            the DesktopPane that constains this
+	 *
+	 * @param mdp the DesktopPane that constains this
 	 * @since 1.0
 	 */
 	public DotDataFrame(DS2DesktopPane mdp) {
@@ -42,17 +40,17 @@ public class DotDataFrame extends JInternalFrame {
 				false, //closable
 				false, //maximizable
 				true);//iconifiable
-		
+
 		getCurrentPage();
 		this.mdp = mdp;
-		
+
 		//set up components
 		instrument = getInstrument();
 		number = getNumber();
 		xPos = getXPos();
 		yPos = getYPos();
 		position = getPositionText();
-		
+
 		//add components to layout
 		setLayout(new MigLayout("wrap 2"));
 		add(new JLabel("Instrument:"));
@@ -65,14 +63,14 @@ public class DotDataFrame extends JInternalFrame {
 		add(yPos);
 		add(new JLabel("Position Text:"));
 		add(position, "span 2");
-		
+
 		//...Then set the window size or call pack...
 		pack();
 	}
-	
+
 	/**
 	 * Sets and returns the current page
-	 * 
+	 *
 	 * @return current page
 	 * @since 1.0
 	 */
@@ -80,10 +78,10 @@ public class DotDataFrame extends JInternalFrame {
 		currentPage = Main.getCurrentPage();
 		return currentPage;
 	}
-	
+
 	/**
 	 * Initializes instrument to contain the letters A-Z
-	 * 
+	 *
 	 * @return instrument
 	 * @since 1.0
 	 */
@@ -92,12 +90,10 @@ public class DotDataFrame extends JInternalFrame {
 		String[] chars = new String[26];
 		for (int i = 0; i < 26; i++)
 			chars[i] = String.valueOf((char) (65 + i));
-		JComboBox<String> comboBox = new JComboBox<String>(chars);
-		
-		comboBox.addItemListener((ItemEvent e) -> {
-			Main.getCurrentPage().getDots().put(mdp.getActivePoint(), (String) comboBox.getSelectedItem() + (int) number.getValue());
-		});
-		
+		JComboBox<String> comboBox = new JComboBox<>(chars);
+
+		comboBox.addItemListener((ItemEvent e) -> Main.getCurrentPage().getDots().put(mdp.getActivePoint(), (String) comboBox.getSelectedItem() + (int) number.getValue()));
+
 		if (mdp.getActivePoint() != null) {
 			char c = Main.getCurrentPage().getDots().get(mdp.getActivePoint()).replaceAll("[0-9]", "").charAt(0);
 			comboBox.setSelectedIndex(c - 65);
@@ -105,10 +101,10 @@ public class DotDataFrame extends JInternalFrame {
 			comboBox.setEnabled(false);
 		return comboBox;
 	}
-	
+
 	/**
 	 * Initializes number to be the current dot's number
-	 * 
+	 *
 	 * @return number
 	 * @since 1.0
 	 */
@@ -120,16 +116,14 @@ public class DotDataFrame extends JInternalFrame {
 			spinner = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 			spinner.setEnabled(false);
 		}
-		
-		spinner.addChangeListener((ChangeEvent e) -> {
-			Main.getCurrentPage().getDots().put(mdp.getActivePoint(), (String) instrument.getSelectedItem() + (int) spinner.getValue());
-		});
+
+		spinner.addChangeListener((ChangeEvent e) -> Main.getCurrentPage().getDots().put(mdp.getActivePoint(), (String) instrument.getSelectedItem() + (int) spinner.getValue()));
 		return spinner;
 	}
-	
+
 	/**
 	 * Initializes xPos to be the current dot's x position
-	 * 
+	 *
 	 * @return xPos
 	 * @since 1.0
 	 */
@@ -142,7 +136,7 @@ public class DotDataFrame extends JInternalFrame {
 			spinner = new JSpinner(new SpinnerNumberModel(field.x, field.x, field.width + field.x, 1));
 			spinner.setEnabled(false);
 		}
-		
+
 		spinner.addChangeListener((ChangeEvent e) -> {
 			deleting = true;
 			Point old = new Point(mdp.getActivePoint());
@@ -156,10 +150,10 @@ public class DotDataFrame extends JInternalFrame {
 		});
 		return spinner;
 	}
-	
+
 	/**
 	 * Initializes yPos to be the current dot's y position
-	 * 
+	 *
 	 * @return yPos
 	 * @since 1.0
 	 */
@@ -185,13 +179,12 @@ public class DotDataFrame extends JInternalFrame {
 		});
 		return spinner;
 	}
-	
+
 	/**
 	 * Initializes positionText to be the position text of the current dot
-	 * 
+	 *
 	 * @return positionText
-	 * @since
-	 * 		1.0
+	 * @since 1.0
 	 */
 	private JTextArea getPositionText() {
 		JTextArea area;
@@ -203,14 +196,13 @@ public class DotDataFrame extends JInternalFrame {
 		area.setEnabled(false);
 		return area;
 	}
-	
+
 	/**
 	 * Gets the position text of the given point. Example:
 	 * Horizontal - Side 1: 3.75 inside of 25
 	 * Vertical - On Front Hash
-	 * 
-	 * @param p
-	 *            the point
+	 *
+	 * @param p the point
 	 * @return the position text
 	 * @since 1.0
 	 */
@@ -222,13 +214,13 @@ public class DotDataFrame extends JInternalFrame {
 		double third = height / 3.0;
 		double x = p.getX() - field.getX();
 		double y = p.getY() - field.getY();
-		
+
 		String str = "Horizontal - ";
 		if (x < width / 2)
 			str += "Side 1: ";
 		else
 			str += "Side 2: ";
-		
+
 		double distance = Integer.MAX_VALUE;
 		int best = 0;
 		for (int i = 0; i <= 20; i++) {
@@ -239,18 +231,18 @@ public class DotDataFrame extends JInternalFrame {
 		}
 		int closestYardLine = 50 - Math.abs(5 * best - 50);
 		String side = (best * fiveYards > x) != (x < width / 2) ? " inside of " : " outside of ";
-		
+
 		double steps = (distance / fiveYards) * 8.0;
 		steps = Math.round(steps * 4.0) / 4.0;
-		
+
 		str += steps + side + closestYardLine;
 		str = str.replace("0.0 outside of", "On").replace("0.0 inside of", "On");
-		
+
 		if (str.contains("On 50"))
 			str = "Horizontal - On 50";
-		
+
 		str += "\nVertical - ";
-		
+
 		distance = Integer.MAX_VALUE;
 		best = 0;
 		for (int i = 0; i <= 3; i++) {
@@ -260,40 +252,40 @@ public class DotDataFrame extends JInternalFrame {
 			}
 		}
 		String[] hashes = new String[] { "Back Sideline", "Back Hash", "Front Hash", "Front Sideline" };
-		
+
 		side = (best * third > y) ? " behind " : " in front of ";
 		steps = (distance / fiveYards) * 8.0;
 		steps = Math.round(steps * 4.0) / 4.0;
-		
+
 		str += steps + side + hashes[best];
 		str = str.replace("Vertical - 0.0 behind", "Vertical - On").replace("Vertical - 0.0 in front of", "Vertical - On");
 		return str;
 	}
-	
+
 	/**
 	 * Sets position's text to be the position text of the current point
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	private void updatePosition() {
 		position.setText(getPointText(mdp.getActivePoint()));
 	}
-	
+
 	/**
 	 * Updates all components to be accurate to the current dot
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	private void updateAll() {
 		instrument.setEnabled(true);
 		instrument.removeItemListener(instrument.getItemListeners()[0]);
 		number.removeChangeListener(number.getChangeListeners()[0]);
-		instrument.setSelectedItem(String.valueOf(Main.getCurrentPage().getDots().get(mdp.getActivePoint()).replaceAll("[0-9]", "").charAt(0)));
+		instrument.setSelectedItem(String.valueOf(Main.getCurrentPage().getDots().get(mdp.getActivePoint()).replaceAll("[0-9]", "")));
 		number.setEnabled(true);
 		number.setValue(Integer.parseInt(Main.getCurrentPage().getDots().get(mdp.getActivePoint()).replaceAll("[A-Za-z]", "")));
-		
+
 		Rectangle field = DS2DesktopPane.getField();
-		
+
 		xPos.setEnabled(true);
 		xPos.setModel(new SpinnerNumberModel(mdp.getActivePoint().x, field.x, field.width + field.x, 1));
 		xPos.setValue(mdp.getActivePoint().x);
@@ -302,7 +294,7 @@ public class DotDataFrame extends JInternalFrame {
 		yPos.setValue(mdp.getActivePoint().y);
 		position.setEnabled(true);
 		updatePosition();
-		
+
 		instrument.addItemListener((ItemEvent e) -> {
 			Main.getCurrentPage().getDots().put(mdp.getActivePoint(), (String) instrument.getSelectedItem() + (int) number.getValue());
 		});
@@ -310,12 +302,11 @@ public class DotDataFrame extends JInternalFrame {
 			Main.getCurrentPage().getDots().put(mdp.getActivePoint(), (String) instrument.getSelectedItem() + (int) number.getValue());
 		});
 	}
-	
+
 	/**
 	 * Updates all components if the current dot is defined, disables all components if it is not
-	 * 
-	 * @param o
-	 *            the current dot
+	 *
+	 * @param o the current dot
 	 * @since 1.0
 	 */
 	public void updateAll(Object o) {
@@ -329,9 +320,10 @@ public class DotDataFrame extends JInternalFrame {
 			updateAll();
 		}
 	}
-	
+
 	/**
-	 * @return if a point is being deleted
+	 * Returns if a point is being deleted
+	 *
 	 * @since 1.0
 	 */
 	public static boolean getDeleting() {

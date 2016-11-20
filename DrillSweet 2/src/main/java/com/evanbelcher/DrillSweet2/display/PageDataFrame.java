@@ -12,15 +12,15 @@ import net.miginfocom.swing.MigLayout;
 
 /**
  * The JInternalFrame holding controls to change the page
- * 
+ *
  * @author Evan Belcher
  * @version 1.0
  * @since 1.0
  */
 public class PageDataFrame extends JInternalFrame {
-	
+
 	private static final long serialVersionUID = 377622521569426205L;
-	
+
 	private JComboBox<String> navigation;
 	private JLabel number;
 	private JTextField song;
@@ -32,13 +32,13 @@ public class PageDataFrame extends JInternalFrame {
 	private JButton clear;
 	private JSpinner textX;
 	private JSpinner textY;
-	
+
 	private Page currentPage;
 	private static boolean deleting = false;
-	
+
 	/**
 	 * Creates the PageDataFrame object, initializes and adds components
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	public PageDataFrame() {
@@ -46,9 +46,9 @@ public class PageDataFrame extends JInternalFrame {
 				false, //closable
 				false, //maximizable
 				true);//iconifiable
-		
+
 		getCurrentPage();
-		
+
 		//set up components
 		navigation = getNavigation();
 		number = getNumber();
@@ -61,7 +61,7 @@ public class PageDataFrame extends JInternalFrame {
 		textY = getTextY();
 		clear = getClear();
 		delete = getDelete();
-		
+
 		//add components to layout
 		setLayout(new MigLayout("wrap 2"));
 		add(new JLabel("Navigation:"));
@@ -85,17 +85,17 @@ public class PageDataFrame extends JInternalFrame {
 		add(textY);
 		add(clear);
 		add(delete);
-		
+
 		//...Then set the window size or call pack...
 		pack();
-		
+
 		//Set the window's location.
 		setLocation(GraphicsRunner.SCREEN_SIZE.width - getSize().width, 0);
 	}
-	
+
 	/**
 	 * Sets the currentPage field to equal the current page and returns it
-	 * 
+	 *
 	 * @return the current page
 	 * @since 1.0
 	 */
@@ -103,60 +103,59 @@ public class PageDataFrame extends JInternalFrame {
 		currentPage = Main.getCurrentPage();
 		return currentPage;
 	}
-	
+
 	/**
 	 * Initializes navigation to include the display strings of all of the pages, and New Page
-	 * 
+	 *
 	 * @return navigation
 	 * @since 1.0
 	 */
 	private JComboBox<String> getNavigation() {
 		ConcurrentHashMap<Integer, Page> pages = Main.getPages();
-		
+
 		//get each value in pages. sort in descending order, with "New Page" at the bottom
 		String[] vals = new String[pages.size() + 1];
 		for (int i = 1; i <= pages.size(); i++) {
 			vals[pages.size() - i] = pages.get(i).toDisplayString();
 		}
 		vals[pages.size()] = "New Page";
-		JComboBox<String> nav = new JComboBox<String>(vals);
-		
+		JComboBox<String> nav = new JComboBox<>(vals);
+
 		//Set the selected index to the current page
 		nav.setSelectedIndex(nav.getItemCount() - Main.getState().getCurrentPage() - 1);
 		nav.addItemListener(new NavigationItemListener(this, nav, currentPage));
 		return nav;
 	}
-	
+
 	/**
 	 * Updates navigation's text to be current
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	private void updateNavigation() {
 		navigation.removeItemListener(navigation.getItemListeners()[0]);
-		
+
 		int index = navigation.getSelectedIndex();
 		navigation.removeItem(navigation.getSelectedItem());
 		navigation.insertItemAt(currentPage.toDisplayString(), index);
 		navigation.setSelectedIndex(index);
-		
+
 		navigation.addItemListener(new NavigationItemListener(this, navigation, currentPage));
 	}
-	
+
 	/**
 	 * Initializes number to the number of the current page
-	 * 
+	 *
 	 * @return number
 	 * @since 1.0
 	 */
 	private JLabel getNumber() {
-		JLabel number = new JLabel(String.valueOf(currentPage.getNumber()));
-		return number;
+		return new JLabel(String.valueOf(currentPage.getNumber()));
 	}
-	
+
 	/**
 	 * Initializes song to be the current page's song
-	 * 
+	 *
 	 * @return song
 	 * @since 1.0
 	 */
@@ -164,39 +163,39 @@ public class PageDataFrame extends JInternalFrame {
 		JTextField song = new JTextField(50);
 		song.setText(currentPage.getSong());
 		song.setEditable(true);
-		
+
 		//update the navigation with the most recent song
 		song.getDocument().addDocumentListener(new DocumentListener() {
-			
+
 			@Override
 			public void changedUpdate(DocumentEvent arg0) {
-				
+
 			}
-			
+
 			@Override
 			public void insertUpdate(DocumentEvent arg0) {
 				update();
 			}
-			
+
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
 				update();
 			}
-			
+
 			private void update() {
 				currentPage.setSong(song.getText());
 				State.print(currentPage);
 				updateNavigation();
 				song.setCaretPosition(song.getText().length());
 			}
-			
+
 		});
 		return song;
 	}
-	
+
 	/**
 	 * Initializes startingMeasure to be the current page's starting measure [0-infinity)
-	 * 
+	 *
 	 * @return startingMeasure
 	 * @since 1.0
 	 */
@@ -209,10 +208,10 @@ public class PageDataFrame extends JInternalFrame {
 		});
 		return startingMeasure;
 	}
-	
+
 	/**
 	 * Initializes endingMeasure to be the current page's ending measure [0-infinity)
-	 * 
+	 *
 	 * @return endingMeasure
 	 * @since 1.0
 	 */
@@ -225,25 +224,23 @@ public class PageDataFrame extends JInternalFrame {
 		});
 		return endingMeasure;
 	}
-	
+
 	/**
 	 * Initializes counts to be the current page's counts [1,infinity)
-	 * 
+	 *
 	 * @return counts
 	 * @since 1.0
 	 */
 	private JSpinner getCounts() {
 		JSpinner counts = new JSpinner(new SpinnerNumberModel(currentPage.getCounts(), 1, Integer.MAX_VALUE, 1));
 		((DefaultEditor) counts.getEditor()).getTextField().setEditable(true);
-		counts.addChangeListener((ChangeEvent e) -> {
-			currentPage.setCounts((int) counts.getValue());
-		});
+		counts.addChangeListener((ChangeEvent e) -> currentPage.setCounts((int) counts.getValue()));
 		return counts;
 	}
-	
+
 	/**
 	 * Initializes notes to be the current page's notes
-	 * 
+	 *
 	 * @return notes
 	 * @since 1.0
 	 */
@@ -252,55 +249,51 @@ public class PageDataFrame extends JInternalFrame {
 		notes.setText(currentPage.getNotes());
 		notes.setEditable(true);
 		notes.getDocument().addDocumentListener(new DocumentListener() {
-			
+
 			@Override
 			public void changedUpdate(DocumentEvent arg0) {
 			}
-			
+
 			@Override
 			public void insertUpdate(DocumentEvent arg0) {
 				currentPage.setNotes(notes.getText());
 			}
-			
+
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
 				currentPage.setNotes(notes.getText());
 			}
-			
+
 		});
 		return notes;
 	}
-	
+
 	/**
 	 * Initializes textX to be the current page's text x position
-	 * 
+	 *
 	 * @return textX
 	 * @since 1.0
 	 */
 	private JSpinner getTextX() {
 		JSpinner textX = new JSpinner(new SpinnerNumberModel(Main.getCurrentPage().getTextPoint().x, 0, Integer.MAX_VALUE, 5));
 		((DefaultEditor) textX.getEditor()).getTextField().setEditable(true);
-		textX.addChangeListener((ChangeEvent e) -> {
-			Main.getCurrentPage().setTextPoint(new Point((int) textX.getValue(), Main.getCurrentPage().getTextPoint().y));
-		});
+		textX.addChangeListener((ChangeEvent e) -> Main.getCurrentPage().setTextPoint(new Point((int) textX.getValue(), Main.getCurrentPage().getTextPoint().y)));
 		return textX;
 	}
-	
+
 	/**
 	 * Initializes textY to be the current page's text y position
-	 * 
+	 *
 	 * @return textY
 	 * @since 1.0
 	 */
 	private JSpinner getTextY() {
 		JSpinner textY = new JSpinner(new SpinnerNumberModel(Main.getCurrentPage().getTextPoint().y, 0, Integer.MAX_VALUE, 5));
 		((DefaultEditor) textY.getEditor()).getTextField().setEditable(true);
-		textY.addChangeListener((ChangeEvent e) -> {
-			Main.getCurrentPage().setTextPoint(new Point(Main.getCurrentPage().getTextPoint().x, (int) textY.getValue()));
-		});
+		textY.addChangeListener((ChangeEvent e) -> Main.getCurrentPage().setTextPoint(new Point(Main.getCurrentPage().getTextPoint().x, (int) textY.getValue())));
 		return textY;
 	}
-	
+
 	private JButton getClear() {
 		JButton clear = new JButton("Clear Page");
 		clear.addActionListener((ActionEvent e) -> {
@@ -311,10 +304,10 @@ public class PageDataFrame extends JInternalFrame {
 		});
 		return clear;
 	}
-	
+
 	/**
 	 * Clears the current page
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	private void clearPage() {
@@ -323,7 +316,7 @@ public class PageDataFrame extends JInternalFrame {
 		updateAll();
 		deleting = false;
 	}
-	
+
 	private JButton getDelete() {
 		JButton delete = new JButton("Delete Page");
 		delete.addActionListener((ActionEvent e) -> {
@@ -334,10 +327,10 @@ public class PageDataFrame extends JInternalFrame {
 		});
 		return delete;
 	}
-	
+
 	/**
 	 * Deletes the current page
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	public void deletePage() {
@@ -346,10 +339,10 @@ public class PageDataFrame extends JInternalFrame {
 			clearPage();
 			return;
 		}
-		
+
 		deleting = true;
 		navigation.removeItemListener(navigation.getItemListeners()[0]);
-		
+
 		//for each page # in pages, if it's greater than the number of the page we are deleting, add a correctly numbered new page to pages
 		int num = currentPage.getNumber();
 		ConcurrentHashMap<Integer, Page> oldPages = new ConcurrentHashMap<>(Main.getPages());
@@ -361,9 +354,9 @@ public class PageDataFrame extends JInternalFrame {
 			}
 		}
 		Main.getRealPages().remove(Main.getPages().size());
-		
+
 		getCurrentPage();
-		
+
 		//update navigation
 		ConcurrentHashMap<Integer, Page> pages = Main.getPages();
 		String[] vals = new String[pages.size() + 1];
@@ -375,15 +368,15 @@ public class PageDataFrame extends JInternalFrame {
 		for (int i = 0; i < vals.length; i++)
 			navigation.addItem(vals[i]);
 		navigation.setSelectedIndex(navigation.getItemCount() - Main.getState().getCurrentPage() - 1);
-		
+
 		navigation.addItemListener(new NavigationItemListener(this, navigation, currentPage));
 		updateAll();
 		deleting = false;
 	}
-	
+
 	/**
 	 * Updates all of the components
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	public void updateAll() {
@@ -397,13 +390,37 @@ public class PageDataFrame extends JInternalFrame {
 		textX.setValue(currentPage.getTextPoint().x);
 		textY.setValue(currentPage.getTextPoint().y);
 	}
-	
+
 	/**
-	 * @return deleting
+	 * Updates navigation to the selected page at the end of printing all pages
+	 *
+	 * @since 1.0
+	 */
+	public void updateAfterPrintAll() {
+		navigation.removeItemListener(navigation.getItemListeners()[0]);
+		getCurrentPage();
+		ConcurrentHashMap<Integer, Page> pages = Main.getPages();
+		String[] vals = new String[pages.size() + 1];
+		for (int i = 1; i <= pages.size(); i++) {
+			vals[pages.size() - i] = pages.get(i).toDisplayString();
+		}
+		vals[pages.size()] = "New Page";
+		navigation.removeAllItems();
+		for (int i = 0; i < vals.length; i++)
+			navigation.addItem(vals[i]);
+		navigation.setSelectedIndex(navigation.getItemCount() - Main.getState().getCurrentPage() - 1);
+
+		navigation.addItemListener(new NavigationItemListener(this, navigation, currentPage));
+		updateAll();
+	}
+
+	/**
+	 * Returns whether a page is deleting
+	 *
 	 * @since 1.0
 	 */
 	public static boolean getDeleting() {
 		return deleting;
 	}
-	
+
 }

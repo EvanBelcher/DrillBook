@@ -1,4 +1,3 @@
-
 package main.java.com.evanbelcher.DrillSweet2;
 
 import java.io.*;
@@ -13,47 +12,52 @@ import com.google.gson.reflect.TypeToken;
 /**
  * Driver class
  * Handles keeping everything in memory
- * 
+ *
  * @author Evan Belcher
  * @version 1.0
  * @since 1.0
  */
 public class Main {
-	
+
 	private static ConcurrentHashMap<Integer, Page> pages;
 	private static State state;
 	private static String filePath;
 	private static String pagesFileName = "pages.json";
 	private static final String stateFileName = "STATE";
 	private static GraphicsRunner graphicsRunner;
-	
+
 	private static Gson gson;
-	
+
 	/**
 	 * Start stuff
-	 * 
+	 *
 	 * @since 1.0
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) { //look i changed PLEASE WORK
 		init();
 		start();
 	}
-	
+
 	/**
 	 * Initializes the gson and filePath variables and loads the pages and state from the file
 	 * system
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	private static void init() {
 		gson = new GsonBuilder().enableComplexMapKeySerialization()/*.setPrettyPrinting()*/.create();
 		filePath = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\";
+		try {
+			System.setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		load();
 	}
-	
+
 	/**
 	 * Initializes and starts the GraphicsRunner (Graphics Thread)
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	private static void start() {
@@ -72,10 +76,10 @@ public class Main {
 			}
 		}, "AutosaveThread").start();
 	}
-	
+
 	/**
 	 * Loads the state and pages from the file system
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	public static void load() {
@@ -109,39 +113,40 @@ public class Main {
 		if (graphicsRunner != null)
 			graphicsRunner.setWindowTitle("DrillSweet 2 - " + pagesFileName);
 	}
-	
+
 	/**
 	 * Loads the state from the STATE file
-	 * 
-	 * @throws FileNotFoundException
-	 *             if the STATE file cannot be found; this is handled by the load() method
+	 *
+	 * @throws FileNotFoundException if the STATE file cannot be found; this is handled by the
+	 *             load() method
 	 * @since 1.0
 	 */
 	private static void loadState() throws FileNotFoundException {
 		File f = new File(filePath + stateFileName);
 		BufferedReader br = new BufferedReader(new FileReader(f));
-		state = gson.fromJson(br, new State().getClass());
+		state = gson.fromJson(br, State.class);
 	}
-	
+
 	/**
 	 * Loads the pages from the json file
-	 * 
-	 * @throws FileNotFoundException
-	 *             if the json file cannot be found; this is handled by the load() method
+	 *
+	 * @throws FileNotFoundException if the json file cannot be found; this is handled by the load()
+	 *             method
 	 * @since 1.0
 	 */
 	private static void loadPages() throws FileNotFoundException {
 		File f = new File(filePath + pagesFileName);
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		Type type = new TypeToken<ConcurrentHashMap<Integer, Page>>() {
+
 		}.getType();
 		pages = gson.fromJson(br, type);
 		State.print(pages);
 	}
-	
+
 	/**
 	 * Saves the pages and state to the json files
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	public static void save(String... filenames) {
@@ -155,14 +160,13 @@ public class Main {
 			savePages(filenames[0]);
 			saveState(filenames[1]);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Saves the pages in the json file
-	 * 
-	 * @param filenames
-	 * 
+	 *
+	 * @param filename the filename, if not pagesFileName
 	 * @return the thread used to save the pages
 	 * @since 1.0
 	 */
@@ -187,15 +191,14 @@ public class Main {
 		thread.start();
 		return thread;
 	}
-	
+
 	/**
 	 * Saves the state in the STATE file in json format
-	 * 
-	 * @param filename
-	 * 
+	 *
+	 * @param filename the filename, if not stateFileName
 	 * @since 1.0
 	 */
-	private static void saveState(String... filename) {
+	protected static void saveState(String... filename) {
 		if (filename.length != 0 && filename.length != 1)
 			throw new IllegalArgumentException("You can only pass in one filename, or none at all.");
 		Runnable r = () -> {
@@ -214,10 +217,10 @@ public class Main {
 		};
 		new Thread(r, "SaveStateThread").start();
 	}
-	
+
 	/**
 	 * Adds a page with fields based on the current page
-	 * 
+	 *
 	 * @since 1.0
 	 */
 	public static void addPage() {
@@ -225,40 +228,40 @@ public class Main {
 		pages.put(getPages().size() + 1, new Page(getPages().size() + 1, page.getSong(), page.getEndingMeasure() + 1, page.getDots()));
 		setCurrentPage(pages.size());
 	}
-	
+
 	/**
 	 * Add the given page at the given index
-	 * 
-	 * @param index
-	 *            the index for the page
-	 * @param page
-	 *            the page to be added
+	 *
+	 * @param index the index for the page
+	 * @param page the page to be added
 	 * @since 1.0
 	 */
 	public static void addPage(int index, Page page) {
 		pages.put(index, page);
 	}
-	
+
 	/**
-	 * @return a copy of pages
+	 * Returns a copy of pages
+	 *
 	 * @since 1.0
 	 */
 	public static ConcurrentHashMap<Integer, Page> getPages() {
 		return new ConcurrentHashMap<Integer, Page>(pages);
 	}
-	
+
 	/**
-	 * @return the actual pages object
+	 * Returns the actual pages object
+	 *
 	 * @since 1.0
 	 */
 	public static ConcurrentHashMap<Integer, Page> getRealPages() {
 		return pages;
 	}
-	
+
 	/**
 	 * The current page is determined by getting the page from pages corresponding to the
 	 * currentPage stored in the State
-	 * 
+	 *
 	 * @return a copy of the current page
 	 * @since 1.0
 	 */
@@ -272,26 +275,11 @@ public class Main {
 			return getPages().get(1);
 		}
 	}
-	
-	/**
-	 * The current page is determined by getting the page from pages corresponding to the
-	 * currentPage stored in the State
-	 * 
-	 * @return the actual current page object
-	 * @since 1.0
-	 * @since 1.0
-	 */
-	public static Page getRealCurrentPage() {
-		synchronized (state) {
-			return pages.get(state.getCurrentPage());
-		}
-	}
-	
+
 	/**
 	 * Sets the current page number in the State object
-	 * 
-	 * @param i
-	 *            the current page number
+	 *
+	 * @param i the current page number
 	 * @since 1.0
 	 */
 	public static void setCurrentPage(int i) {
@@ -299,51 +287,54 @@ public class Main {
 			state.setCurrentPage(i);
 		}
 	}
-	
+
 	/**
 	 * Returns the State object
-	 * 
-	 * @return the State
+	 *
 	 * @since 1.0
 	 */
 	public static State getState() {
 		return state;
 	}
-	
+
 	/**
 	 * Returns the file path. This maps to the DrillSweet2 folder in Documents
-	 * 
-	 * @return filePath
+	 *
 	 * @since 1.0
 	 */
 	public static String getFilePath() {
 		return filePath;
 	}
-	
+
 	/**
 	 * Returns the file name for the pages json file, should include .json
-	 * 
-	 * @return pagesFileName
+	 *
 	 * @since 1.0
 	 */
 	public static String getPagesFileName() {
 		return pagesFileName;
 	}
-	
+
 	/**
 	 * Sets the file name for the pages json file
-	 * 
-	 * @param pagesFileName
-	 *            the file name, should include .json
+	 *
+	 * @param pagesFileName the file name, should include .json
 	 * @since 1.0
 	 */
 	public static void setPagesFileName(String pagesFileName) {
 		Main.pagesFileName = pagesFileName;
 	}
-	
+
+	/**
+	 * Finds and returns the resource file of the given name
+	 *
+	 * @param file the name of the file
+	 * @return requested file
+	 * @since 1.0
+	 */
 	public static File getFile(String file) {
 		ClassLoader classLoader = Main.class.getClassLoader();
 		return new File(classLoader.getResource(file).getFile().replaceAll("%20", " "));
 	}
-	
+
 }
