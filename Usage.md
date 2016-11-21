@@ -7,7 +7,7 @@
 - Page
 	- Individual sheet of drill paper. Also known as a set. A page has [a set of information](../master/Usage.md#editing-the-page) associated with it.
 - Show
-	- Set of pages. An entire show is stored in one JSON file.
+	- Set of pages. An entire show is stored in one DS2 file **which can be opened as a JSON file**.
 - Dot
 	- Individual person represented on a page. A dot has a [a set of information](../master/Usage.md#editing-dots) associated with it.
 - DrillSweet directory
