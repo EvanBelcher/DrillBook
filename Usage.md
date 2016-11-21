@@ -74,11 +74,13 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 
 ##File menu
 - New
-	- Create a new show in the [DrillSweet directory](../master/Usage.md#terminology). It will ask you for a filename for the new page. You don't need to give it the ".json" extension.
+	- Create a new show in the [DrillSweet directory](../master/Usage.md#terminology) by default or wherever you choose. It will ask you for a filename for the new page. You don't need to give it the ".ds2" extension.
 - Open
-	- Open an existing show in the DrillSweet directory.
+	- Open an existing show in the DrillSweet directory by default or wherever you choose.
 - Save
 	- Save the current show under the current filename. The current filename is displayed in the title bar and taskbar next to "DrillSweet 2".
+- Save As
+	- Save the current show under a new filename.
 - Print Current Page
 	- Saves the current show as a PDF file in the DrillSweet directory. Takes current "toggle gridlines" and "toggle dot names" states into account.
 - Print Show
