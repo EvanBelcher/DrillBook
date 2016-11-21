@@ -14,8 +14,8 @@ import main.java.com.evanbelcher.DrillSweet2.data.State;
  * Custom JFrame and Runnable for the application
  *
  * @author Evan Belcher
- * @version 1.0
- * @since 1.0
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class GraphicsRunner extends JFrame implements Runnable {
 
@@ -25,7 +25,7 @@ public class GraphicsRunner extends JFrame implements Runnable {
 	/**
 	 * Initializes and sets up frame
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	@Override public void run() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
@@ -77,7 +77,7 @@ public class GraphicsRunner extends JFrame implements Runnable {
 	 * Sets the name and title of the JFrame
 	 *
 	 * @param str the name to use
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void setWindowTitle(String str) {
 		setName(str);
@@ -87,7 +87,7 @@ public class GraphicsRunner extends JFrame implements Runnable {
 	/**
 	 * Ask us if we want to save our work on close.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private void handleClosing() {
 		addWindowListener(new WindowListener() {
@@ -115,6 +115,11 @@ public class GraphicsRunner extends JFrame implements Runnable {
 						} catch (InterruptedException e1) {
 							e1.printStackTrace();
 						}
+				}
+				try {
+					Main.saveState().join();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
 				}
 			}
 

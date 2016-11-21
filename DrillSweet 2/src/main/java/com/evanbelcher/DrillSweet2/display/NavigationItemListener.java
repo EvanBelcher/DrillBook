@@ -9,8 +9,8 @@ import main.java.com.evanbelcher.DrillSweet2.data.Page;
  * Custom ItemListener for the navigation JComboBox (Page Data).
  *
  * @author Evan Belcher
- * @version 1.0
- * @since 1.0
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class NavigationItemListener implements ItemListener {
 
@@ -24,7 +24,7 @@ public class NavigationItemListener implements ItemListener {
 	 * @param pdf the PageDataFrame that the combobox is in
 	 * @param nav the combobox
 	 * @param currentPage the current page
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public NavigationItemListener(PageDataFrame pdf, JComboBox<String> nav, Page currentPage) {
 		this.pdf = pdf;
@@ -35,7 +35,7 @@ public class NavigationItemListener implements ItemListener {
 	/**
 	 * Changes the page or creates a new page
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {

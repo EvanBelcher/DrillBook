@@ -1,3 +1,5 @@
+
+
 package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.Point;
@@ -14,8 +16,8 @@ import net.miginfocom.swing.MigLayout;
  * The JInternalFrame holding controls to change the page
  *
  * @author Evan Belcher
- * @version 1.0
- * @since 1.0
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class PageDataFrame extends JInternalFrame {
 
@@ -37,7 +39,7 @@ public class PageDataFrame extends JInternalFrame {
 	/**
 	 * Creates the PageDataFrame object, initializes and adds components
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public PageDataFrame() {
 		super("Page Data", false, //resizable
@@ -95,7 +97,7 @@ public class PageDataFrame extends JInternalFrame {
 	 * Sets the currentPage field to equal the current page and returns it
 	 *
 	 * @return the current page
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public Page getCurrentPage() {
 		currentPage = Main.getCurrentPage();
@@ -106,7 +108,7 @@ public class PageDataFrame extends JInternalFrame {
 	 * Initializes navigation to include the display strings of all of the pages, and New Page
 	 *
 	 * @return navigation
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private JComboBox<String> getNavigation() {
 		ConcurrentHashMap<Integer, Page> pages = Main.getPages();
@@ -128,7 +130,7 @@ public class PageDataFrame extends JInternalFrame {
 	/**
 	 * Updates navigation's text to be current
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private void updateNavigation() {
 		navigation.removeItemListener(navigation.getItemListeners()[0]);
@@ -145,7 +147,7 @@ public class PageDataFrame extends JInternalFrame {
 	 * Initializes number to the number of the current page
 	 *
 	 * @return number
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private JLabel getNumber() {
 		return new JLabel(String.valueOf(currentPage.getNumber()));
@@ -155,7 +157,7 @@ public class PageDataFrame extends JInternalFrame {
 	 * Initializes song to be the current page's song
 	 *
 	 * @return song
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private JTextField getSong() {
 		JTextField song = new JTextField(50);
@@ -195,7 +197,7 @@ public class PageDataFrame extends JInternalFrame {
 	 * Initializes startingMeasure to be the current page's starting measure [0-infinity)
 	 *
 	 * @return startingMeasure
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private JSpinner getStartingMeasure() {
 		JSpinner startingMeasure = new JSpinner(new SpinnerNumberModel(currentPage.getStartingMeasure(), 0, Integer.MAX_VALUE, 1));
@@ -211,7 +213,7 @@ public class PageDataFrame extends JInternalFrame {
 	 * Initializes endingMeasure to be the current page's ending measure [0-infinity)
 	 *
 	 * @return endingMeasure
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private JSpinner getEndingMeasure() {
 		JSpinner endingMeasure = new JSpinner(new SpinnerNumberModel(currentPage.getEndingMeasure(), 0, Integer.MAX_VALUE, 1));
@@ -227,7 +229,7 @@ public class PageDataFrame extends JInternalFrame {
 	 * Initializes counts to be the current page's counts [1,infinity)
 	 *
 	 * @return counts
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private JSpinner getCounts() {
 		JSpinner counts = new JSpinner(new SpinnerNumberModel(currentPage.getCounts(), 1, Integer.MAX_VALUE, 1));
@@ -240,7 +242,7 @@ public class PageDataFrame extends JInternalFrame {
 	 * Initializes notes to be the current page's notes
 	 *
 	 * @return notes
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private JTextArea getNotes() {
 		JTextArea notes = new JTextArea(10, 20);
@@ -270,7 +272,7 @@ public class PageDataFrame extends JInternalFrame {
 	 * Initializes textX to be the current page's text x position
 	 *
 	 * @return textX
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private JSpinner getTextX() {
 		JSpinner textX = new JSpinner(new SpinnerNumberModel(Main.getCurrentPage().getTextPoint().x, 0, Integer.MAX_VALUE, 5));
@@ -283,7 +285,7 @@ public class PageDataFrame extends JInternalFrame {
 	 * Initializes textY to be the current page's text y position
 	 *
 	 * @return textY
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private JSpinner getTextY() {
 		JSpinner textY = new JSpinner(new SpinnerNumberModel(Main.getCurrentPage().getTextPoint().y, 0, Integer.MAX_VALUE, 5));
@@ -306,7 +308,7 @@ public class PageDataFrame extends JInternalFrame {
 	/**
 	 * Clears the current page
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private void clearPage() {
 		deleting = true;
@@ -329,7 +331,7 @@ public class PageDataFrame extends JInternalFrame {
 	/**
 	 * Deletes the current page
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void deletePage() {
 		//if there's only one page, just clear the page instead.
@@ -373,7 +375,7 @@ public class PageDataFrame extends JInternalFrame {
 	/**
 	 * Updates all of the components
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void updateAll() {
 		getCurrentPage();
@@ -390,7 +392,7 @@ public class PageDataFrame extends JInternalFrame {
 	/**
 	 * Updates navigation to the selected page at the end of printing all pages
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void updateAfterPrintAll() {
 		navigation.removeItemListener(navigation.getItemListeners()[0]);
@@ -413,7 +415,7 @@ public class PageDataFrame extends JInternalFrame {
 	/**
 	 * Returns whether a page is deleting
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public static boolean getDeleting() {
 		return deleting;

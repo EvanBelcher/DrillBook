@@ -18,7 +18,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
  * Custom JDesktopPane to display the field
  *
  * @author Evan Belcher
- * @version 1.0
+ * @version 1.0.0
  */
 @SuppressWarnings("ConstantConditions") class DS2DesktopPane extends JDesktopPane
 		implements MouseListener {
@@ -42,7 +42,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	/**
 	 * Constructs DS2DesktopPane
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	protected DS2DesktopPane() {
 		super();
@@ -61,7 +61,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Initializes the image from the file. Sets the scaleFactor and field.
 	 *
 	 * @throws IOException if the file cannot be found
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private void getImage() throws IOException {
 		img = ImageIO.read(Main.getFile("field.png"));
@@ -73,7 +73,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	/**
 	 * Sets the field.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private void getFieldSize() {
 		BufferedImage bi = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
@@ -118,7 +118,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	/**
 	 * Creates the Data Frame to hold Point controls
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private void createDotDataFrame() {
 		ddf = new DotDataFrame(this);
@@ -129,7 +129,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	/**
 	 * Creates the Data Frame to hold Page controls
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private PageDataFrame createPageDataFrame() {
 		PageDataFrame frame = new PageDataFrame();
@@ -146,7 +146,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	/**
 	 * Paints the dots, dot names, and page info
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	@Override public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, GraphicsRunner.SCREEN_SIZE.width, GraphicsRunner.SCREEN_SIZE.height);
@@ -198,7 +198,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		}
 
 		//Draw the points and their names
-		if (!PageDataFrame.getDeleting() && !DotDataFrame.getDeleting()) {
+		if (!PageDataFrame.getDeleting() && !DotDataFrame.isDeleting()) {
 			for (Point p : Main.getCurrentPage().getDots().keySet()) {
 				g.setColor((p.equals(activePoint)) ? Color.RED : Color.BLACK);
 				g.fillOval(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize);
@@ -221,7 +221,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Prints the current page to a png file
 	 *
 	 * @param makeFolder if a folder titled by the show name should be created
-	 * @since 1.0
+	 * @since 1.0.0
 	 * @deprecated
 	 */
 	@SuppressWarnings("unused") protected void printCurrentPage(boolean makeFolder) {
@@ -250,7 +250,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Prints the current page to a pdf file
 	 *
 	 * @throws IOException if the file cannot be found or the pdf cannot be created
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	protected void printCurrentPageToPdf() throws IOException {
 		activePoint = null;
@@ -301,7 +301,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Prints every page to a pdf file
 	 *
 	 * @throws IOException if the file cannot be found or the pdf cannot be created
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	protected void printAllPagesToPdf() throws IOException {
 		activePoint = null;
@@ -372,7 +372,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	/**
 	 * On mouse click (down). Adds a new point if there is none or selects the point.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	@Override public void mousePressed(MouseEvent arg0) {
 		//Forgive a one-pixel click out of bounds error
@@ -425,7 +425,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * On mouse release (up). Moves selected point if dragged (left click). Removes dot if
 	 * right-clicked.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	@Override public void mouseReleased(MouseEvent arg0) {
 
@@ -479,7 +479,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * @return the field boundaries as a rectangle
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	protected static Rectangle getField() {
 		return field;
@@ -487,7 +487,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * @return the active Point.
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	protected Point getActivePoint() {
 		return activePoint;
@@ -497,7 +497,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Sets the active Point
 	 *
 	 * @param p new active Point
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	protected void setActivePoint(Point p) {
 		activePoint = p;

@@ -22,8 +22,8 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
  * Creates dot sheets for all dots
  *
  * @author Evan Belcher
- * @version 1.0
- * @since 1.0
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class DotSheetMaker extends JPanel {
 
@@ -47,7 +47,7 @@ public class DotSheetMaker extends JPanel {
 	/**
 	 * Constructs object. Automatically runs getDotSheetData().
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public DotSheetMaker() {
 		setSize(WIDTH, HEIGHT);
@@ -57,7 +57,7 @@ public class DotSheetMaker extends JPanel {
 	/**
 	 * Gets data for the dot sheet and stores it in map.
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private void getDotSheetData() {
 		map = new HashMap<>();
@@ -75,7 +75,7 @@ public class DotSheetMaker extends JPanel {
 	/**
 	 * Prints an individual dot sheet for the currentName and currentMap
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 * @deprecated
 	 */
 	@Override public void paintComponent(Graphics g) {
@@ -114,7 +114,7 @@ public class DotSheetMaker extends JPanel {
 	/**
 	 * Prints all dot sheets to png files
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 * @deprecated
 	 */
 	@SuppressWarnings("unused") public void printAll() {
@@ -146,7 +146,7 @@ public class DotSheetMaker extends JPanel {
 	/**
 	 * Prints all dot sheets to pdf files
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private void printAllToPdf() throws IOException {
 		printing = true;
@@ -247,7 +247,7 @@ public class DotSheetMaker extends JPanel {
 	/**
 	 * Returns printing
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public static boolean isPrinting() {
 		return printing;

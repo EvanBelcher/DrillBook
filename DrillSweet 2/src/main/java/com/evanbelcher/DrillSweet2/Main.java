@@ -15,15 +15,13 @@ import com.google.gson.reflect.TypeToken;
  * Handles keeping everything in memory
  *
  * @author Evan Belcher
- * @version 1.0
- * @since 1.0
+ * @version 1.1.0
+ * @since 1.0.0
  */
 @SuppressWarnings("SynchronizeOnNonFinalField") public class Main {
 
 	private static ConcurrentHashMap<Integer, Page> pages;
 	private static State state;
-	private static String filePath;
-	private static String pagesFileName = "pages.json";
 	private static final String stateFileName = "STATE";
 	private static GraphicsRunner graphicsRunner;
 
@@ -32,7 +30,7 @@ import com.google.gson.reflect.TypeToken;
 	/**
 	 * Start stuff
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public static void main(String[] args) { //look i changed PLEASE WORK
 		init();
@@ -43,27 +41,28 @@ import com.google.gson.reflect.TypeToken;
 	 * Initializes the gson and filePath variables and loads the pages and state from the file
 	 * system
 	 *
-	 * @since 1.0
+	 * @verison 1.1.0
+	 * @since 1.0.0
 	 */
 	private static void init() {
 		gson = new GsonBuilder().enableComplexMapKeySerialization()/*.setPrettyPrinting()*/.create();
-		filePath = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\";
 		try {
 			System.setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		load();
+		load(true);
 	}
 
 	/**
 	 * Initializes and starts the GraphicsRunner (Graphics Thread)
 	 *
-	 * @since 1.0
+	 * @version 1.1.0
+	 * @since 1.0.0
 	 */
 	private static void start() {
 		graphicsRunner = new GraphicsRunner();
-		graphicsRunner.setWindowTitle("DrillSweet 2 - " + pagesFileName);
+		graphicsRunner.setWindowTitle("DrillSweet 2 - " + getPagesFileName());
 		new Thread(graphicsRunner, "GraphicsThread").start();
 		new Thread(() -> {
 			//noinspection InfiniteLoopStatement
@@ -71,7 +70,7 @@ import com.google.gson.reflect.TypeToken;
 				try {
 					Thread.sleep(120000);
 					State.print("printing... " + System.currentTimeMillis());
-					save("autosave.pages.json", "autosave.state");
+					save("autosave.show.ds2", "autosave.state");
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -82,30 +81,31 @@ import com.google.gson.reflect.TypeToken;
 	/**
 	 * Loads the state and pages from the file system
 	 *
-	 * @since 1.0
+	 * @version 1.1.0
+	 * @since 1.0.0
 	 */
-	public static void load() {
-		if (new File(filePath).mkdirs()) {
-			state = new State(1);
+	public static void load(boolean loadState) {
+		if (new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\").mkdirs()) {
+			state = new State(1, FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\", "show.ds2");
 			saveState();
 			pages = new ConcurrentHashMap<>();
 			savePages();
 		} else {
-			try {
-				boolean nullState = state == null;
-				loadState();
-				State.print(state);
-				if (nullState)
-					pagesFileName = state.getCurrentFileName();
-			} catch (FileNotFoundException e) {
-				System.out.println("State file not found: " + filePath + stateFileName);
-				state = new State(1);
-				saveState();
+			if (loadState) {
+				try {
+					System.out.println("hit1 " + state);
+					loadState();
+					System.out.println("hit2 " + state);
+				} catch (FileNotFoundException e) {
+					System.out.println("State file not found: " + FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + stateFileName);
+					state = new State(1, FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\", "show.ds2");
+					saveState();
+				}
 			}
 			try {
 				loadPages();
 			} catch (FileNotFoundException e) {
-				System.out.println("Pages file not found: " + filePath + pagesFileName);
+				System.out.println("Pages file not found: " + getFilePath() + getPagesFileName());
 				pages = new ConcurrentHashMap<>();
 				savePages();
 			}
@@ -113,7 +113,7 @@ import com.google.gson.reflect.TypeToken;
 		if (pages.isEmpty())
 			pages.put(1, new Page(1));
 		if (graphicsRunner != null)
-			graphicsRunner.setWindowTitle("DrillSweet 2 - " + pagesFileName);
+			graphicsRunner.setWindowTitle("DrillSweet 2 - " + getPagesFileName());
 	}
 
 	/**
@@ -121,10 +121,11 @@ import com.google.gson.reflect.TypeToken;
 	 *
 	 * @throws FileNotFoundException if the STATE file cannot be found; this is handled by the
 	 *                               load() method
-	 * @since 1.0
+	 * @version 1.1.0
+	 * @since 1.0.0
 	 */
 	private static void loadState() throws FileNotFoundException {
-		File f = new File(filePath + stateFileName);
+		File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + stateFileName);
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		state = gson.fromJson(br, State.class);
 	}
@@ -134,10 +135,12 @@ import com.google.gson.reflect.TypeToken;
 	 *
 	 * @throws FileNotFoundException if the json file cannot be found; this is handled by the load()
 	 *                               method
-	 * @since 1.0
+	 * @version 1.1.0
+	 * @since 1.0.0
 	 */
-	private static void loadPages() throws FileNotFoundException {
-		File f = new File(filePath + pagesFileName);
+	public static void loadPages() throws FileNotFoundException {
+		File f = new File(getFilePath() + getPagesFileName());
+		System.out.println("LOADING: " + f);
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		Type type = new TypeToken<ConcurrentHashMap<Integer, Page>>() {
 
@@ -149,12 +152,13 @@ import com.google.gson.reflect.TypeToken;
 	/**
 	 * Saves the pages and state to the json files
 	 *
-	 * @since 1.0
+	 * @version 1.1.0
+	 * @since 1.0.0
 	 */
 	public static void save(String... filenames) {
 		if (filenames.length != 0 && filenames.length != 2)
 			throw new IllegalArgumentException("filenames needs to either be the two filenames or nothing at all.");
-		new File(filePath).mkdirs();
+		new File(getFilePath()).mkdirs();
 		if (filenames.length == 0) {
 			savePages();
 			saveState();
@@ -170,7 +174,8 @@ import com.google.gson.reflect.TypeToken;
 	 *
 	 * @param filename the filename, if not pagesFileName
 	 * @return the thread used to save the pages
-	 * @since 1.0
+	 * @version 1.1.0
+	 * @since 1.0.0
 	 */
 	public static Thread savePages(String... filename) {
 		if (filename.length != 0 && filename.length != 1)
@@ -178,7 +183,6 @@ import com.google.gson.reflect.TypeToken;
 		Runnable r = () -> {
 			String str = gson.toJson(pages);
 			File f = new File(getFilePath() + (filename.length == 0 ? getPagesFileName() : filename[0]));
-			state.setCurrentFileName(getPagesFileName());
 			State.print("Saving:" + getFilePath() + getPagesFileName());
 			BufferedWriter bw;
 			try {
@@ -198,15 +202,16 @@ import com.google.gson.reflect.TypeToken;
 	 * Saves the state in the STATE file in json format
 	 *
 	 * @param filename the filename, if not stateFileName
-	 * @since 1.0
+	 * @version 1.1.0
+	 * @since 1.0.0
 	 */
-	protected static void saveState(String... filename) {
+	public static Thread saveState(String... filename) {
 		if (filename.length != 0 && filename.length != 1)
 			throw new IllegalArgumentException("You can only pass in one filename, or none at all.");
 		Runnable r = () -> {
 			synchronized (state) {
 				String str = gson.toJson(state);
-				File f = new File(filePath + (filename.length == 0 ? stateFileName : filename[0]));
+				File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + (filename.length == 0 ? stateFileName : filename[0]));
 				BufferedWriter bw;
 				try {
 					bw = new BufferedWriter(new FileWriter(f));
@@ -217,13 +222,15 @@ import com.google.gson.reflect.TypeToken;
 				}
 			}
 		};
-		new Thread(r, "SaveStateThread").start();
+		Thread t = new Thread(r, "SaveStateThread");
+		t.start();
+		return t;
 	}
 
 	/**
 	 * Adds a page with fields based on the current page
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public static void addPage() {
 		Page page = getPages().get(getPages().size());
@@ -236,7 +243,7 @@ import com.google.gson.reflect.TypeToken;
 	 *
 	 * @param index the index for the page
 	 * @param page  the page to be added
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	@SuppressWarnings("unused") public static void addPage(int index, Page page) {
 		pages.put(index, page);
@@ -245,7 +252,7 @@ import com.google.gson.reflect.TypeToken;
 	/**
 	 * Returns a copy of pages
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public static ConcurrentHashMap<Integer, Page> getPages() {
 		return new ConcurrentHashMap<>(pages);
@@ -254,7 +261,7 @@ import com.google.gson.reflect.TypeToken;
 	/**
 	 * Returns the actual pages object
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public static ConcurrentHashMap<Integer, Page> getRealPages() {
 		return pages;
@@ -265,7 +272,7 @@ import com.google.gson.reflect.TypeToken;
 	 * currentPage stored in the State
 	 *
 	 * @return a copy of the current page
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public static Page getCurrentPage() {
 		int currentPage;
@@ -282,7 +289,7 @@ import com.google.gson.reflect.TypeToken;
 	 * Sets the current page number in the State object
 	 *
 	 * @param i the current page number
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public static void setCurrentPage(int i) {
 		synchronized (state) {
@@ -293,38 +300,59 @@ import com.google.gson.reflect.TypeToken;
 	/**
 	 * Returns the State object
 	 *
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public static State getState() {
 		return state;
 	}
 
 	/**
-	 * Returns the file path. This maps to the DrillSweet2 folder in Documents
+	 * Returns the file path. This maps to the DrillSweet2 folder in Documents by default
 	 *
-	 * @since 1.0
+	 * @version 1.1.0
+	 * @since 1.0.0
 	 */
 	public static String getFilePath() {
-		return filePath;
+		synchronized (state) {
+			return state.getFilePath();
+		}
 	}
 
 	/**
-	 * Returns the file name for the pages json file, should include .json
+	 * Sets the file path
 	 *
-	 * @since 1.0
+	 * @version 1.1.0
+	 * @since 1.0.0
+	 */
+	public static void setFilePath(String path) {
+		synchronized (state) {
+			state.setFilePath(path);
+		}
+	}
+
+	/**
+	 * Returns the file name for the pages json file, should include .ds2
+	 *
+	 * @version 1.1.0
+	 * @since 1.0.0
 	 */
 	public static String getPagesFileName() {
-		return pagesFileName;
+		synchronized (state) {
+			return state.getCurrentFileName();
+		}
 	}
 
 	/**
 	 * Sets the file name for the pages json file
 	 *
-	 * @param pagesFileName the file name, should include .json
-	 * @since 1.0
+	 * @param newPagesFileName the file name, should include .ds2
+	 * @version 1.1.0
+	 * @since 1.0.0
 	 */
-	public static void setPagesFileName(String pagesFileName) {
-		Main.pagesFileName = pagesFileName;
+	public static void setPagesFileName(String newPagesFileName) {
+		synchronized (state) {
+			state.setCurrentFileName(newPagesFileName);
+		}
 	}
 
 	/**
@@ -332,7 +360,7 @@ import com.google.gson.reflect.TypeToken;
 	 *
 	 * @param file the name of the file
 	 * @return requested file
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	@SuppressWarnings("ConstantConditions") public static File getFile(String file) {
 		ClassLoader classLoader = Main.class.getClassLoader();
