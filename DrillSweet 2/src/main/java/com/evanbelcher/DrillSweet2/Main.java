@@ -93,11 +93,9 @@ import com.google.gson.reflect.TypeToken;
 		} else {
 			if (loadState) {
 				try {
-					System.out.println("hit1 " + state);
 					loadState();
-					System.out.println("hit2 " + state);
 				} catch (FileNotFoundException e) {
-					System.out.println("State file not found: " + FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + stateFileName);
+					State.print("State file not found: " + FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + stateFileName);
 					state = new State(1, FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\", "show.ds2");
 					saveState();
 				}
@@ -105,7 +103,7 @@ import com.google.gson.reflect.TypeToken;
 			try {
 				loadPages();
 			} catch (FileNotFoundException e) {
-				System.out.println("Pages file not found: " + getFilePath() + getPagesFileName());
+				State.print("Pages file not found: " + getFilePath() + getPagesFileName());
 				pages = new ConcurrentHashMap<>();
 				savePages();
 			}
@@ -140,7 +138,7 @@ import com.google.gson.reflect.TypeToken;
 	 */
 	public static void loadPages() throws FileNotFoundException {
 		File f = new File(getFilePath() + getPagesFileName());
-		System.out.println("LOADING: " + f);
+		State.print("LOADING: " + f);
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		Type type = new TypeToken<ConcurrentHashMap<Integer, Page>>() {
 

@@ -270,10 +270,9 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		try {
 			doc = new PDDocument();
 			boolean crop = true;
-			System.out.println(field);
+			State.print(field);
 			for (Point p : Main.getCurrentPage().getDots().keySet())
 				if (p.getX() < field.getWidth() * 0.1 + field.getX() || p.getX() > field.getWidth() * 0.9 + field.getX()) {
-					System.out.println(p);
 					crop = false;
 					break;
 				}
@@ -319,13 +318,11 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		for (int pageNum : Main.getPages().keySet()) {
 			for (Point p : Main.getPages().get(pageNum).getDots().keySet()) {
 				if (p.getX() < field.getWidth() * 0.1 + field.getX() || p.getX() > field.getWidth() * 0.9 + field.getX()) {
-					System.out.println(p);
 					crop = false;
 					break a;
 				}
 			}
 			if (Main.getPages().get(pageNum).getTextPoint().getX() < field.getWidth() * 0.1 + field.getX() || Main.getPages().get(pageNum).getTextPoint().getX() + 100 > field.getWidth() * 0.9 + field.getX()) {
-				System.out.println(Main.getPages().get(pageNum).getTextPoint());
 				crop = false;
 				break;
 			}

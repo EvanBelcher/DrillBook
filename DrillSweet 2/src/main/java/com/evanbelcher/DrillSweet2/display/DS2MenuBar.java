@@ -210,7 +210,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
 				Main.setFilePath(path);
 				Main.setPagesFileName(name);
-				System.out.println(path + "     " + name);
 				Main.saveState().join();
 				Main.load(false);
 			} catch (IOException e) {
