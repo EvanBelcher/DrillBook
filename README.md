@@ -22,13 +22,13 @@ Drill Sweet 2 is a marching band drill creation software. It is designed to help
 ##[Usage](../master/Usage.md)
 
 ##Samples
-UI Sample:
+###UI Sample:
 ![UI Sample](../master/ui-sample.png "UI Sample")
 
-Page Sample:
+###Page Sample:
 ![Page Sample](../master/page-sample.png "Page Sample")
 
-Dot Sheet Sample:
+###Dot Sheet Sample:
 ![Dot Sheet Sample](../master/dotsheet-sample.png "Dot Sheet Sample")
 
 ##FAQ
