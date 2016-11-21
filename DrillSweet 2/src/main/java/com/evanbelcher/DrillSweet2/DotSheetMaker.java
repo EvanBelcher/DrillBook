@@ -170,6 +170,7 @@ public class DotSheetMaker extends JPanel {
 				Collections.sort(list, nameComparator);
 				for (String dotName : list) {
 					if (dotName.replaceAll("[0-9]", "").equals(letter)) {
+						int i = 0;
 						PDPage page = new PDPage();
 						doc.addPage(page);
 
@@ -211,10 +212,18 @@ public class DotSheetMaker extends JPanel {
 							//noinspection UnnecessaryLocalVariable
 							float yStart = yStartNewPage;
 							float bottomMargin = 70;
+
 							BaseTable baseTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, true, true);
 							DataTable dataTable = new DataTable(baseTable, page);
 							dataTable.addListToTable(data, DataTable.HASHEADER);
 							baseTable.draw();
+							if (++i >= 35) {
+								page = new PDPage();
+								doc.addPage(page);
+								data.clear();
+								data.add(new ArrayList<>(Arrays.asList("Set #", "Horizontal", "Vertical")));
+								i -= 35;
+							}
 						}
 					}
 				}
