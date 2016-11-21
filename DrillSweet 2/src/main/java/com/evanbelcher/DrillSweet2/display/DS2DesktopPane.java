@@ -229,9 +229,9 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		ddf.updateAll(activePoint);
 		String folder = "";
 		if (makeFolder)
-			folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 5), 0) + "/";
+			folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4), 0) + "/";
 
-		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 5) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"), 0);
+		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"), 0);
 		File f = new File(Main.getFilePath() + folder + fileName + ".png");
 		f.mkdirs();
 
@@ -255,7 +255,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	protected void printCurrentPageToPdf() throws IOException {
 		activePoint = null;
 		ddf.updateAll(activePoint);
-		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 5) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"), 0);
+		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"), 0);
 		File f = new File(Main.getFilePath());
 		f.mkdirs();
 		f = new File(Main.getFilePath() + fileName + ".pdf");
@@ -277,6 +277,8 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 					crop = false;
 					break;
 				}
+			if (Main.getCurrentPage().getTextPoint().getX() < field.getWidth() * 0.1 + field.getX() || Main.getCurrentPage().getTextPoint().getX() + 100 > field.getWidth() * 0.9 + field.getX())
+				crop = false;
 
 			float scale = 1.0f;
 			if (crop)
@@ -308,7 +310,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		ddf.updateAll(activePoint);
 		File f = new File(Main.getFilePath());
 		f.mkdirs();
-		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 5), 0);
+		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4), 0);
 
 		f = new File(Main.getFilePath() + fileName + " full show" + ".pdf");
 
