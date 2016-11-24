@@ -4,17 +4,16 @@ import main.java.com.evanbelcher.DrillSweet2.Main;
 import main.java.com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
 import main.java.com.evanbelcher.DrillSweet2.data.State;
 
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.*;
 
 /**
  * Mouse and Key Listeners for DS2DesktopPane
  */
-public class IOListener implements MouseListener, KeyListener {
+public class IOListener implements MouseListener {
 
 	private DS2DesktopPane ddp;
 	private boolean normalDragging = false;
@@ -24,64 +23,70 @@ public class IOListener implements MouseListener, KeyListener {
 	private boolean shiftDown = false;
 	private boolean ctrlDown = false;
 	private boolean altDown = false;
+	private DS2ConcurrentHashMap<Point, String> oldDots;
 
 	public IOListener(DS2DesktopPane ds2DesktopPane) {
 		ddp = ds2DesktopPane;
 		activePoints = new Vector<>();
 		activePoints.add(null);
-	}
 
-	/**
-	 * Invoked when a key has been typed.
-	 * See the class description for {@link KeyEvent} for a definition of
-	 * a key typed event.
-	 *
-	 * @param e
-	 */
-	@Override public void keyTyped(KeyEvent e) {
+		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, InputEvent.SHIFT_DOWN_MASK), "shiftDown");
+		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0, true), "shiftUp");
+		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_CONTROL, InputEvent.CTRL_DOWN_MASK), "ctrlDown");
+		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_CONTROL, 0, true), "ctrlUp");
+		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, InputEvent.ALT_DOWN_MASK), "altDown");
+		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, 0, true), "altUp");
 
-	}
+		ddp.getActionMap().put("shiftDown", new AbstractAction() {
 
-	/**
-	 * Invoked when a key has been pressed.
-	 * See the class description for {@link KeyEvent} for a definition of
-	 * a key pressed event.
-	 *
-	 * @param e
-	 */
-	@Override public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {
-			case KeyEvent.VK_SHIFT:
+			@Override public void actionPerformed(ActionEvent e) {
+				System.out.println("shiftDown");
 				shiftDown = true;
-				break;
-			case KeyEvent.VK_CONTROL:
-				ctrlDown = true;
-				break;
-			case KeyEvent.VK_ALT:
-				altDown = true;
-				break;
-		}
-	}
+				ddp.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+			}
+		});
+		ddp.getActionMap().put("shiftUp", new AbstractAction() {
 
-	/**
-	 * Invoked when a key has been released.
-	 * See the class description for {@link KeyEvent} for a definition of
-	 * a key released event.
-	 *
-	 * @param e
-	 */
-	@Override public void keyReleased(KeyEvent e) {
-		switch (e.getKeyCode()) {
-			case KeyEvent.VK_SHIFT:
+			@Override public void actionPerformed(ActionEvent e) {
+				System.out.println("shiftUp");
 				shiftDown = false;
-				break;
-			case KeyEvent.VK_CONTROL:
+				ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+		ddp.getActionMap().put("ctrlDown", new AbstractAction() {
+
+			@Override public void actionPerformed(ActionEvent e) {
+				System.out.println("controlDown");
+				ctrlDown = true;
+				ddp.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+		});
+		ddp.getActionMap().put("ctrlUp", new AbstractAction() {
+
+			@Override public void actionPerformed(ActionEvent e) {
+				System.out.println("controlUp");
 				ctrlDown = false;
-				break;
-			case KeyEvent.VK_ALT:
+				ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+		ddp.getActionMap().put("altDown", new AbstractAction() {
+
+			@Override public void actionPerformed(ActionEvent e) {
+				System.out.println("altDown");
+				altDown = true;
+				ddp.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+			}
+		});
+		ddp.getActionMap().put("altUp", new AbstractAction() {
+
+			@Override public void actionPerformed(ActionEvent e) {
+				System.out.println("altUp");
 				altDown = false;
-				break;
-		}
+				ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+
+		updateOldDots();
 	}
 
 	/**
@@ -107,6 +112,9 @@ public class IOListener implements MouseListener, KeyListener {
 		if (clickPoint.y == DS2DesktopPane.getField().height + DS2DesktopPane.getField().y + 1)
 			e.getPoint().translate(0, -1);
 		State.print(clickPoint);
+
+		State.print("Shiftdown: " + shiftDown + "\tCtrldown: " + ctrlDown + "\taltdown: " + altDown);
+
 		if (DS2DesktopPane.getField().contains(clickPoint)) {
 			if (shiftDown) {
 				switch (e.getButton()) {
@@ -124,6 +132,7 @@ public class IOListener implements MouseListener, KeyListener {
 								if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
 									intersects = true;
 									if (activePoints.contains(p)) {
+										updateOldDots();
 										for (Point activePoint : activePoints)
 											Main.getCurrentPage().getDots().remove(activePoint);
 										clearActivePoints();
@@ -159,10 +168,12 @@ public class IOListener implements MouseListener, KeyListener {
 							if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
 								intersects = true;
 								if (activePoints.contains(p)) {
+									updateOldDots();
 									for (Point activePoint : activePoints)
 										Main.getCurrentPage().getDots().remove(activePoint);
 									clearActivePoints();
-								}
+								} else
+									clearActivePoints();
 								break;
 							}
 						}
@@ -179,8 +190,9 @@ public class IOListener implements MouseListener, KeyListener {
 							if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
 								String name = dotMap.get(p);
 								String letter = name.replaceAll("[0-9]", "");
+								System.out.println(letter);
 								for (Point q : dotMap.keySet()) {
-									if (dotMap.get(q).replaceAll("[0-9]", "").equals(letter)) {
+									if (dotMap.get(q).replaceAll("[0-9]", "").equalsIgnoreCase(letter)) {
 										addActivePoint(q);
 									}
 								}
@@ -193,6 +205,7 @@ public class IOListener implements MouseListener, KeyListener {
 						boolean intersects = false;
 						for (Point p : Main.getCurrentPage().getDots().keySet()) {
 							if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
+								updateOldDots();
 								intersects = true;
 								String name = dotMap.get(p);
 								String letter = name.replaceAll("[0-9]", "");
@@ -211,6 +224,7 @@ public class IOListener implements MouseListener, KeyListener {
 						break;
 				}
 			} else {
+				System.out.println(e.getPoint());
 				switch (e.getButton()) {
 					case MouseEvent.BUTTON1:
 						if (!isDragging()) {
@@ -222,6 +236,9 @@ public class IOListener implements MouseListener, KeyListener {
 									if (activePoints.contains(p)) {
 										normalDragging = true;
 										dragStart = p;
+										removeActivePoint(p);
+										addActivePoint(p);
+										ddp.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "blank cursor"));
 									} else {
 										clearActivePoints();
 										addActivePoint(p);
@@ -231,10 +248,12 @@ public class IOListener implements MouseListener, KeyListener {
 							}
 
 							if (!intersects) {
+								updateOldDots();
 								String str = "A1";
 								Point activePoint = e.getPoint();
 								if (activePoints.get(0) != null) {
-									str = Main.getCurrentPage().getDots().get(activePoint);
+									//									System.out.println(Main.getCurrentPage().getDots().contains(activePoint));
+									str = Main.getCurrentPage().getDots().get(activePoints.get(0));
 									if (str != null)
 										str = str.replaceAll("[0-9]", "") + (Integer.parseInt(str.replaceAll("[A-Za-z]", "")) + 1);
 									else
@@ -250,6 +269,7 @@ public class IOListener implements MouseListener, KeyListener {
 					case MouseEvent.BUTTON3:
 						if (isDragging()) {
 							normalDragging = false;
+							ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 						} else {
 							int dotSize = DS2DesktopPane.getDotSize();
 							Iterator<Point> iterator = Main.getCurrentPage().getDots().keySet().iterator();
@@ -258,6 +278,7 @@ public class IOListener implements MouseListener, KeyListener {
 								if (activePoints.contains(p))
 									clearActivePoints();
 								if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
+									oldDots = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
 									iterator.remove();
 									break;
 								}
@@ -285,7 +306,7 @@ public class IOListener implements MouseListener, KeyListener {
 		Point clickPoint = new Point(x, y);
 		if (shiftDragging) {
 			if (e.getButton() == MouseEvent.BUTTON1) {
-				Rectangle rect = new Rectangle(dragStart, new Dimension(clickPoint.x - dragStart.x, clickPoint.y - dragStart.y));
+				Rectangle rect = new DS2Rectangle(dragStart.x, dragStart.y, clickPoint.x - dragStart.x, clickPoint.y - dragStart.y);
 				int dotSize = DS2DesktopPane.getDotSize();
 				for (Point p : Main.getCurrentPage().getDots().keySet()) {
 					if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).intersects(rect)) {
@@ -298,17 +319,23 @@ public class IOListener implements MouseListener, KeyListener {
 			shiftDragging = false;
 		} else if (normalDragging) {
 			if (e.getButton() == MouseEvent.BUTTON1) {
+				oldDots = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
+				Dimension diff = new Dimension(clickPoint.x - dragStart.x, clickPoint.y - dragStart.y);
+
 				ListIterator<Point> iterator = activePoints.listIterator();
 				while (iterator.hasNext()) {
 					Point activePoint = iterator.next();
+					Point p = new Point(activePoint.x + diff.width, activePoint.y + diff.height);
 					//Move the point to where you released
 					String s = Main.getCurrentPage().getDots().get(activePoint);
 					Main.getCurrentPage().getDots().remove(activePoint);
-					Main.getCurrentPage().getDots().put(clickPoint, s);
-					iterator.set(clickPoint);
+					System.out.println(p + "    " + s);
+					Main.getCurrentPage().getDots().put(p, s);
+					iterator.set(p);
 				}
 			}
 			normalDragging = false;
+			ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 		ddp.getDotDataFrame().updateAll(activePoints);
 	}
@@ -350,9 +377,36 @@ public class IOListener implements MouseListener, KeyListener {
 		activePoints.add(null);
 	}
 
-	@SuppressWarnings("unused") public void removeActivePoint(Point p) {
+	public void removeActivePoint(Point p) {
 		activePoints.remove(p);
 		if (activePoints.isEmpty())
 			activePoints.add(null);
+	}
+
+	public boolean isNormalDragging() {
+		return normalDragging;
+	}
+
+	public boolean isShiftDragging() {
+		return shiftDragging;
+	}
+
+	public Point getDragStart() {
+		return dragStart;
+	}
+
+	public void fixControl() {
+		ctrlDown = false;
+		ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+
+	private void updateOldDots() {
+		oldDots = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
+	}
+
+	public DS2ConcurrentHashMap<Point, String> getOldDots() {
+		clearActivePoints();
+		ddp.getDotDataFrame().updateAll(activePoints);
+		return oldDots;
 	}
 }

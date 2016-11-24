@@ -48,7 +48,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 		io = new IOListener(this);
 		addMouseListener(io);
-		addKeyListener(io);
 
 		pdf = createPageDataFrame();
 		createDotDataFrame();
@@ -198,7 +197,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		//Draw the points and their names
 		if (!PageDataFrame.getDeleting() && !DotDataFrame.isDeleting()) {
 			for (Point p : Main.getCurrentPage().getDots().keySet()) {
-				g.setColor((io.getActivePoints().contains(p)) ? Color.RED : Color.BLACK);
+				g.setColor((io.getActivePoints().contains(p)) ? (io.isNormalDragging() ? Color.PINK : Color.RED) : Color.BLACK);
 				g.fillOval(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize);
 				if (Main.getState().isShowNames())
 					g.drawString(Main.getCurrentPage().getDots().get(p), p.x, p.y - dotSize / 2);
@@ -206,12 +205,28 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		}
 
 		//Draw the dragged point
-		if (io.isDragging() && !io.getActivePoints().isEmpty()) {
+		if (io.isNormalDragging() && !io.getActivePoints().isEmpty()) {
 			g.setColor(Color.RED);
 			Point p = MouseInfo.getPointerInfo().getLocation();
 			Point q = getLocationOnScreen();
 			p.translate(-q.x, -q.y);
-			g.fillOval(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize);
+			Point activePoint = getActivePoints().get(0);
+			Dimension diff = new Dimension(p.x - activePoint.x, p.y - activePoint.y);
+			for (Point ap : io.getActivePoints())
+				g.fillOval((ap.x + diff.width) - dotSize / 2, (ap.y + diff.height) - dotSize / 2, dotSize, dotSize);
+		}
+		if (io.isShiftDragging()) {
+			g.setColor(Color.BLACK);
+			Graphics2D g2d = (Graphics2D) g;
+			final float dash1[] = { 10.0f };
+			final BasicStroke dashed = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f);
+			Stroke old = g2d.getStroke();
+			g2d.setStroke(dashed);
+			Point p = MouseInfo.getPointerInfo().getLocation();
+			Point q = getLocationOnScreen();
+			p.translate(-q.x, -q.y);
+			g2d.draw(new DS2Rectangle(io.getDragStart().x, io.getDragStart().y, p.x - io.getDragStart().x, p.y - io.getDragStart().y));
+			g2d.setStroke(old);
 		}
 	}
 
@@ -397,5 +412,9 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	public DotDataFrame getDotDataFrame() {
 		return ddf;
+	}
+
+	public IOListener getIO() {
+		return io;
 	}
 }

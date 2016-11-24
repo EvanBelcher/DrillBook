@@ -68,6 +68,8 @@ public class DotDataFrame extends JInternalFrame {
 
 		//...Then set the window size or call pack...
 		pack();
+
+		setFocusable(false);
 	}
 
 	/**
@@ -94,7 +96,7 @@ public class DotDataFrame extends JInternalFrame {
 		JComboBox<String> comboBox = new JComboBox<>(chars);
 
 		comboBox.addItemListener((ItemEvent e) -> Main.getCurrentPage().getDots().put(mdp.getActivePoints().get(0), (String) comboBox.getSelectedItem() + (int) number.getValue()));
-
+		comboBox.setFocusable(false);
 		if (mdp.getActivePoints().get(0) != null && mdp.getActivePoints().size() == 1) {
 			char c = Main.getCurrentPage().getDots().get(mdp.getActivePoints().get(0)).replaceAll("[0-9]", "").charAt(0);
 			comboBox.setSelectedIndex(c - 65);

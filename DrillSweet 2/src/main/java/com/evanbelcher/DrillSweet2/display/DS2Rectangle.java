@@ -19,6 +19,16 @@ import java.awt.Rectangle;
 
 	public DS2Rectangle(int i, int j, int k, int l) {
 		super(i, j, k, l);
+		int x = i, y = j, w = k, h = l;
+		if (k < 0) {
+			x = i + k;
+			w = -k;
+		}
+		if (l < 0) {
+			y = j + l;
+			h = -l;
+		}
+		setBounds(x, y, w, h);
 	}
 
 	/**
@@ -27,7 +37,7 @@ import java.awt.Rectangle;
 	 * @since 1.0.0
 	 */
 	public DS2Rectangle(double d, double e, double f, double g) {
-		super((int) d, (int) e, (int) f, (int) g);
+		new DS2Rectangle((int) d, (int) e, (int) f, (int) g);
 	}
 
 	/**
@@ -38,8 +48,7 @@ import java.awt.Rectangle;
 	 * @return whether the given coordinates fall inside or on the edges of this rectangle
 	 * @since 1.0.0
 	 */
-	@SuppressWarnings("deprecation") @Override
-	public boolean inside(int X, int Y) {
+	@SuppressWarnings("deprecation") @Override public boolean inside(int X, int Y) {
 		int w = this.width;
 		int h = this.height;
 		if ((w | h) < 0) {

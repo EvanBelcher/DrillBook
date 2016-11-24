@@ -234,6 +234,10 @@ import java.text.DecimalFormat;
 		return dots;
 	}
 
+	public void setDots(DS2ConcurrentHashMap<Point, String> dots) {
+		this.dots = new DS2ConcurrentHashMap<>(dots);
+	}
+
 	/**
 	 * The well-fomatted representation of this object
 	 *
