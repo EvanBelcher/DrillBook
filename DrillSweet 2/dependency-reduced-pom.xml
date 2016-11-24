@@ -26,12 +26,50 @@
         </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>2.3</version>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-5</version>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/src.xml</descriptor>
+          </descriptors>
+          <archive>
+            <manifest>
+              <mainClass>main.java.com.evanbelcher.DrillSweet2.Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.1</version>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer>
+                  <mainClass>main.java.com.evanbelcher.DrillSweet2.Main</mainClass>
+                  <manifestEntries>
+                    <Main-Class>main.java.com.evanbelcher.DrillSweet2.Main</Main-Class>
+                    <Build-Number>1.1.0</Build-Number>
+                  </manifestEntries>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
