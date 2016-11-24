@@ -12,18 +12,11 @@ import be.quodlibet.boxable.BaseTable;
 import be.quodlibet.boxable.datatable.DataTable;
 import main.java.com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
 import main.java.com.evanbelcher.DrillSweet2.display.*;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.*;
+import org.apache.pdfbox.pdmodel.font.*;
 
 /**
  * Creates dot sheets for all dots
- *
- * @author Evan Belcher
- * @version 1.0.0
- * @since 1.0.0
  */
 public class DotSheetMaker extends JPanel {
 
@@ -46,8 +39,6 @@ public class DotSheetMaker extends JPanel {
 
 	/**
 	 * Constructs object. Automatically runs getDotSheetData().
-	 *
-	 * @since 1.0.0
 	 */
 	public DotSheetMaker() {
 		setSize(WIDTH, HEIGHT);
@@ -56,8 +47,6 @@ public class DotSheetMaker extends JPanel {
 
 	/**
 	 * Gets data for the dot sheet and stores it in map.
-	 *
-	 * @since 1.0.0
 	 */
 	private void getDotSheetData() {
 		map = new HashMap<>();
@@ -75,7 +64,6 @@ public class DotSheetMaker extends JPanel {
 	/**
 	 * Prints an individual dot sheet for the currentName and currentMap
 	 *
-	 * @since 1.0.0
 	 * @deprecated
 	 */
 	@Override public void paintComponent(Graphics g) {
@@ -114,7 +102,6 @@ public class DotSheetMaker extends JPanel {
 	/**
 	 * Prints all dot sheets to png files
 	 *
-	 * @since 1.0.0
 	 * @deprecated
 	 */
 	@SuppressWarnings("unused") public void printAll() {
@@ -145,8 +132,6 @@ public class DotSheetMaker extends JPanel {
 
 	/**
 	 * Prints all dot sheets to pdf files
-	 *
-	 * @since 1.0.0
 	 */
 	private void printAllToPdf() throws IOException {
 		printing = true;
@@ -241,6 +226,11 @@ public class DotSheetMaker extends JPanel {
 		printing = false;
 	}
 
+	/**
+	 * Print all dot sheets
+	 *
+	 * @throws InterruptedException if the thread fails for some reason
+	 */
 	public void printDotSheets() throws InterruptedException {
 		Thread t = new Thread(() -> {
 			try {
@@ -255,8 +245,6 @@ public class DotSheetMaker extends JPanel {
 
 	/**
 	 * Returns printing
-	 *
-	 * @since 1.0.0
 	 */
 	public static boolean isPrinting() {
 		return printing;

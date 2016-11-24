@@ -18,7 +18,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
  * Custom JDesktopPane to display the field
  *
  * @author Evan Belcher
- * @version 1.0.0
  */
 @SuppressWarnings("ConstantConditions") class DS2DesktopPane extends JDesktopPane {
 
@@ -38,8 +37,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * Constructs DS2DesktopPane
-	 *
-	 * @since 1.0.0
 	 */
 	protected DS2DesktopPane() {
 		super();
@@ -57,7 +54,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Initializes the image from the file. Sets the scaleFactor and field.
 	 *
 	 * @throws IOException if the file cannot be found
-	 * @since 1.0.0
 	 */
 	private void getImage() throws IOException {
 		img = ImageIO.read(Main.getFile("field.png"));
@@ -68,8 +64,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * Sets the field.
-	 *
-	 * @since 1.0.0
 	 */
 	private void getFieldSize() {
 		BufferedImage bi = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
@@ -113,8 +107,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * Creates the Data Frame to hold Point controls
-	 *
-	 * @since 1.0.0
 	 */
 	private void createDotDataFrame() {
 		ddf = new DotDataFrame(this);
@@ -124,8 +116,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * Creates the Data Frame to hold Page controls
-	 *
-	 * @since 1.0.0
 	 */
 	private PageDataFrame createPageDataFrame() {
 		PageDataFrame frame = new PageDataFrame();
@@ -141,8 +131,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * Paints the dots, dot names, and page info
-	 *
-	 * @since 1.0.0
 	 */
 	@Override public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, GraphicsRunner.SCREEN_SIZE.width, GraphicsRunner.SCREEN_SIZE.height);
@@ -233,7 +221,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Prints the current page to a png file
 	 *
 	 * @param makeFolder if a folder titled by the show name should be created
-	 * @since 1.0.0
 	 * @deprecated
 	 */
 	@SuppressWarnings("unused") protected void printCurrentPage(boolean makeFolder) {
@@ -262,7 +249,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Prints the current page to a pdf file
 	 *
 	 * @throws IOException if the file cannot be found or the pdf cannot be created
-	 * @since 1.0.0
 	 */
 	protected void printCurrentPageToPdf() throws IOException {
 		io.clearActivePoints();
@@ -314,7 +300,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Prints every page to a pdf file
 	 *
 	 * @throws IOException if the file cannot be found or the pdf cannot be created
-	 * @since 1.0.0
 	 */
 	protected void printAllPagesToPdf() throws IOException {
 		io.clearActivePoints();
@@ -377,42 +362,51 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * @return the field boundaries as a rectangle
-	 * @since 1.0.0
 	 */
 	protected static DS2Rectangle getField() {
 		return field;
 	}
 
 	/**
-	 * @return the active Point.
-	 * @since 1.0.0
+	 * Returns the active Points
 	 */
 	protected Vector<Point> getActivePoints() {
 		return io.getActivePoints();
 	}
 
 	/**
-	 * Sets the active Point
+	 * Adds a new active point
 	 *
 	 * @param p new active Point
-	 * @since 1.0.0
 	 */
 	protected void addActivePoint(Point p) {
 		io.addActivePoint(p);
 	}
 
+	/**
+	 * Clears the active points
+	 */
 	@SuppressWarnings("unused") public void clearActivePoints() {
 		io.clearActivePoints();
 	}
 
+	/**
+	 * Returns the dot size
+	 */
 	public static int getDotSize() {
 		return dotSize;
 	}
 
+	/**
+	 * Returns the dot data frame
+	 */
 	public DotDataFrame getDotDataFrame() {
 		return ddf;
 	}
 
+	/**
+	 * Returns the IOListener
+	 */
 	public IOListener getIO() {
 		return io;
 	}

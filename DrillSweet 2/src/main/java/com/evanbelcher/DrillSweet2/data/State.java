@@ -4,8 +4,6 @@ package main.java.com.evanbelcher.DrillSweet2.data;
  * Holds information about the current state of the application
  *
  * @author Evan Belcher
- * @version 1.1.0
- * @since 1.0.0
  */
 @SuppressWarnings("unused") public class State {
 
@@ -20,7 +18,6 @@ package main.java.com.evanbelcher.DrillSweet2.data;
 	 * Constructs the object with given current page.
 	 *
 	 * @param currentPage the current page number
-	 * @since 1.0.0
 	 */
 	public State(int currentPage, String filePath, String currentFileName) {
 		this.currentPage = currentPage;
@@ -29,16 +26,14 @@ package main.java.com.evanbelcher.DrillSweet2.data;
 	}
 
 	/**
-	 * @return debug mode?
-	 * @since 1.0.0
+	 * Returns if the program is in debug mode
 	 */
 	public static boolean isDebugMode() {
 		return DEBUG_MODE;
 	}
 
 	/**
-	 * @return current page number
-	 * @since 1.0.0
+	 * Returns current page number
 	 */
 	public int getCurrentPage() {
 		return currentPage;
@@ -48,15 +43,13 @@ package main.java.com.evanbelcher.DrillSweet2.data;
 	 * Sets current page number
 	 *
 	 * @param currentPage the current page number
-	 * @since 1.0.0
 	 */
 	public void setCurrentPage(int currentPage) {
 		this.currentPage = currentPage;
 	}
 
 	/**
-	 * @return show grid?
-	 * @since 1.0.0
+	 * Returns show grid?
 	 */
 	public boolean isShowGrid() {
 		return showGrid;
@@ -66,15 +59,13 @@ package main.java.com.evanbelcher.DrillSweet2.data;
 	 * Sets showGrid
 	 *
 	 * @param showGrid whether the grid should be shown
-	 * @since 1.0.0
 	 */
 	public void setShowGrid(boolean showGrid) {
 		this.showGrid = showGrid;
 	}
 
 	/**
-	 * @return show names?
-	 * @since 1.0.0
+	 * Returns show names?
 	 */
 	public boolean isShowNames() {
 		return showNames;
@@ -84,15 +75,13 @@ package main.java.com.evanbelcher.DrillSweet2.data;
 	 * Sets showNames
 	 *
 	 * @param showNames whether the names should be shown
-	 * @since 1.0.0
 	 */
 	public void setShowNames(boolean showNames) {
 		this.showNames = showNames;
 	}
 
 	/**
-	 * @return currentFileName
-	 * @since 1.0.0
+	 * Returns currentFileName
 	 */
 	public String getCurrentFileName() {
 		return currentFileName;
@@ -102,7 +91,6 @@ package main.java.com.evanbelcher.DrillSweet2.data;
 	 * Sets currentFileName
 	 *
 	 * @param currentFileName the new current file name
-	 * @since 1.0.0
 	 */
 	public void setCurrentFileName(String currentFileName) {
 		this.currentFileName = currentFileName;
@@ -110,8 +98,6 @@ package main.java.com.evanbelcher.DrillSweet2.data;
 
 	/**
 	 * Returns the file path
-	 *
-	 * @since 1.1.0
 	 */
 	public String getFilePath() {
 		return filePath;
@@ -121,7 +107,6 @@ package main.java.com.evanbelcher.DrillSweet2.data;
 	 * Sets the file path
 	 *
 	 * @param filePath
-	 * @since 1.1.0
 	 */
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
@@ -129,9 +114,6 @@ package main.java.com.evanbelcher.DrillSweet2.data;
 
 	/**
 	 * Default toString()
-	 *
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	@Override public String toString() {
 		return "State{" + "currentPage=" + currentPage + ", showGrid=" + showGrid + ", showNames=" + showNames + ", currentFileName='" + currentFileName + '\'' + ", filePath='" + filePath + '\'' + '}';
@@ -141,7 +123,6 @@ package main.java.com.evanbelcher.DrillSweet2.data;
 	 * Prints objects to console if debug mode is true
 	 *
 	 * @param objects the object or objects to be printed (varargs)
-	 * @since 1.0.0
 	 */
 	public static void print(Object... objects) {
 		if (DEBUG_MODE) {

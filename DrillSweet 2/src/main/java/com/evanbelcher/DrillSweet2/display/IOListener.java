@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 /**
- * Mouse and Key Listeners for DS2DesktopPane
+ * Mouse Listener and Key Bindings for DS2DesktopPane
  */
 public class IOListener implements MouseListener {
 
@@ -25,11 +25,23 @@ public class IOListener implements MouseListener {
 	private boolean altDown = false;
 	private DS2ConcurrentHashMap<Point, String> oldDots;
 
+	/**
+	 * Initializes variables and sets up key bindings
+	 *
+	 * @param ds2DesktopPane
+	 */
 	public IOListener(DS2DesktopPane ds2DesktopPane) {
 		ddp = ds2DesktopPane;
 		activePoints = new Vector<>();
 		activePoints.add(null);
+		setupKeyBindings();
+		updateOldDots();
+	}
 
+	/**
+	 * Sets up key bindings
+	 */
+	private void setupKeyBindings() {
 		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, InputEvent.SHIFT_DOWN_MASK), "shiftDown");
 		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0, true), "shiftUp");
 		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_CONTROL, InputEvent.CTRL_DOWN_MASK), "ctrlDown");
@@ -40,7 +52,7 @@ public class IOListener implements MouseListener {
 		ddp.getActionMap().put("shiftDown", new AbstractAction() {
 
 			@Override public void actionPerformed(ActionEvent e) {
-				System.out.println("shiftDown");
+				State.print("shiftDown");
 				shiftDown = true;
 				ddp.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 			}
@@ -48,7 +60,7 @@ public class IOListener implements MouseListener {
 		ddp.getActionMap().put("shiftUp", new AbstractAction() {
 
 			@Override public void actionPerformed(ActionEvent e) {
-				System.out.println("shiftUp");
+				State.print("shiftUp");
 				shiftDown = false;
 				ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
@@ -56,7 +68,7 @@ public class IOListener implements MouseListener {
 		ddp.getActionMap().put("ctrlDown", new AbstractAction() {
 
 			@Override public void actionPerformed(ActionEvent e) {
-				System.out.println("controlDown");
+				State.print("controlDown");
 				ctrlDown = true;
 				ddp.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
@@ -64,7 +76,7 @@ public class IOListener implements MouseListener {
 		ddp.getActionMap().put("ctrlUp", new AbstractAction() {
 
 			@Override public void actionPerformed(ActionEvent e) {
-				System.out.println("controlUp");
+				State.print("controlUp");
 				ctrlDown = false;
 				ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
@@ -72,7 +84,7 @@ public class IOListener implements MouseListener {
 		ddp.getActionMap().put("altDown", new AbstractAction() {
 
 			@Override public void actionPerformed(ActionEvent e) {
-				System.out.println("altDown");
+				State.print("altDown");
 				altDown = true;
 				ddp.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 			}
@@ -80,13 +92,11 @@ public class IOListener implements MouseListener {
 		ddp.getActionMap().put("altUp", new AbstractAction() {
 
 			@Override public void actionPerformed(ActionEvent e) {
-				System.out.println("altUp");
+				State.print("altUp");
 				altDown = false;
 				ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
-
-		updateOldDots();
 	}
 
 	/**
@@ -100,9 +110,7 @@ public class IOListener implements MouseListener {
 	}
 
 	/**
-	 * On mouse click (down). Adds a new point if there is none or selects the point.
-	 *
-	 * @since 1.0.0
+	 * On mouse click (down). Handles left and right clicks, all depending on which keys are down.
 	 */
 	@Override public void mousePressed(MouseEvent e) {
 		//Forgive a one-pixel click out of bounds error
@@ -190,7 +198,7 @@ public class IOListener implements MouseListener {
 							if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
 								String name = dotMap.get(p);
 								String letter = name.replaceAll("[0-9]", "");
-								System.out.println(letter);
+								State.print(letter);
 								for (Point q : dotMap.keySet()) {
 									if (dotMap.get(q).replaceAll("[0-9]", "").equalsIgnoreCase(letter)) {
 										addActivePoint(q);
@@ -224,7 +232,7 @@ public class IOListener implements MouseListener {
 						break;
 				}
 			} else {
-				System.out.println(e.getPoint());
+				State.print(e.getPoint());
 				switch (e.getButton()) {
 					case MouseEvent.BUTTON1:
 						if (!isDragging()) {
@@ -252,7 +260,7 @@ public class IOListener implements MouseListener {
 								String str = "A1";
 								Point activePoint = e.getPoint();
 								if (activePoints.get(0) != null) {
-									//									System.out.println(Main.getCurrentPage().getDots().contains(activePoint));
+									//									State.print(Main.getCurrentPage().getDots().contains(activePoint));
 									str = Main.getCurrentPage().getDots().get(activePoints.get(0));
 									if (str != null)
 										str = str.replaceAll("[0-9]", "") + (Integer.parseInt(str.replaceAll("[A-Za-z]", "")) + 1);
@@ -294,10 +302,7 @@ public class IOListener implements MouseListener {
 	}
 
 	/**
-	 * On mouse release (up). Moves selected point if dragged (left click). Removes dot if
-	 * right-clicked.
-	 *
-	 * @since 1.0.0
+	 * On mouse release (up). Handles left and right click releases, all depending on which keys are down.
 	 */
 	@Override public void mouseReleased(MouseEvent e) {
 		DS2Rectangle field = DS2DesktopPane.getField();
@@ -329,7 +334,7 @@ public class IOListener implements MouseListener {
 					//Move the point to where you released
 					String s = Main.getCurrentPage().getDots().get(activePoint);
 					Main.getCurrentPage().getDots().remove(activePoint);
-					System.out.println(p + "    " + s);
+					State.print(p + "    " + s);
 					Main.getCurrentPage().getDots().put(p, s);
 					iterator.set(p);
 				}
@@ -358,52 +363,91 @@ public class IOListener implements MouseListener {
 
 	}
 
+	/**
+	 * Returns if the user is dragging or shift-dragging
+	 */
 	public boolean isDragging() {
 		return shiftDragging || normalDragging;
 	}
 
+	/**
+	 * Gets activePoints
+	 */
 	public Vector<Point> getActivePoints() {
 		return activePoints;
 	}
 
+	/**
+	 * Adds the active point. If activePoints was empty (contained null), clear it first
+	 *
+	 * @param activePoint the point to add
+	 */
 	public void addActivePoint(Point activePoint) {
 		if (activePoints.get(0) == null)
 			activePoints.clear();
 		activePoints.add(0, activePoint);
 	}
 
+	/**
+	 * Clears the active points. Adds null.
+	 */
 	public void clearActivePoints() {
 		activePoints.clear();
 		activePoints.add(null);
 	}
 
+	/**
+	 * Removes the given point. Adds null if the list is empty.
+	 *
+	 * @param p the point to remove
+	 */
 	public void removeActivePoint(Point p) {
 		activePoints.remove(p);
 		if (activePoints.isEmpty())
 			activePoints.add(null);
 	}
 
+	/**
+	 * Returns if the user is normal dragging
+	 */
 	public boolean isNormalDragging() {
 		return normalDragging;
 	}
 
+	/**
+	 * Returns if the user is shift-dragging
+	 */
 	public boolean isShiftDragging() {
 		return shiftDragging;
 	}
 
+	/**
+	 * Returns the point where the user started dragging
+	 */
 	public Point getDragStart() {
 		return dragStart;
 	}
 
+	/**
+	 * Resets ctrlDown and cursor
+	 */
 	public void fixControl() {
 		ctrlDown = false;
 		ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
+	/**
+	 * Sets oldDots to be the current dots before it is changed
+	 */
 	private void updateOldDots() {
 		oldDots = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
 	}
 
+	/**
+	 * Deselects all points and returns oldDots
+	 *
+	 * @return oldDots
+	 */
 	public DS2ConcurrentHashMap<Point, String> getOldDots() {
 		clearActivePoints();
 		ddp.getDotDataFrame().updateAll(activePoints);

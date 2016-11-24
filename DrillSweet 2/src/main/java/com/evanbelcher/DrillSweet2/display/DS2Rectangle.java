@@ -6,8 +6,6 @@ import java.awt.Rectangle;
  * Custom Rectangle whose contain method includes the bounds
  *
  * @author Evan Belcher
- * @version 1.0.0
- * @since 1.0.0
  */
 @SuppressWarnings("unused") public class DS2Rectangle extends Rectangle {
 
@@ -17,6 +15,14 @@ import java.awt.Rectangle;
 		super(r);
 	}
 
+	/**
+	 * If the dimensions are negative, change the bounds so that everything works
+	 *
+	 * @param i x
+	 * @param j y
+	 * @param k width
+	 * @param l height
+	 */
 	public DS2Rectangle(int i, int j, int k, int l) {
 		super(i, j, k, l);
 		int x = i, y = j, w = k, h = l;
@@ -33,8 +39,6 @@ import java.awt.Rectangle;
 
 	/**
 	 * Constructor that takes doubles for convenience / cleanliness
-	 *
-	 * @since 1.0.0
 	 */
 	public DS2Rectangle(double d, double e, double f, double g) {
 		new DS2Rectangle((int) d, (int) e, (int) f, (int) g);
@@ -46,7 +50,6 @@ import java.awt.Rectangle;
 	 * @param X x coordinate
 	 * @param Y y coordinate
 	 * @return whether the given coordinates fall inside or on the edges of this rectangle
-	 * @since 1.0.0
 	 */
 	@SuppressWarnings("deprecation") @Override public boolean inside(int X, int Y) {
 		int w = this.width;

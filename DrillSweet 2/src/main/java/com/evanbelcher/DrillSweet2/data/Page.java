@@ -7,8 +7,6 @@ import java.text.DecimalFormat;
  * Object to hold data about an individual page
  *
  * @author Evan Belcher
- * @version 1.0.0
- * @since 1.0.0
  */
 @SuppressWarnings("unused") public class Page {
 
@@ -25,7 +23,6 @@ import java.text.DecimalFormat;
 	 * Constructs the page object with the given number. All other fields are default.
 	 *
 	 * @param number the page number
-	 * @since 1.0.0
 	 */
 	public Page(int number) {
 		setNumber(number);
@@ -46,7 +43,6 @@ import java.text.DecimalFormat;
 	 * @param song            the song title
 	 * @param startingMeasure he starting measure number
 	 * @param dots            the map of dots
-	 * @since 1.0.0
 	 */
 	public Page(int number, String song, int startingMeasure, DS2ConcurrentHashMap<Point, String> dots) {
 		setNumber(number);
@@ -70,7 +66,6 @@ import java.text.DecimalFormat;
 	 * @param notes           the notes
 	 * @param textPoint       the top-left corner for the page text to be drawn at
 	 * @param dots            the map of dots
-	 * @since 1.0.0
 	 */
 	public Page(int number, String song, int startingMeasure, int endingMeasure, int counts, String notes, Point textPoint, DS2ConcurrentHashMap<Point, String> dots) {
 		setNumber(number);
@@ -87,7 +82,6 @@ import java.text.DecimalFormat;
 	 * Constructs the page object using all the values of another page object
 	 *
 	 * @param p the other Page
-	 * @since 1.0.0
 	 */
 	public Page(Page p) {
 		setNumber(p.getNumber());
@@ -101,8 +95,7 @@ import java.text.DecimalFormat;
 	}
 
 	/**
-	 * @return the page number
-	 * @since 1.0.0
+	 * Returns the page number
 	 */
 	public int getNumber() {
 		return number;
@@ -112,15 +105,13 @@ import java.text.DecimalFormat;
 	 * Sets the page number
 	 *
 	 * @param number
-	 * @since 1.0.0
 	 */
 	public void setNumber(int number) {
 		this.number = number;
 	}
 
 	/**
-	 * @return the song title
-	 * @since 1.0.0
+	 * Returns the song title
 	 */
 	public String getSong() {
 		return song;
@@ -130,15 +121,13 @@ import java.text.DecimalFormat;
 	 * Sets the song title
 	 *
 	 * @param song
-	 * @since 1.0.0
 	 */
 	public void setSong(String song) {
 		this.song = song;
 	}
 
 	/**
-	 * @return the starting measure number
-	 * @since 1.0.0
+	 * Returns the starting measure number
 	 */
 	public int getStartingMeasure() {
 		return startingMeasure;
@@ -148,15 +137,13 @@ import java.text.DecimalFormat;
 	 * Sets the starting measure number
 	 *
 	 * @param startingMeasure
-	 * @since 1.0.0
 	 */
 	public void setStartingMeasure(int startingMeasure) {
 		this.startingMeasure = startingMeasure;
 	}
 
 	/**
-	 * @return the ending measure number
-	 * @since 1.0.0
+	 * Returns the ending measure number
 	 */
 	public int getEndingMeasure() {
 		return endingMeasure;
@@ -166,15 +153,13 @@ import java.text.DecimalFormat;
 	 * Sets the ending measure number
 	 *
 	 * @param endingMeasure
-	 * @since 1.0.0
 	 */
 	public void setEndingMeasure(int endingMeasure) {
 		this.endingMeasure = endingMeasure;
 	}
 
 	/**
-	 * @return the counts
-	 * @since 1.0.0
+	 * Returns the counts
 	 */
 	public int getCounts() {
 		return counts;
@@ -184,15 +169,13 @@ import java.text.DecimalFormat;
 	 * Sets the counts
 	 *
 	 * @param counts
-	 * @since 1.0.0
 	 */
 	public void setCounts(int counts) {
 		this.counts = counts;
 	}
 
 	/**
-	 * @return the notes
-	 * @since 1.0.0
+	 * Returns the notes
 	 */
 	public String getNotes() {
 		return notes;
@@ -202,15 +185,13 @@ import java.text.DecimalFormat;
 	 * Sets the notes
 	 *
 	 * @param notes
-	 * @since 1.0.0
 	 */
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
 
 	/**
-	 * @return the the top-left corner for the page text to be drawn at
-	 * @since 1.0.0
+	 * Returns the the top-left corner for the page text to be drawn at
 	 */
 	public Point getTextPoint() {
 		return textPoint;
@@ -220,20 +201,23 @@ import java.text.DecimalFormat;
 	 * Sets the top-left corner for the page text to be drawn at
 	 *
 	 * @param textPoint
-	 * @since 1.0.0
 	 */
 	public void setTextPoint(Point textPoint) {
 		this.textPoint = textPoint;
 	}
 
 	/**
-	 * @return the map of dots
-	 * @since 1.0.0
+	 * Returns the map of dots
 	 */
 	public DS2ConcurrentHashMap<Point, String> getDots() {
 		return dots;
 	}
 
+	/**
+	 * Sets the dots to given dot map
+	 *
+	 * @param dots
+	 */
 	public void setDots(DS2ConcurrentHashMap<Point, String> dots) {
 		this.dots = new DS2ConcurrentHashMap<>(dots);
 	}
@@ -242,7 +226,6 @@ import java.text.DecimalFormat;
 	 * The well-fomatted representation of this object
 	 *
 	 * @return the display string
-	 * @since 1.0.0
 	 */
 	public String toDisplayString() {
 		DecimalFormat df = new DecimalFormat("00");
@@ -253,7 +236,6 @@ import java.text.DecimalFormat;
 	 * Default toString
 	 *
 	 * @return String representation of this object
-	 * @since 1.0.0
 	 */
 	@Override public String toString() {
 		return "Page [number=" + number + ", song=" + song + ", startingMeasure=" + startingMeasure + ", endingMeasure=" + endingMeasure + ", counts=" + counts + ", notes=" + notes + ", dots=" + dots + "]";

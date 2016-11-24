@@ -8,8 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * Pretty sure this is unnecessary but don't feel like removing it and testing
  *
  * @author Evan Belcher
- * @version 1.0.0
- * @since 1.0.0
  */
 public class DS2ConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
@@ -29,10 +27,8 @@ public class DS2ConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	 *
 	 * @param key
 	 * @return value
-	 * @since 1.0.0
 	 */
-	@Override
-	public V get(Object key) {
+	@Override public V get(Object key) {
 		if (key instanceof Point) {
 			Point point = (Point) key;
 			for (Object o : keySet()) {

@@ -13,8 +13,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
  * Custom JMenuBar holding the miscellaneous controls
  *
  * @author Evan Belcher
- * @version 1.1.0
- * @since 1.0.0
  */
 public class DS2MenuBar extends JMenuBar implements ActionListener {
 
@@ -27,8 +25,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 *
 	 * @param graphicsRunner the JFrame that created this
 	 * @param desktop        the DS2DesktopPane in the JFrame
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public DS2MenuBar(GraphicsRunner graphicsRunner, DS2DesktopPane desktop) {
 		super();
@@ -117,9 +113,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 
 	/**
 	 * On any menu item click.
-	 *
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	@Override public void actionPerformed(ActionEvent arg0) {
 		State.print(arg0.getActionCommand());
@@ -185,6 +178,11 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		desktop.getIO().fixControl();
 	}
 
+	/**
+	 * Prompts the user if they want to save.
+	 *
+	 * @return false if they want to cancel
+	 */
 	private boolean askToSave() {
 		int i = JOptionPane.showConfirmDialog(this, "Would you like to save your work first?", "Unsaved Work", JOptionPane.YES_NO_CANCEL_OPTION);
 		if (i == 2)
@@ -203,8 +201,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Creates a new json file for a new show
 	 *
 	 * @throws InterruptedException if there is an error when waiting for the saves to finish
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	private void newShow() throws InterruptedException {
 		if (askToSave()) {
@@ -236,7 +232,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 *
 	 * @param filename the file name to be cleansed
 	 * @return the cleansed file name
-	 * @since 1.0.0
 	 */
 	public static String cleanseFileName(String filename) {
 		filename = filename.trim();
@@ -256,8 +251,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Gets the show to open and opens the respective json file.
 	 *
 	 * @throws InterruptedException if there is an error when waiting for the saves to finish
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	private void openShow() throws InterruptedException {
 		if (askToSave()) {
@@ -293,7 +286,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Saves the current file under a new name/path
 	 *
 	 * @throws InterruptedException if there is an error when waiting for the saves to finish
-	 * @since 1.1.0
 	 */
 	private void saveAs() throws InterruptedException {
 		if (askToSave()) {

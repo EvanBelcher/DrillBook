@@ -2,7 +2,6 @@ package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -15,8 +14,6 @@ import net.miginfocom.swing.MigLayout;
  * Custom JInternal Frame to hold controls for the selected dot;
  *
  * @author Evan Belcher
- * @version 1.0.0
- * @since 1.0.0
  */
 public class DotDataFrame extends JInternalFrame {
 
@@ -35,7 +32,6 @@ public class DotDataFrame extends JInternalFrame {
 	 * Constructs the object. Adds components.
 	 *
 	 * @param mdp the DesktopPane that constains this
-	 * @since 1.0.0
 	 */
 	public DotDataFrame(DS2DesktopPane mdp) {
 		super("Dot Data", false, //resizable
@@ -76,7 +72,6 @@ public class DotDataFrame extends JInternalFrame {
 	 * Sets and returns the current page
 	 *
 	 * @return current page
-	 * @since 1.0.0
 	 */
 	public Page getCurrentPage() {
 		return Main.getCurrentPage();
@@ -86,7 +81,6 @@ public class DotDataFrame extends JInternalFrame {
 	 * Initializes instrument to contain the letters A-Z
 	 *
 	 * @return instrument
-	 * @since 1.0.0
 	 */
 	private JComboBox<String> getInstrument() {
 		//populate with letters A-Z
@@ -109,7 +103,6 @@ public class DotDataFrame extends JInternalFrame {
 	 * Initializes number to be the current dot's number
 	 *
 	 * @return number
-	 * @since 1.0.0
 	 */
 	private JSpinner getNumber() {
 		JSpinner spinner;
@@ -128,7 +121,6 @@ public class DotDataFrame extends JInternalFrame {
 	 * Initializes xPos to be the current dot's x position
 	 *
 	 * @return xPos
-	 * @since 1.0.0
 	 */
 	private JSpinner getXPos() {
 		Rectangle field = DS2DesktopPane.getField();
@@ -158,7 +150,6 @@ public class DotDataFrame extends JInternalFrame {
 	 * Initializes yPos to be the current dot's y position
 	 *
 	 * @return yPos
-	 * @since 1.0.0
 	 */
 	private JSpinner getYPos() {
 		Rectangle field = DS2DesktopPane.getField();
@@ -187,7 +178,6 @@ public class DotDataFrame extends JInternalFrame {
 	 * Initializes positionText to be the position text of the current dot
 	 *
 	 * @return positionText
-	 * @since 1.0.0
 	 */
 	private JTextArea getPositionText() {
 		JTextArea area;
@@ -207,7 +197,6 @@ public class DotDataFrame extends JInternalFrame {
 	 *
 	 * @param p the point
 	 * @return the position text
-	 * @since 1.0.0
 	 */
 	public static String getPointText(Point p) {
 		Rectangle field = DS2DesktopPane.getField();
@@ -267,8 +256,6 @@ public class DotDataFrame extends JInternalFrame {
 
 	/**
 	 * Sets position's text to be the position text of the current point
-	 *
-	 * @since 1.0.0
 	 */
 	private void updatePosition() {
 		position.setText(getPointText(mdp.getActivePoints().get(0)));
@@ -276,8 +263,6 @@ public class DotDataFrame extends JInternalFrame {
 
 	/**
 	 * Updates all components to be accurate to the current dot
-	 *
-	 * @since 1.0.0
 	 */
 	private void updateAll() {
 		instrument.setEnabled(true);
@@ -305,8 +290,7 @@ public class DotDataFrame extends JInternalFrame {
 	/**
 	 * Updates all components if the current dot is defined, disables all components if it is not
 	 *
-	 * @param p the current dot
-	 * @since 1.0.0
+	 * @param activePoints the current dot
 	 */
 	public void updateAll(Vector<Point> activePoints) {
 		if (activePoints.get(0) == null || activePoints.size() != 1) {
@@ -322,8 +306,6 @@ public class DotDataFrame extends JInternalFrame {
 
 	/**
 	 * Returns if a point is being deleted
-	 *
-	 * @since 1.0.0
 	 */
 	public static boolean isDeleting() {
 		return deleting;
