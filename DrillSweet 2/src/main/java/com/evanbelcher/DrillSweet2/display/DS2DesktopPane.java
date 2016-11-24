@@ -3,7 +3,6 @@ package main.java.com.evanbelcher.DrillSweet2.display;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
@@ -242,9 +241,9 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		ddf.updateAll(io.getActivePoints());
 		String folder = "";
 		if (makeFolder)
-			folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4), 0) + "/";
+			folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4)) + "/";
 
-		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"), 0);
+		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"));
 		File f = new File(Main.getFilePath() + folder + fileName + ".png");
 		f.mkdirs();
 
@@ -268,7 +267,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	protected void printCurrentPageToPdf() throws IOException {
 		io.clearActivePoints();
 		ddf.updateAll(io.getActivePoints());
-		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"), 0);
+		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"));
 		File f = new File(Main.getFilePath());
 		f.mkdirs();
 		f = new File(Main.getFilePath() + fileName + ".pdf");
@@ -322,7 +321,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		ddf.updateAll(io.getActivePoints());
 		File f = new File(Main.getFilePath());
 		f.mkdirs();
-		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4), 0);
+		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4));
 
 		f = new File(Main.getFilePath() + fileName + " full show" + ".pdf");
 

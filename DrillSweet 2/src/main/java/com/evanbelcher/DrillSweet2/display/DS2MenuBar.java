@@ -235,11 +235,10 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Makes the given file name valid for a Windows operating system.
 	 *
 	 * @param filename the file name to be cleansed
-	 * @param count    the count of times this has been called in the same operation.
 	 * @return the cleansed file name
 	 * @since 1.0.0
 	 */
-	public static String cleanseFileName(String filename, int count) {
+	public static String cleanseFileName(String filename) {
 		filename = filename.trim();
 		filename = filename.replaceAll("[<>:\"/\\\\|?*]", "");
 		filename = filename.trim();
@@ -248,7 +247,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		filename = filename.trim();
 		ArrayList<String> arr = new ArrayList<>(Arrays.asList(new String[] { "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9" }));
 		if (filename.isEmpty() || arr.contains(filename))
-			filename = "newfile" + (count > 0 ? count : "");
+			filename = "newfile";
 		filename = filename.trim();
 		return filename;
 	}

@@ -119,11 +119,11 @@ public class DotSheetMaker extends JPanel {
 	 */
 	@SuppressWarnings("unused") public void printAll() {
 		int height = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).createGraphics().getFontMetrics().getHeight();
-		String folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4), 0) + "/Dot Sheets/";
+		String folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4)) + "/Dot Sheets/";
 		File f = new File(Main.getFilePath() + folder);
 		f.mkdirs();
 		for (String s : map.keySet()) {
-			String fileName = DS2MenuBar.cleanseFileName(s, 0);
+			String fileName = DS2MenuBar.cleanseFileName(s);
 			f = new File(Main.getFilePath() + folder + fileName + ".png");
 			setSize(WIDTH, height * (3 + map.get(s).size() * 2));
 
@@ -150,7 +150,7 @@ public class DotSheetMaker extends JPanel {
 	 */
 	private void printAllToPdf() throws IOException {
 		printing = true;
-		String folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4), 0) + " Dot Sheets/";
+		String folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4)) + " Dot Sheets/";
 		File f = new File(Main.getFilePath() + folder);
 		f.mkdirs();
 		PDDocument doc = null;
@@ -163,11 +163,11 @@ public class DotSheetMaker extends JPanel {
 			for (String letter : chars) {
 				doc = new PDDocument();
 
-				String fileName = Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + " " + DS2MenuBar.cleanseFileName(letter, 0);
+				String fileName = Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + " " + DS2MenuBar.cleanseFileName(letter);
 				f = new File(Main.getFilePath() + folder + fileName + " dot sheet.pdf");
 
 				ArrayList<String> list = new ArrayList<>(map.keySet());
-				Collections.sort(list, nameComparator);
+				list.sort(nameComparator);
 				for (String dotName : list) {
 					if (dotName.replaceAll("[0-9]", "").equals(letter)) {
 						int i = 0;
