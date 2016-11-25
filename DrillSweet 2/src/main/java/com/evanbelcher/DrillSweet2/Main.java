@@ -15,8 +15,6 @@ import com.google.gson.reflect.TypeToken;
  * Handles keeping everything in memory
  *
  * @author Evan Belcher
- * @version 1.1.0
- * @since 1.0.0
  */
 @SuppressWarnings("SynchronizeOnNonFinalField") public class Main {
 
@@ -29,8 +27,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Start stuff
-	 *
-	 * @since 1.0.0
 	 */
 	public static void main(String[] args) { //look i changed PLEASE WORK
 		init();
@@ -40,9 +36,6 @@ import com.google.gson.reflect.TypeToken;
 	/**
 	 * Initializes the gson and filePath variables and loads the pages and state from the file
 	 * system
-	 *
-	 * @verison 1.1.0
-	 * @since 1.0.0
 	 */
 	private static void init() {
 		gson = new GsonBuilder().enableComplexMapKeySerialization()/*.setPrettyPrinting()*/.create();
@@ -56,9 +49,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Initializes and starts the GraphicsRunner (Graphics Thread)
-	 *
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	private static void start() {
 		graphicsRunner = new GraphicsRunner();
@@ -80,9 +70,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Loads the state and pages from the file system
-	 *
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public static void load(boolean loadState) {
 		if (new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\").mkdirs()) {
@@ -119,8 +106,6 @@ import com.google.gson.reflect.TypeToken;
 	 *
 	 * @throws FileNotFoundException if the STATE file cannot be found; this is handled by the
 	 *                               load() method
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	private static void loadState() throws FileNotFoundException {
 		File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + stateFileName);
@@ -133,8 +118,6 @@ import com.google.gson.reflect.TypeToken;
 	 *
 	 * @throws FileNotFoundException if the json file cannot be found; this is handled by the load()
 	 *                               method
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public static void loadPages() throws FileNotFoundException {
 		File f = new File(getFilePath() + getPagesFileName());
@@ -149,9 +132,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Saves the pages and state to the json files
-	 *
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public static void save(String... filenames) {
 		if (filenames.length != 0 && filenames.length != 2)
@@ -172,8 +152,6 @@ import com.google.gson.reflect.TypeToken;
 	 *
 	 * @param filename the filename, if not pagesFileName
 	 * @return the thread used to save the pages
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public static Thread savePages(String... filename) {
 		if (filename.length != 0 && filename.length != 1)
@@ -200,8 +178,6 @@ import com.google.gson.reflect.TypeToken;
 	 * Saves the state in the STATE file in json format
 	 *
 	 * @param filename the filename, if not stateFileName
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public static Thread saveState(String... filename) {
 		if (filename.length != 0 && filename.length != 1)
@@ -227,8 +203,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Adds a page with fields based on the current page
-	 *
-	 * @since 1.0.0
 	 */
 	public static void addPage() {
 		Page page = getPages().get(getPages().size());
@@ -241,7 +215,6 @@ import com.google.gson.reflect.TypeToken;
 	 *
 	 * @param index the index for the page
 	 * @param page  the page to be added
-	 * @since 1.0.0
 	 */
 	@SuppressWarnings("unused") public static void addPage(int index, Page page) {
 		pages.put(index, page);
@@ -249,8 +222,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Returns a copy of pages
-	 *
-	 * @since 1.0.0
 	 */
 	public static ConcurrentHashMap<Integer, Page> getPages() {
 		return new ConcurrentHashMap<>(pages);
@@ -258,8 +229,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Returns the actual pages object
-	 *
-	 * @since 1.0.0
 	 */
 	public static ConcurrentHashMap<Integer, Page> getRealPages() {
 		return pages;
@@ -270,7 +239,6 @@ import com.google.gson.reflect.TypeToken;
 	 * currentPage stored in the State
 	 *
 	 * @return a copy of the current page
-	 * @since 1.0.0
 	 */
 	public static Page getCurrentPage() {
 		int currentPage;
@@ -287,7 +255,6 @@ import com.google.gson.reflect.TypeToken;
 	 * Sets the current page number in the State object
 	 *
 	 * @param i the current page number
-	 * @since 1.0.0
 	 */
 	public static void setCurrentPage(int i) {
 		synchronized (state) {
@@ -297,8 +264,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Returns the State object
-	 *
-	 * @since 1.0.0
 	 */
 	public static State getState() {
 		return state;
@@ -306,9 +271,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Returns the file path. This maps to the DrillSweet2 folder in Documents by default
-	 *
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public static String getFilePath() {
 		synchronized (state) {
@@ -318,9 +280,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Sets the file path
-	 *
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public static void setFilePath(String path) {
 		synchronized (state) {
@@ -330,9 +289,6 @@ import com.google.gson.reflect.TypeToken;
 
 	/**
 	 * Returns the file name for the pages json file, should include .ds2
-	 *
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public static String getPagesFileName() {
 		synchronized (state) {
@@ -344,8 +300,6 @@ import com.google.gson.reflect.TypeToken;
 	 * Sets the file name for the pages json file
 	 *
 	 * @param newPagesFileName the file name, should include .ds2
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public static void setPagesFileName(String newPagesFileName) {
 		synchronized (state) {
@@ -358,7 +312,6 @@ import com.google.gson.reflect.TypeToken;
 	 *
 	 * @param file the name of the file
 	 * @return requested file
-	 * @since 1.0.0
 	 */
 	@SuppressWarnings("ConstantConditions") public static File getFile(String file) {
 		ClassLoader classLoader = Main.class.getClassLoader();

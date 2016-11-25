@@ -12,18 +12,11 @@ import be.quodlibet.boxable.BaseTable;
 import be.quodlibet.boxable.datatable.DataTable;
 import main.java.com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
 import main.java.com.evanbelcher.DrillSweet2.display.*;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.*;
+import org.apache.pdfbox.pdmodel.font.*;
 
 /**
  * Creates dot sheets for all dots
- *
- * @author Evan Belcher
- * @version 1.0.0
- * @since 1.0.0
  */
 public class DotSheetMaker extends JPanel {
 
@@ -46,8 +39,6 @@ public class DotSheetMaker extends JPanel {
 
 	/**
 	 * Constructs object. Automatically runs getDotSheetData().
-	 *
-	 * @since 1.0.0
 	 */
 	public DotSheetMaker() {
 		setSize(WIDTH, HEIGHT);
@@ -56,8 +47,6 @@ public class DotSheetMaker extends JPanel {
 
 	/**
 	 * Gets data for the dot sheet and stores it in map.
-	 *
-	 * @since 1.0.0
 	 */
 	private void getDotSheetData() {
 		map = new HashMap<>();
@@ -75,7 +64,6 @@ public class DotSheetMaker extends JPanel {
 	/**
 	 * Prints an individual dot sheet for the currentName and currentMap
 	 *
-	 * @since 1.0.0
 	 * @deprecated
 	 */
 	@Override public void paintComponent(Graphics g) {
@@ -114,16 +102,15 @@ public class DotSheetMaker extends JPanel {
 	/**
 	 * Prints all dot sheets to png files
 	 *
-	 * @since 1.0.0
 	 * @deprecated
 	 */
 	@SuppressWarnings("unused") public void printAll() {
 		int height = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).createGraphics().getFontMetrics().getHeight();
-		String folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4), 0) + "/Dot Sheets/";
+		String folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4)) + "/Dot Sheets/";
 		File f = new File(Main.getFilePath() + folder);
 		f.mkdirs();
 		for (String s : map.keySet()) {
-			String fileName = DS2MenuBar.cleanseFileName(s, 0);
+			String fileName = DS2MenuBar.cleanseFileName(s);
 			f = new File(Main.getFilePath() + folder + fileName + ".png");
 			setSize(WIDTH, height * (3 + map.get(s).size() * 2));
 
@@ -145,12 +132,10 @@ public class DotSheetMaker extends JPanel {
 
 	/**
 	 * Prints all dot sheets to pdf files
-	 *
-	 * @since 1.0.0
 	 */
 	private void printAllToPdf() throws IOException {
 		printing = true;
-		String folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4), 0) + " Dot Sheets/";
+		String folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4)) + " Dot Sheets/";
 		File f = new File(Main.getFilePath() + folder);
 		f.mkdirs();
 		PDDocument doc = null;
@@ -163,11 +148,11 @@ public class DotSheetMaker extends JPanel {
 			for (String letter : chars) {
 				doc = new PDDocument();
 
-				String fileName = Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + " " + DS2MenuBar.cleanseFileName(letter, 0);
+				String fileName = Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + " " + DS2MenuBar.cleanseFileName(letter);
 				f = new File(Main.getFilePath() + folder + fileName + " dot sheet.pdf");
 
 				ArrayList<String> list = new ArrayList<>(map.keySet());
-				Collections.sort(list, nameComparator);
+				list.sort(nameComparator);
 				for (String dotName : list) {
 					if (dotName.replaceAll("[0-9]", "").equals(letter)) {
 						int i = 0;
@@ -241,6 +226,11 @@ public class DotSheetMaker extends JPanel {
 		printing = false;
 	}
 
+	/**
+	 * Print all dot sheets
+	 *
+	 * @throws InterruptedException if the thread fails for some reason
+	 */
 	public void printDotSheets() throws InterruptedException {
 		Thread t = new Thread(() -> {
 			try {
@@ -255,8 +245,6 @@ public class DotSheetMaker extends JPanel {
 
 	/**
 	 * Returns printing
-	 *
-	 * @since 1.0.0
 	 */
 	public static boolean isPrinting() {
 		return printing;

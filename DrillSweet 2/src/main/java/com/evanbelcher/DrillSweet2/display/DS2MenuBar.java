@@ -13,8 +13,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
  * Custom JMenuBar holding the miscellaneous controls
  *
  * @author Evan Belcher
- * @version 1.1.0
- * @since 1.0.0
  */
 public class DS2MenuBar extends JMenuBar implements ActionListener {
 
@@ -27,8 +25,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 *
 	 * @param graphicsRunner the JFrame that created this
 	 * @param desktop        the DS2DesktopPane in the JFrame
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	public DS2MenuBar(GraphicsRunner graphicsRunner, DS2DesktopPane desktop) {
 		super();
@@ -106,13 +102,17 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		menuItem.setActionCommand("togglenames");
 		menuItem.addActionListener(this);
 		add(menuItem);
+
+		menuItem = new JMenuItem("Undo");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
+		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
+		menuItem.setActionCommand("undo");
+		menuItem.addActionListener(this);
+		add(menuItem);
 	}
 
 	/**
 	 * On any menu item click.
-	 *
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	@Override public void actionPerformed(ActionEvent arg0) {
 		State.print(arg0.getActionCommand());
@@ -168,16 +168,25 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			case "togglenames":
 				Main.getState().setShowNames(!Main.getState().isShowNames());
 				break;
+			case "undo":
+				Main.getCurrentPage().setDots(desktop.getIO().getOldDots());
+				break;
 			case "quit":
 			default:
 				gr.dispatchEvent(new WindowEvent(gr, WindowEvent.WINDOW_CLOSING));
 		}
+		desktop.getIO().fixControl();
 	}
 
-	private void askToSave() {
+	/**
+	 * Prompts the user if they want to save.
+	 *
+	 * @return false if they want to cancel
+	 */
+	private boolean askToSave() {
 		int i = JOptionPane.showConfirmDialog(this, "Would you like to save your work first?", "Unsaved Work", JOptionPane.YES_NO_CANCEL_OPTION);
 		if (i == 2)
-			throw new UnsupportedOperationException("They don't want to do that");
+			return false;
 		if (i == 0) {
 			try {
 				Main.savePages().join();
@@ -185,35 +194,35 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				e.printStackTrace();
 			}
 		}
+		return true;
 	}
 
 	/**
 	 * Creates a new json file for a new show
 	 *
 	 * @throws InterruptedException if there is an error when waiting for the saves to finish
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	private void newShow() throws InterruptedException {
-		askToSave();
-		final JFileChooser fc = new JFileChooser(new File(Main.getFilePath()));
-		fc.setFileFilter(new DS2FileFilter());
-		int returnVal = fc.showDialog(this, "New File");
+		if (askToSave()) {
+			final JFileChooser fc = new JFileChooser(new File(Main.getFilePath()));
+			fc.setFileFilter(new DS2FileFilter());
+			int returnVal = fc.showDialog(this, "New File");
 
-		String name, path;
+			String name, path;
 
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			try {
-				File file = fc.getSelectedFile();
-				path = file.getCanonicalPath();
-				path = path.substring(0, path.lastIndexOf('\\') + 1);
-				name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
-				Main.setFilePath(path);
-				Main.setPagesFileName(name);
-				Main.saveState().join();
-				Main.load(false);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				try {
+					File file = fc.getSelectedFile();
+					path = file.getCanonicalPath();
+					path = path.substring(0, path.lastIndexOf('\\') + 1);
+					name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
+					Main.setFilePath(path);
+					Main.setPagesFileName(name);
+					Main.saveState().join();
+					Main.load(false);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -222,11 +231,9 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Makes the given file name valid for a Windows operating system.
 	 *
 	 * @param filename the file name to be cleansed
-	 * @param count    the count of times this has been called in the same operation.
 	 * @return the cleansed file name
-	 * @since 1.0.0
 	 */
-	public static String cleanseFileName(String filename, int count) {
+	public static String cleanseFileName(String filename) {
 		filename = filename.trim();
 		filename = filename.replaceAll("[<>:\"/\\\\|?*]", "");
 		filename = filename.trim();
@@ -235,7 +242,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		filename = filename.trim();
 		ArrayList<String> arr = new ArrayList<>(Arrays.asList(new String[] { "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9" }));
 		if (filename.isEmpty() || arr.contains(filename))
-			filename = "newfile" + (count > 0 ? count : "");
+			filename = "newfile";
 		filename = filename.trim();
 		return filename;
 	}
@@ -244,34 +251,33 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Gets the show to open and opens the respective json file.
 	 *
 	 * @throws InterruptedException if there is an error when waiting for the saves to finish
-	 * @version 1.1.0
-	 * @since 1.0.0
 	 */
 	private void openShow() throws InterruptedException {
-		askToSave();
+		if (askToSave()) {
 
-		File file;
-		final JFileChooser fc = new JFileChooser(Main.getFilePath());
-		fc.setFileFilter(new DS2FileFilter());
-		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int returnVal;
-		do {
-			returnVal = fc.showOpenDialog(this);
-			file = fc.getSelectedFile();
-		} while (!file.exists());
+			File file;
+			final JFileChooser fc = new JFileChooser(Main.getFilePath());
+			fc.setFileFilter(new DS2FileFilter());
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int returnVal;
+			do {
+				returnVal = fc.showOpenDialog(this);
+				file = fc.getSelectedFile();
+			} while (!file.exists());
 
-		String name, path;
+			String name, path;
 
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			try {
-				path = file.getCanonicalPath();
-				path = path.substring(0, path.lastIndexOf('\\') + 1);
-				name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
-				Main.setFilePath(path);
-				Main.setPagesFileName(name);
-				Main.load(false);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				try {
+					path = file.getCanonicalPath();
+					path = path.substring(0, path.lastIndexOf('\\') + 1);
+					name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
+					Main.setFilePath(path);
+					Main.setPagesFileName(name);
+					Main.load(false);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -280,33 +286,32 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Saves the current file under a new name/path
 	 *
 	 * @throws InterruptedException if there is an error when waiting for the saves to finish
-	 * @since 1.1.0
 	 */
 	private void saveAs() throws InterruptedException {
-		askToSave();
+		if (askToSave()) {
 
-		final JFileChooser fc = new JFileChooser(Main.getFilePath());
-		fc.setFileFilter(new DS2FileFilter());
-		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int returnVal = fc.showSaveDialog(this);
-		File file = fc.getSelectedFile();
+			final JFileChooser fc = new JFileChooser(Main.getFilePath());
+			fc.setFileFilter(new DS2FileFilter());
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int returnVal = fc.showSaveDialog(this);
+			File file = fc.getSelectedFile();
 
-		String name, path;
+			String name, path;
 
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			try {
-				path = file.getCanonicalPath();
-				path = path.substring(0, path.lastIndexOf('\\') + 1);
-				name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
-				Main.setFilePath(path);
-				Main.setPagesFileName(name);
-				Main.savePages().join();
-				Main.saveState().join();
-				Main.load(false);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				try {
+					path = file.getCanonicalPath();
+					path = path.substring(0, path.lastIndexOf('\\') + 1);
+					name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
+					Main.setFilePath(path);
+					Main.setPagesFileName(name);
+					Main.savePages().join();
+					Main.saveState().join();
+					Main.load(false);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
-
 }

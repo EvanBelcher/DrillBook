@@ -1,9 +1,9 @@
 package main.java.com.evanbelcher.DrillSweet2.display;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
 
@@ -18,10 +18,8 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
  * Custom JDesktopPane to display the field
  *
  * @author Evan Belcher
- * @version 1.0.0
  */
-@SuppressWarnings("ConstantConditions") class DS2DesktopPane extends JDesktopPane
-		implements MouseListener {
+@SuppressWarnings("ConstantConditions") class DS2DesktopPane extends JDesktopPane {
 
 	private static final long serialVersionUID = -6004681236445735439L;
 
@@ -32,36 +30,30 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	private static final int dotSize = 9;
 
 	private boolean first = true;
-	private Point activePoint;
+
 	private DotDataFrame ddf;
 	private PageDataFrame pdf;
-
-	private boolean dragging = false;
-	private boolean cancel = false;
+	private IOListener io;
 
 	/**
 	 * Constructs DS2DesktopPane
-	 *
-	 * @since 1.0.0
 	 */
 	protected DS2DesktopPane() {
 		super();
 		setFocusable(true);
 		setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
-		addMouseListener(this);
+		io = new IOListener(this);
+		addMouseListener(io);
 
 		pdf = createPageDataFrame();
 		createDotDataFrame();
 		ddf.setLocation(pdf.getLocation().x, pdf.getLocation().y + pdf.getSize().height);
-
-		activePoint = null;
 	}
 
 	/**
 	 * Initializes the image from the file. Sets the scaleFactor and field.
 	 *
 	 * @throws IOException if the file cannot be found
-	 * @since 1.0.0
 	 */
 	private void getImage() throws IOException {
 		img = ImageIO.read(Main.getFile("field.png"));
@@ -72,8 +64,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * Sets the field.
-	 *
-	 * @since 1.0.0
 	 */
 	private void getFieldSize() {
 		BufferedImage bi = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
@@ -117,8 +107,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * Creates the Data Frame to hold Point controls
-	 *
-	 * @since 1.0.0
 	 */
 	private void createDotDataFrame() {
 		ddf = new DotDataFrame(this);
@@ -128,8 +116,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * Creates the Data Frame to hold Page controls
-	 *
-	 * @since 1.0.0
 	 */
 	private PageDataFrame createPageDataFrame() {
 		PageDataFrame frame = new PageDataFrame();
@@ -145,8 +131,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	/**
 	 * Paints the dots, dot names, and page info
-	 *
-	 * @since 1.0.0
 	 */
 	@Override public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, GraphicsRunner.SCREEN_SIZE.width, GraphicsRunner.SCREEN_SIZE.height);
@@ -200,7 +184,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		//Draw the points and their names
 		if (!PageDataFrame.getDeleting() && !DotDataFrame.isDeleting()) {
 			for (Point p : Main.getCurrentPage().getDots().keySet()) {
-				g.setColor((p.equals(activePoint)) ? Color.RED : Color.BLACK);
+				g.setColor((io.getActivePoints().contains(p)) ? (io.isNormalDragging() ? Color.PINK : Color.RED) : Color.BLACK);
 				g.fillOval(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize);
 				if (Main.getState().isShowNames())
 					g.drawString(Main.getCurrentPage().getDots().get(p), p.x, p.y - dotSize / 2);
@@ -208,12 +192,28 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		}
 
 		//Draw the dragged point
-		if (dragging && activePoint != null) {
+		if (io.isNormalDragging() && !io.getActivePoints().isEmpty()) {
 			g.setColor(Color.RED);
 			Point p = MouseInfo.getPointerInfo().getLocation();
 			Point q = getLocationOnScreen();
 			p.translate(-q.x, -q.y);
-			g.fillOval(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize);
+			Point activePoint = getActivePoints().get(0);
+			Dimension diff = new Dimension(p.x - activePoint.x, p.y - activePoint.y);
+			for (Point ap : io.getActivePoints())
+				g.fillOval((ap.x + diff.width) - dotSize / 2, (ap.y + diff.height) - dotSize / 2, dotSize, dotSize);
+		}
+		if (io.isShiftDragging()) {
+			g.setColor(Color.BLACK);
+			Graphics2D g2d = (Graphics2D) g;
+			final float dash1[] = { 10.0f };
+			final BasicStroke dashed = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f);
+			Stroke old = g2d.getStroke();
+			g2d.setStroke(dashed);
+			Point p = MouseInfo.getPointerInfo().getLocation();
+			Point q = getLocationOnScreen();
+			p.translate(-q.x, -q.y);
+			g2d.draw(new DS2Rectangle(io.getDragStart().x, io.getDragStart().y, p.x - io.getDragStart().x, p.y - io.getDragStart().y));
+			g2d.setStroke(old);
 		}
 	}
 
@@ -221,17 +221,16 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Prints the current page to a png file
 	 *
 	 * @param makeFolder if a folder titled by the show name should be created
-	 * @since 1.0.0
 	 * @deprecated
 	 */
 	@SuppressWarnings("unused") protected void printCurrentPage(boolean makeFolder) {
-		activePoint = null;
-		ddf.updateAll(activePoint);
+		io.clearActivePoints();
+		ddf.updateAll(io.getActivePoints());
 		String folder = "";
 		if (makeFolder)
-			folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4), 0) + "/";
+			folder = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4)) + "/";
 
-		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"), 0);
+		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"));
 		File f = new File(Main.getFilePath() + folder + fileName + ".png");
 		f.mkdirs();
 
@@ -250,12 +249,11 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Prints the current page to a pdf file
 	 *
 	 * @throws IOException if the file cannot be found or the pdf cannot be created
-	 * @since 1.0.0
 	 */
 	protected void printCurrentPageToPdf() throws IOException {
-		activePoint = null;
-		ddf.updateAll(activePoint);
-		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"), 0);
+		io.clearActivePoints();
+		ddf.updateAll(io.getActivePoints());
+		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4) + ": " + Main.getCurrentPage().toDisplayString().replaceAll("\\|", "-"));
 		File f = new File(Main.getFilePath());
 		f.mkdirs();
 		f = new File(Main.getFilePath() + fileName + ".pdf");
@@ -302,14 +300,13 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 * Prints every page to a pdf file
 	 *
 	 * @throws IOException if the file cannot be found or the pdf cannot be created
-	 * @since 1.0.0
 	 */
 	protected void printAllPagesToPdf() throws IOException {
-		activePoint = null;
-		ddf.updateAll(activePoint);
+		io.clearActivePoints();
+		ddf.updateAll(io.getActivePoints());
 		File f = new File(Main.getFilePath());
 		f.mkdirs();
-		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4), 0);
+		String fileName = DS2MenuBar.cleanseFileName(Main.getState().getCurrentFileName().substring(0, Main.getState().getCurrentFileName().length() - 4));
 
 		f = new File(Main.getFilePath() + fileName + " full show" + ".pdf");
 
@@ -363,143 +360,54 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		}
 	}
 
-	//Mouselistener
-
-	@Override public void mouseClicked(MouseEvent arg0) {
-	}
-
-	/**
-	 * On mouse click (down). Adds a new point if there is none or selects the point.
-	 *
-	 * @since 1.0.0
-	 */
-	@Override public void mousePressed(MouseEvent arg0) {
-		//Forgive a one-pixel click out of bounds error
-		Point clickPoint = new Point(arg0.getPoint());
-		if (clickPoint.x == field.width + field.x + 1)
-			clickPoint.translate(-1, 0);
-		if (clickPoint.y == field.height + field.y + 1)
-			arg0.getPoint().translate(0, -1);
-		State.print(clickPoint);
-
-		if (field.contains(clickPoint)) {
-
-			if (arg0.getButton() == 1) {
-				boolean intersects = false;
-				for (Point p : Main.getCurrentPage().getDots().keySet()) {
-					if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(arg0.getX(), arg0.getY())) {
-						dragging = true;
-						activePoint = p;
-						intersects = true;
-						break;
-					}
-				}
-				if (!intersects) {
-					if (activePoint == null) {
-						activePoint = arg0.getPoint();
-						Main.getCurrentPage().getDots().put(activePoint, "A1");
-					} else {
-						String str = Main.getCurrentPage().getDots().get(activePoint);
-						if (str != null)
-							str = str.replaceAll("[0-9]", "") + (Integer.parseInt(str.replaceAll("[A-Za-z]", "")) + 1);
-						else
-							str = "A1";
-						activePoint = arg0.getPoint();
-						Main.getCurrentPage().getDots().put(activePoint, str);
-					}
-				}
-				ddf.updateAll(activePoint);
-			}
-			if (dragging && arg0.getButton() == 3) { //cancel drag
-				cancel = true;
-				dragging = false;
-			}
-
-		} else {
-			State.print("click outside boundaries");
-		}
-	}
-
-	/**
-	 * On mouse release (up). Moves selected point if dragged (left click). Removes dot if
-	 * right-clicked.
-	 *
-	 * @since 1.0.0
-	 */
-	@Override public void mouseReleased(MouseEvent arg0) {
-
-		switch (arg0.getButton()) {
-			case 1:
-				if (dragging) {
-					//Move the point to where you released
-					int x = Math.min(Math.max(arg0.getX(), field.x), field.width + field.x);
-					int y = Math.min(Math.max(arg0.getY(), field.y), field.height + field.y);
-					Point p = new Point(x, y);
-					String s = Main.getCurrentPage().getDots().get(activePoint);
-					Main.getCurrentPage().getDots().remove(activePoint);
-					Main.getCurrentPage().getDots().put(p, s);
-					activePoint = p;
-				}
-				ddf.updateAll(activePoint);
-				break;
-			case 3:
-				if (!cancel) {
-					//remove the selected point
-					boolean intersects = false;
-					for (Point p : Main.getCurrentPage().getDots().keySet()) {
-						if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(arg0.getX(), arg0.getY())) {
-							Main.getCurrentPage().getDots().remove(p);
-							if (activePoint == null)
-								ddf.updateAll(activePoint);
-							if (activePoint.equals(p)) {
-								activePoint = null;
-								ddf.updateAll(activePoint);
-							}
-							intersects = true;
-							break;
-						}
-					}
-					if (!intersects) {
-						activePoint = null;
-						ddf.updateAll(activePoint);
-					}
-				} else //forgive the right click release (dont remove another point)
-					cancel = false;
-				break;
-		}
-		dragging = false;
-	}
-
-	@Override public void mouseEntered(MouseEvent arg0) {
-	}
-
-	@Override public void mouseExited(MouseEvent arg0) {
-	}
-
 	/**
 	 * @return the field boundaries as a rectangle
-	 * @since 1.0.0
 	 */
-	protected static Rectangle getField() {
+	protected static DS2Rectangle getField() {
 		return field;
 	}
 
 	/**
-	 * @return the active Point.
-	 * @since 1.0.0
+	 * Returns the active Points
 	 */
-	protected Point getActivePoint() {
-		return activePoint;
+	protected Vector<Point> getActivePoints() {
+		return io.getActivePoints();
 	}
 
 	/**
-	 * Sets the active Point
+	 * Adds a new active point
 	 *
 	 * @param p new active Point
-	 * @since 1.0.0
 	 */
-	protected void setActivePoint(Point p) {
-		activePoint = p;
+	protected void addActivePoint(Point p) {
+		io.addActivePoint(p);
 	}
 
+	/**
+	 * Clears the active points
+	 */
+	@SuppressWarnings("unused") public void clearActivePoints() {
+		io.clearActivePoints();
+	}
+
+	/**
+	 * Returns the dot size
+	 */
+	public static int getDotSize() {
+		return dotSize;
+	}
+
+	/**
+	 * Returns the dot data frame
+	 */
+	public DotDataFrame getDotDataFrame() {
+		return ddf;
+	}
+
+	/**
+	 * Returns the IOListener
+	 */
+	public IOListener getIO() {
+		return io;
+	}
 }
