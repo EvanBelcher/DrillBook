@@ -4,18 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>DrillSweet2</groupId>
     <artifactId>DrillSweet2</artifactId>
-    <version>1.0</version>
+    <version>1.2.0</version>
     <build>
         <sourceDirectory>src</sourceDirectory>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.1</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -24,60 +15,6 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
-            </plugin>
-
-            <!-- -->
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2-beta-5</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/src.xml</descriptor>
-                    </descriptors>
-                    <archive>
-                        <manifest>
-                            <mainClass>main.java.com.evanbelcher.DrillSweet2.Main</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>
-                            make-assembly
-                        </id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>main.java.com.evanbelcher.DrillSweet2.Main
-                                    </mainClass>
-                                    <manifestEntries>
-                                        <Main-Class>main.java.com.evanbelcher.DrillSweet2.Main
-                                        </Main-Class>
-                                        <Build-Number>1.1.0</Build-Number>
-                                    </manifestEntries>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

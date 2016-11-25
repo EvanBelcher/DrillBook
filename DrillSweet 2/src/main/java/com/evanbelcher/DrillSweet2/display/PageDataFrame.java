@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.*;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.event.*;
+import javax.swing.text.BadLocationException;
 
 import main.java.com.evanbelcher.DrillSweet2.Main;
 import main.java.com.evanbelcher.DrillSweet2.data.*;
@@ -74,7 +75,7 @@ public class PageDataFrame extends JInternalFrame {
 		add(new JLabel("Counts:"));
 		add(counts);
 		add(new JLabel("Notes:"));
-		add(notes, "span 2 2");
+		add(new JScrollPane(notes), "span 2 2");
 		add(new JLabel());
 		add(new JLabel("Text X Position"));
 		add(textX);
@@ -229,9 +230,11 @@ public class PageDataFrame extends JInternalFrame {
 	 * @return notes
 	 */
 	private JTextArea getNotes() {
-		JTextArea notes = new JTextArea(10, 20);
+		JTextArea notes = new JTextArea(10, 50);
 		notes.setText(currentPage.getNotes());
 		notes.setEditable(true);
+		notes.setLineWrap(true);
+		notes.setMaximumSize(notes.getPreferredSize());
 		notes.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override public void changedUpdate(DocumentEvent arg0) {
