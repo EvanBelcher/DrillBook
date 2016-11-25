@@ -33,7 +33,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 	private DotDataFrame ddf;
 	private PageDataFrame pdf;
-	private IOListener io;
+	private IOHandler io;
 
 	/**
 	 * Constructs DS2DesktopPane
@@ -42,7 +42,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		super();
 		setFocusable(true);
 		setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
-		io = new IOListener(this);
+		io = new IOHandler(this);
 		addMouseListener(io);
 
 		pdf = createPageDataFrame();
@@ -405,9 +405,9 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	}
 
 	/**
-	 * Returns the IOListener
+	 * Returns the IOHandler
 	 */
-	public IOListener getIO() {
+	public IOHandler getIO() {
 		return io;
 	}
 }

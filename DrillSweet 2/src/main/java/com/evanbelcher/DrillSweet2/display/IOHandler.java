@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Mouse Listener and Key Bindings for DS2DesktopPane
  */
-public class IOListener implements MouseListener {
+public class IOHandler implements MouseListener {
 
 	private DS2DesktopPane ddp;
 	private boolean normalDragging = false;
@@ -30,7 +30,7 @@ public class IOListener implements MouseListener {
 	 *
 	 * @param ds2DesktopPane
 	 */
-	public IOListener(DS2DesktopPane ds2DesktopPane) {
+	public IOHandler(DS2DesktopPane ds2DesktopPane) {
 		ddp = ds2DesktopPane;
 		activePoints = new Vector<>();
 		activePoints.add(null);
@@ -199,9 +199,20 @@ public class IOListener implements MouseListener {
 								String name = dotMap.get(p);
 								String letter = name.replaceAll("[0-9]", "");
 								State.print(letter);
-								for (Point q : dotMap.keySet()) {
-									if (dotMap.get(q).replaceAll("[0-9]", "").equalsIgnoreCase(letter)) {
-										addActivePoint(q);
+								if (activePoints.size() > 1 && activePoints.contains(p)) {
+									ListIterator<Point> iterator = activePoints.listIterator();
+									while (iterator.hasNext()) {
+										if (dotMap.get(iterator.next()).replaceAll("[0-9]", "").equalsIgnoreCase(letter))
+											iterator.remove();
+									}
+									if (activePoints.isEmpty())
+										activePoints.add(null);
+								} else {
+									State.print(letter);
+									for (Point q : dotMap.keySet()) {
+										if (dotMap.get(q).replaceAll("[0-9]", "").equalsIgnoreCase(letter)) {
+											addActivePoint(q);
+										}
 									}
 								}
 								break;
@@ -279,6 +290,7 @@ public class IOListener implements MouseListener {
 							normalDragging = false;
 							ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 						} else {
+							/*
 							int dotSize = DS2DesktopPane.getDotSize();
 							Iterator<Point> iterator = Main.getCurrentPage().getDots().keySet().iterator();
 							while (iterator.hasNext()) {
@@ -291,6 +303,26 @@ public class IOListener implements MouseListener {
 									break;
 								}
 							}
+							*/
+
+							int dotSize = DS2DesktopPane.getDotSize();
+							boolean intersects = false;
+							for (Point p : Main.getCurrentPage().getDots().keySet()) {
+								if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
+									intersects = true;
+									if (activePoints.contains(p)) {
+										updateOldDots();
+										for (Point activePoint : activePoints)
+											Main.getCurrentPage().getDots().remove(activePoint);
+										clearActivePoints();
+									} else {
+										Main.getCurrentPage().getDots().remove(p);
+									}
+									break;
+								}
+							}
+							if (!intersects)
+								clearActivePoints();
 						}
 						break;
 				}

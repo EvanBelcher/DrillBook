@@ -122,7 +122,8 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 - Right click off point to deselect all
 
 #### Holding alt:
-- Left click on point to select all points with same instrument
+- Left click on selected point to deselect all points with same instrument
+- Left click on deselected point to select all points with same instrument
 - Left click off point to do NOTHING
 - Right click on point to delete all points with same instrument
 - Right click off point to deselect all
@@ -131,7 +132,7 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 - Before drag:
 	- Left click off point to add and select point
 	- Left click on deselected point to select point
-	- Right click on selected point to remove point and deselect all points
+	- Right click on selected point to deselect and remove all selected points
 	- Right click on deselected point to remove point
 	- Right click off point to deselect selected point
 - Left click on selected point to drag
