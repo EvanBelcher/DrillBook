@@ -192,7 +192,7 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 		}
 
 		//Draw the dragged point
-		if (io.isNormalDragging() && !io.getActivePoints().isEmpty()) {
+		if (io.isNormalDragging()) {
 			g.setColor(Color.RED);
 			Point p = MouseInfo.getPointerInfo().getLocation();
 			Point q = getLocationOnScreen();
