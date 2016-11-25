@@ -1,9 +1,9 @@
-#Usage
+# Usage
 
-##Installation
+## Installation
 ????????????????????
 
-##Terminology
+## Terminology
 - Page
 	- Individual sheet of drill paper. Also known as a set. A page has [a set of information](../master/Usage.md#editing-the-page) associated with it.
 - Show
@@ -13,7 +13,7 @@
 - DrillSweet directory
 	- **Documents/DrillSweet 2/** by default
 
-##Placing and moving dots
+## Placing and moving dots
 - Click in the bounds of the field to place a dot. It will be automatically selected.
 - Click on an existing dot to select it.
 - Click and drag a dot to move it.
@@ -21,7 +21,7 @@
 - Right-click a dot to delete it.
 - Right click any empty space to deselect the currently selected dot.
 
-##Editing dots
+## Editing dots
 The "Dot Data" pane on the right side of the screen contains controls for the selected dot.
 Controls:
 - Instrument
@@ -35,10 +35,10 @@ Controls:
 - Position Text
 	- Not editable. Displays the position of the dot in English.
 	
-Notes:
+### Notes:
 - The instrument and number combined make the dot "name". Duplicate names are allowed technically, although it doesn't make much sense from a marching standpoint. Telling someone to be in two places at once is a bit evil, even for a band director.
 
-##Editing the page
+## Editing the page
 The "Page Data" pane on the right side of the screen contains controls for the entire page.
 - Navigation
 	- Pages are shown in the format:
@@ -66,13 +66,15 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 - Delete Page
 	- Remove this page and change the number of other pages to remove the hole. Band directors hate holes. **Does not save automatically, so if you somehow managed to do this accidentally, just close without saving and re-open.**
 
-##Display settings
+## Display settings
 - Toggle Gridlines
 	- Click it once and the grid disappears. Click it again and it's back. Abracadabra!
 - Toggle Dot Names
 	- Clap on. Dot names disappear. Clap off. Dot names re-appear.
+- Undo
+	- Remember that thing you just did? Because I don't.
 
-##File menu
+## File menu
 - New
 	- Create a new show in the [DrillSweet directory](../master/Usage.md#terminology) by default or wherever you choose. It will ask you for a filename for the new page. You don't need to give it the ".ds2" extension.
 - Open
@@ -89,3 +91,51 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 	- Saves dot sheets for every player as PDF files named by their instrument letter. These are all put in a folder called the name of your show "Dot Sheets". Hope you got all that.
 - Quit
 	- Now why would you want to do that?
+
+## Click controls
+
+### TL;DR:
+- Shift-click to draw a rectangle and select all dots in it. Right-click to remove all selected dots.
+- Control-click to select/deselect multiple dots one by one. Right-click to remove all selected dots.
+- Alt-click to select/deselect all dots by instrument Right click to remove all selected dots.
+- Normal click to add or select a dot. Drag to move selected dot(s). Right-click to remove dot.
+
+### Full Details:
+
+#### Holding shift:
+- Before drag:
+	- Right click on selected point to remove all selected points
+	- Right click on deselected point to do NOTHING
+	- Right click off point to deselect all
+- Left-click (on or off point) to drag
+- During drag:
+	- Draw and show rectangle
+	- Right click (on or off point) during drag to cancel
+- Release left click (on or off point) to stop drag and select all in rectangle
+
+#### Holding control:
+- Left click on selected point to deselect point
+- Left click on deselected point to select point
+- Left click off point to do NOTHING
+- Right click on selected point to remove all selected points
+- Right click on deselected point to deselect all
+- Right click off point to deselect all
+
+#### Holding alt:
+- Left click on point to select all points with same instrument
+- Left click off point to do NOTHING
+- Right click on point to delete all points with same instrument
+- Right click off point to deselect all
+
+#### Normal:
+- Before drag:
+	- Left click off point to add and select point
+	- Left click on deselected point to select point
+	- Right click on selected point to remove point and deselect all points
+	- Right click on deselected point to remove point
+	- Right click off point to deselect selected point
+- Left click on selected point to drag
+- During drag:
+	- Move and show selected point(s)
+	- Right click on or off point during drag to cancel
+- Release left click (on or off point) to stop drag and deposit selected point(s)
