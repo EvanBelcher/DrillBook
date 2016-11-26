@@ -22,11 +22,13 @@ import java.util.Vector;
 @SuppressWarnings("ConstantConditions") class DS2DesktopPane extends JDesktopPane {
 
 	private static final long serialVersionUID = -6004681236445735439L;
-	private static final int dotSize = 9;
-	private static DS2Rectangle field = new DS2Rectangle(25, 3, 1892 - 25, 982 - 3);
+
 	private BufferedImage img = null;
 	private int imgWidth;
 	private int imgHeight;
+	private static DS2Rectangle field = new DS2Rectangle(25, 3, 1892 - 25, 982 - 3);
+	private static final int dotSize = 9;
+
 	private boolean first = true;
 
 	private DotDataFrame ddf;
@@ -46,32 +48,6 @@ import java.util.Vector;
 		pdf = createPageDataFrame();
 		createDotDataFrame();
 		ddf.setLocation(pdf.getLocation().x, pdf.getLocation().y + pdf.getSize().height);
-	}
-
-	/**
-	 * @return the field boundaries as a rectangle
-	 */
-	protected static DS2Rectangle getField() {
-		return field;
-	}
-
-	/**
-	 * Returns the dot size
-	 */
-	public static int getDotSize() {
-		return dotSize;
-	}
-
-	/**
-	 * Initializes the image from the file. Sets the scaleFactor and field.
-	 *
-	 * @throws IOException if the file cannot be found
-	 */
-	private void getImage() throws IOException {
-		img = ImageIO.read(Main.getFile("field.png", this));
-		double scaleFactor = Math.min(getSize().getWidth() / img.getWidth(), getSize().getHeight() / img.getHeight());
-		imgWidth = (int) (img.getWidth() * scaleFactor);
-		imgHeight = (int) (img.getHeight() * scaleFactor);
 	}
 
 	/**
@@ -115,6 +91,18 @@ import java.util.Vector;
 
 		field = new DS2Rectangle(startX, startY, endX - startX, endY - startY);
 		State.print(field);
+	}
+
+	/**
+	 * Initializes the image from the file. Sets the scaleFactor and field.
+	 *
+	 * @throws IOException if the file cannot be found
+	 */
+	private void getImage() throws IOException {
+		img = ImageIO.read(Main.getFile("field.png", this));
+		double scaleFactor = Math.min(getSize().getWidth() / img.getWidth(), getSize().getHeight() / img.getHeight());
+		imgWidth = (int) (img.getWidth() * scaleFactor);
+		imgHeight = (int) (img.getHeight() * scaleFactor);
 	}
 
 	/**
@@ -373,6 +361,13 @@ import java.util.Vector;
 	}
 
 	/**
+	 * @return the field boundaries as a rectangle
+	 */
+	protected static DS2Rectangle getField() {
+		return field;
+	}
+
+	/**
 	 * Returns the active Points
 	 */
 	protected Vector<Point> getActivePoints() {
@@ -393,6 +388,13 @@ import java.util.Vector;
 	 */
 	@SuppressWarnings("unused") public void clearActivePoints() {
 		io.clearActivePoints();
+	}
+
+	/**
+	 * Returns the dot size
+	 */
+	public static int getDotSize() {
+		return dotSize;
 	}
 
 	/**

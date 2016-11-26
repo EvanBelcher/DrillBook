@@ -33,18 +33,6 @@ package com.evanbelcher.DrillSweet2.data;
 	}
 
 	/**
-	 * Prints objects to console if debug mode is true
-	 *
-	 * @param objects the object or objects to be printed (varargs)
-	 */
-	public static void print(Object... objects) {
-		if (DEBUG_MODE) {
-			for (Object o : objects)
-				System.out.println(o);
-		}
-	}
-
-	/**
 	 * Returns current page number
 	 */
 	public int getCurrentPage() {
@@ -129,6 +117,18 @@ package com.evanbelcher.DrillSweet2.data;
 	 */
 	@Override public String toString() {
 		return "State{" + "currentPage=" + currentPage + ", showGrid=" + showGrid + ", showNames=" + showNames + ", currentFileName='" + currentFileName + '\'' + ", filePath='" + filePath + '\'' + '}';
+	}
+
+	/**
+	 * Prints objects to console if debug mode is true
+	 *
+	 * @param objects the object or objects to be printed (varargs)
+	 */
+	public static void print(Object... objects) {
+		if (DEBUG_MODE) {
+			for (Object o : objects)
+				System.out.println(o);
+		}
 	}
 
 }
