@@ -1,18 +1,17 @@
 
 
-package main.java.com.evanbelcher.DrillSweet2.display;
+package com.evanbelcher.DrillSweet2.display;
 
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.util.concurrent.ConcurrentHashMap;
+import com.evanbelcher.DrillSweet2.Main;
+import com.evanbelcher.DrillSweet2.data.*;
+import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.event.*;
-import javax.swing.text.BadLocationException;
-
-import main.java.com.evanbelcher.DrillSweet2.Main;
-import main.java.com.evanbelcher.DrillSweet2.data.*;
-import net.miginfocom.swing.MigLayout;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The JInternalFrame holding controls to change the page
@@ -22,7 +21,7 @@ import net.miginfocom.swing.MigLayout;
 public class PageDataFrame extends JInternalFrame {
 
 	private static final long serialVersionUID = 377622521569426205L;
-
+	private static boolean deleting = false;
 	private JComboBox<String> navigation;
 	private JLabel number;
 	private JTextField song;
@@ -32,9 +31,7 @@ public class PageDataFrame extends JInternalFrame {
 	private JTextArea notes;
 	private JSpinner textX;
 	private JSpinner textY;
-
 	private Page currentPage;
-	private static boolean deleting = false;
 
 	/**
 	 * Creates the PageDataFrame object, initializes and adds components
@@ -89,6 +86,13 @@ public class PageDataFrame extends JInternalFrame {
 
 		//Set the window's location.
 		setLocation(GraphicsRunner.SCREEN_SIZE.width - getSize().width, 0);
+	}
+
+	/**
+	 * Returns whether a page is deleting
+	 */
+	public static boolean getDeleting() {
+		return deleting;
 	}
 
 	/**
@@ -394,13 +398,6 @@ public class PageDataFrame extends JInternalFrame {
 
 		navigation.addItemListener(new NavigationItemListener(this, navigation, currentPage));
 		updateAll();
-	}
-
-	/**
-	 * Returns whether a page is deleting
-	 */
-	public static boolean getDeleting() {
-		return deleting;
 	}
 
 }

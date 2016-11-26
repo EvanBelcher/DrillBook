@@ -1,6 +1,6 @@
-package main.java.com.evanbelcher.DrillSweet2.display;
+package com.evanbelcher.DrillSweet2.display;
 
-import java.awt.Rectangle;
+import java.awt.*;
 
 /**
  * Custom Rectangle whose contain method includes the bounds

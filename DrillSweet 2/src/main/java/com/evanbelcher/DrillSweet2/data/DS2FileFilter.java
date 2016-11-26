@@ -1,4 +1,4 @@
-package main.java.com.evanbelcher.DrillSweet2.data;
+package com.evanbelcher.DrillSweet2.data;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;

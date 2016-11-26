@@ -1,14 +1,14 @@
-package main.java.com.evanbelcher.DrillSweet2;
+package com.evanbelcher.DrillSweet2;
 
+import com.evanbelcher.DrillSweet2.data.*;
+import com.evanbelcher.DrillSweet2.display.GraphicsRunner;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+
+import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.swing.filechooser.FileSystemView;
-
-import main.java.com.evanbelcher.DrillSweet2.data.*;
-import main.java.com.evanbelcher.DrillSweet2.display.GraphicsRunner;
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * Driver class
@@ -18,9 +18,9 @@ import com.google.gson.reflect.TypeToken;
  */
 @SuppressWarnings("SynchronizeOnNonFinalField") public class Main {
 
+	private static final String stateFileName = "STATE";
 	private static ConcurrentHashMap<Integer, Page> pages;
 	private static State state;
-	private static final String stateFileName = "STATE";
 	private static GraphicsRunner graphicsRunner;
 
 	private static Gson gson;
@@ -313,9 +313,8 @@ import com.google.gson.reflect.TypeToken;
 	 * @param file the name of the file
 	 * @return requested file
 	 */
-	@SuppressWarnings("ConstantConditions") public static File getFile(String file) {
-		ClassLoader classLoader = Main.class.getClassLoader();
-		return new File(classLoader.getResource(file).getFile().replaceAll("%20", " "));
+	@SuppressWarnings("ConstantConditions") public static InputStream getFile(String file, Object o) {
+		return o.getClass().getResourceAsStream("/" + file);
 	}
 
 }

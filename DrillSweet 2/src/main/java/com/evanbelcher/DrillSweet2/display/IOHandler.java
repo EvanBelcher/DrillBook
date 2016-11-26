@@ -1,8 +1,7 @@
-package main.java.com.evanbelcher.DrillSweet2.display;
+package com.evanbelcher.DrillSweet2.display;
 
-import main.java.com.evanbelcher.DrillSweet2.Main;
-import main.java.com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
-import main.java.com.evanbelcher.DrillSweet2.data.State;
+import com.evanbelcher.DrillSweet2.Main;
+import com.evanbelcher.DrillSweet2.data.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,6 +47,7 @@ public class IOHandler implements MouseListener {
 		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_CONTROL, 0, true), "ctrlUp");
 		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, InputEvent.ALT_DOWN_MASK), "altDown");
 		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, 0, true), "altUp");
+		ddp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
 
 		ddp.getActionMap().put("shiftDown", new AbstractAction() {
 
@@ -95,6 +95,19 @@ public class IOHandler implements MouseListener {
 				State.print("altUp");
 				altDown = false;
 				ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+		ddp.getActionMap().put("delete", new AbstractAction() {
+
+			@Override public void actionPerformed(ActionEvent e) {
+				State.print("delete");
+				if (activePoints.get(0) != null) {
+					updateOldDots();
+					for (Point activePoint : activePoints)
+						Main.getCurrentPage().getDots().remove(activePoint);
+					clearActivePoints();
+					ddp.getDotDataFrame().updateAll(activePoints);
+				}
 			}
 		});
 	}

@@ -1,19 +1,19 @@
-package main.java.com.evanbelcher.DrillSweet2;
+package com.evanbelcher.DrillSweet2;
 
+import be.quodlibet.boxable.BaseTable;
+import be.quodlibet.boxable.datatable.DataTable;
+import com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
+import com.evanbelcher.DrillSweet2.display.*;
+import org.apache.pdfbox.pdmodel.*;
+import org.apache.pdfbox.pdmodel.font.*;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 import java.util.List;
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-
-import be.quodlibet.boxable.BaseTable;
-import be.quodlibet.boxable.datatable.DataTable;
-import main.java.com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
-import main.java.com.evanbelcher.DrillSweet2.display.*;
-import org.apache.pdfbox.pdmodel.*;
-import org.apache.pdfbox.pdmodel.font.*;
 
 /**
  * Creates dot sheets for all dots
@@ -21,11 +21,12 @@ import org.apache.pdfbox.pdmodel.font.*;
 public class DotSheetMaker extends JPanel {
 
 	private static final long serialVersionUID = 6371967053629285090L;
+	private static boolean printing = false;
+	private final int WIDTH = 300;
+	private final int HEIGHT = 1600;
 	private HashMap<String, HashMap<Integer, String>> map;
 	private HashMap<Integer, String> currentMap;
 	private String currentName;
-	private final int WIDTH = 300;
-	private final int HEIGHT = 1600;
 	private Comparator<String> nameComparator = (String o1, String o2) -> {
 		String name1 = o1.replaceAll("[0-9]", "");
 		String name2 = o2.replaceAll("[0-9]", "");
@@ -35,7 +36,6 @@ public class DotSheetMaker extends JPanel {
 			return name1.compareTo(name2);
 		return (num1 > num2) ? 1 : -1;
 	};
-	private static boolean printing = false;
 
 	/**
 	 * Constructs object. Automatically runs getDotSheetData().
@@ -43,6 +43,13 @@ public class DotSheetMaker extends JPanel {
 	public DotSheetMaker() {
 		setSize(WIDTH, HEIGHT);
 		getDotSheetData();
+	}
+
+	/**
+	 * Returns printing
+	 */
+	public static boolean isPrinting() {
+		return printing;
 	}
 
 	/**
@@ -241,12 +248,5 @@ public class DotSheetMaker extends JPanel {
 		});
 		t.start();
 		t.join();
-	}
-
-	/**
-	 * Returns printing
-	 */
-	public static boolean isPrinting() {
-		return printing;
 	}
 }

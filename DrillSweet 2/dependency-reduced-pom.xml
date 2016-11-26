@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>DrillSweet2</groupId>
   <artifactId>DrillSweet2</artifactId>
   <name>DrillSweet 2</name>
-  <version>1.0</version>
+    <version>1.2.0</version>
   <url>https://github.com/EbMinor3/DrillSweet2</url>
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.1</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+      <resources>
+          <resource>
+              <directory>src/main/resources</directory>
+          </resource>
+      </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -23,29 +21,6 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2-beta-5</version>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <descriptors>
-            <descriptor>src/main/assembly/src.xml</descriptor>
-          </descriptors>
-          <archive>
-            <manifest>
-              <mainClass>main.java.com.evanbelcher.DrillSweet2.Main</mainClass>
-            </manifest>
-          </archive>
         </configuration>
       </plugin>
       <plugin>
@@ -60,11 +35,11 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>main.java.com.evanbelcher.DrillSweet2.Main</mainClass>
-                  <manifestEntries>
-                    <Main-Class>main.java.com.evanbelcher.DrillSweet2.Main</Main-Class>
-                    <Build-Number>1.1.0</Build-Number>
-                  </manifestEntries>
+                    <mainClass>com.evanbelcher.DrillSweet2.Main</mainClass>
+                </transformer>
+                  <transformer>
+                      <resource>resources</resource>
+                      <file>field.png</file>
                 </transformer>
               </transformers>
             </configuration>

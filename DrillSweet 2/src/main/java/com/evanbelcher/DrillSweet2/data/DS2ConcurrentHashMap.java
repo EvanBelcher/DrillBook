@@ -1,6 +1,6 @@
-package main.java.com.evanbelcher.DrillSweet2.data;
+package com.evanbelcher.DrillSweet2.data;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

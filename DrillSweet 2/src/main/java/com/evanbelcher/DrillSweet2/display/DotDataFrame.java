@@ -1,14 +1,14 @@
-package main.java.com.evanbelcher.DrillSweet2.display;
+package com.evanbelcher.DrillSweet2.display;
 
+import com.evanbelcher.DrillSweet2.Main;
+import com.evanbelcher.DrillSweet2.data.Page;
+import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.Vector;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-
-import main.java.com.evanbelcher.DrillSweet2.Main;
-import main.java.com.evanbelcher.DrillSweet2.data.Page;
-import net.miginfocom.swing.MigLayout;
 
 /**
  * Custom JInternal Frame to hold controls for the selected dot;
@@ -18,15 +18,13 @@ import net.miginfocom.swing.MigLayout;
 public class DotDataFrame extends JInternalFrame {
 
 	private static final long serialVersionUID = -5792479023645647921L;
-
+	private static boolean deleting;
 	private JComboBox<String> instrument;
 	private JSpinner number;
 	private JSpinner xPos;
 	private JSpinner yPos;
 	private JTextArea position;
-
 	private DS2DesktopPane mdp;
-	private static boolean deleting;
 
 	/**
 	 * Constructs the object. Adds components.
@@ -64,6 +62,77 @@ public class DotDataFrame extends JInternalFrame {
 
 		//...Then set the window size or call pack...
 		pack();
+	}
+
+	/**
+	 * Gets the position text of the given point. Example:
+	 * Horizontal - Side 1: 3.75 inside of 25
+	 * Vertical - On Front Hash
+	 *
+	 * @param p the point
+	 * @return the position text
+	 */
+	public static String getPointText(Point p) {
+		Rectangle field = DS2DesktopPane.getField();
+		double width = field.getWidth();
+		double height = field.getHeight();
+		double fiveYards = width / 20.0;
+		double third = height / 3.0;
+		double x = p.getX() - field.getX();
+		double y = p.getY() - field.getY();
+
+		String str = "Horizontal - ";
+		if (x < width / 2)
+			str += "Side 1: ";
+		else
+			str += "Side 2: ";
+
+		double distance = Integer.MAX_VALUE;
+		int best = 0;
+		for (int i = 0; i <= 20; i++) {
+			if (Math.abs(fiveYards * i - x) < distance) {
+				distance = Math.abs(fiveYards * i - x);
+				best = i;
+			}
+		}
+		int closestYardLine = 50 - Math.abs(5 * best - 50);
+		String side = (best * fiveYards > x) != (x < width / 2) ? " inside of " : " outside of ";
+
+		double steps = (distance / fiveYards) * 8.0;
+		steps = Math.round(steps * 4.0) / 4.0;
+
+		str += steps + side + closestYardLine;
+		str = str.replace("0.0 outside of", "On").replace("0.0 inside of", "On");
+
+		if (str.contains("On 50"))
+			str = "Horizontal - On 50";
+
+		str += "\nVertical - ";
+
+		distance = Integer.MAX_VALUE;
+		best = 0;
+		for (int i = 0; i <= 3; i++) {
+			if (Math.abs(third * i - y) < distance) {
+				distance = Math.abs(third * i - y);
+				best = i;
+			}
+		}
+		String[] hashes = new String[] { "Back Sideline", "Back Hash", "Front Hash", "Front Sideline" };
+
+		side = (best * third > y) ? " behind " : " in front of ";
+		steps = (distance / fiveYards) * 8.0;
+		steps = Math.round(steps * 4.0) / 4.0;
+
+		str += steps + side + hashes[best];
+		str = str.replace("Vertical - 0.0 behind", "Vertical - On").replace("Vertical - 0.0 in front of", "Vertical - On");
+		return str;
+	}
+
+	/**
+	 * Returns if a point is being deleted
+	 */
+	public static boolean isDeleting() {
+		return deleting;
 	}
 
 	/**
@@ -188,70 +257,6 @@ public class DotDataFrame extends JInternalFrame {
 	}
 
 	/**
-	 * Gets the position text of the given point. Example:
-	 * Horizontal - Side 1: 3.75 inside of 25
-	 * Vertical - On Front Hash
-	 *
-	 * @param p the point
-	 * @return the position text
-	 */
-	public static String getPointText(Point p) {
-		Rectangle field = DS2DesktopPane.getField();
-		double width = field.getWidth();
-		double height = field.getHeight();
-		double fiveYards = width / 20.0;
-		double third = height / 3.0;
-		double x = p.getX() - field.getX();
-		double y = p.getY() - field.getY();
-
-		String str = "Horizontal - ";
-		if (x < width / 2)
-			str += "Side 1: ";
-		else
-			str += "Side 2: ";
-
-		double distance = Integer.MAX_VALUE;
-		int best = 0;
-		for (int i = 0; i <= 20; i++) {
-			if (Math.abs(fiveYards * i - x) < distance) {
-				distance = Math.abs(fiveYards * i - x);
-				best = i;
-			}
-		}
-		int closestYardLine = 50 - Math.abs(5 * best - 50);
-		String side = (best * fiveYards > x) != (x < width / 2) ? " inside of " : " outside of ";
-
-		double steps = (distance / fiveYards) * 8.0;
-		steps = Math.round(steps * 4.0) / 4.0;
-
-		str += steps + side + closestYardLine;
-		str = str.replace("0.0 outside of", "On").replace("0.0 inside of", "On");
-
-		if (str.contains("On 50"))
-			str = "Horizontal - On 50";
-
-		str += "\nVertical - ";
-
-		distance = Integer.MAX_VALUE;
-		best = 0;
-		for (int i = 0; i <= 3; i++) {
-			if (Math.abs(third * i - y) < distance) {
-				distance = Math.abs(third * i - y);
-				best = i;
-			}
-		}
-		String[] hashes = new String[] { "Back Sideline", "Back Hash", "Front Hash", "Front Sideline" };
-
-		side = (best * third > y) ? " behind " : " in front of ";
-		steps = (distance / fiveYards) * 8.0;
-		steps = Math.round(steps * 4.0) / 4.0;
-
-		str += steps + side + hashes[best];
-		str = str.replace("Vertical - 0.0 behind", "Vertical - On").replace("Vertical - 0.0 in front of", "Vertical - On");
-		return str;
-	}
-
-	/**
 	 * Sets position's text to be the position text of the current point
 	 */
 	private void updatePosition() {
@@ -299,12 +304,5 @@ public class DotDataFrame extends JInternalFrame {
 		} else {
 			updateAll();
 		}
-	}
-
-	/**
-	 * Returns if a point is being deleted
-	 */
-	public static boolean isDeleting() {
-		return deleting;
 	}
 }

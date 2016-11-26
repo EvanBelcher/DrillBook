@@ -1,13 +1,13 @@
-package main.java.com.evanbelcher.DrillSweet2.display;
+package com.evanbelcher.DrillSweet2.display;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import com.evanbelcher.DrillSweet2.*;
+import com.evanbelcher.DrillSweet2.data.State;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
-import main.java.com.evanbelcher.DrillSweet2.*;
-import main.java.com.evanbelcher.DrillSweet2.data.State;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
 
 /**
  * Custom JFrame and Runnable for the application
@@ -16,8 +16,8 @@ import main.java.com.evanbelcher.DrillSweet2.data.State;
  */
 public class GraphicsRunner extends JFrame implements Runnable {
 
-	private static final long serialVersionUID = 9006087905794888130L;
 	public static final Rectangle SCREEN_SIZE = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+	private static final long serialVersionUID = 9006087905794888130L;
 
 	/**
 	 * Initializes and sets up frame
@@ -37,7 +37,7 @@ public class GraphicsRunner extends JFrame implements Runnable {
 		setJMenuBar(new DS2MenuBar(this, desktop));
 
 		try {
-			setIconImage(ImageIO.read(Main.getFile("icon.png")));
+			setIconImage(ImageIO.read(Main.getFile("icon.png", this)));
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}

@@ -1,13 +1,13 @@
-package main.java.com.evanbelcher.DrillSweet2.display;
+package com.evanbelcher.DrillSweet2.display;
 
-import java.awt.Dimension;
+import com.evanbelcher.DrillSweet2.*;
+import com.evanbelcher.DrillSweet2.data.*;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import javax.swing.*;
-
-import main.java.com.evanbelcher.DrillSweet2.*;
-import main.java.com.evanbelcher.DrillSweet2.data.*;
 
 /**
  * Custom JMenuBar holding the miscellaneous controls
@@ -109,6 +109,26 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		menuItem.setActionCommand("undo");
 		menuItem.addActionListener(this);
 		add(menuItem);
+	}
+
+	/**
+	 * Makes the given file name valid for a Windows operating system.
+	 *
+	 * @param filename the file name to be cleansed
+	 * @return the cleansed file name
+	 */
+	public static String cleanseFileName(String filename) {
+		filename = filename.trim();
+		filename = filename.replaceAll("[<>:\"/\\\\|?*]", "");
+		filename = filename.trim();
+		if (!filename.isEmpty() && filename.charAt(filename.length() - 1) == '.')
+			filename = filename.substring(0, filename.length() - 1);
+		filename = filename.trim();
+		ArrayList<String> arr = new ArrayList<>(Arrays.asList(new String[] { "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9" }));
+		if (filename.isEmpty() || arr.contains(filename))
+			filename = "newfile";
+		filename = filename.trim();
+		return filename;
 	}
 
 	/**
@@ -225,26 +245,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Makes the given file name valid for a Windows operating system.
-	 *
-	 * @param filename the file name to be cleansed
-	 * @return the cleansed file name
-	 */
-	public static String cleanseFileName(String filename) {
-		filename = filename.trim();
-		filename = filename.replaceAll("[<>:\"/\\\\|?*]", "");
-		filename = filename.trim();
-		if (!filename.isEmpty() && filename.charAt(filename.length() - 1) == '.')
-			filename = filename.substring(0, filename.length() - 1);
-		filename = filename.trim();
-		ArrayList<String> arr = new ArrayList<>(Arrays.asList(new String[] { "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9" }));
-		if (filename.isEmpty() || arr.contains(filename))
-			filename = "newfile";
-		filename = filename.trim();
-		return filename;
 	}
 
 	/**

@@ -1,18 +1,18 @@
-package main.java.com.evanbelcher.DrillSweet2.display;
+package com.evanbelcher.DrillSweet2.display;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.Vector;
-import javax.imageio.ImageIO;
-import javax.swing.JDesktopPane;
-
+import com.evanbelcher.DrillSweet2.Main;
+import com.evanbelcher.DrillSweet2.data.*;
 import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.*;
-import main.java.com.evanbelcher.DrillSweet2.Main;
-import main.java.com.evanbelcher.DrillSweet2.data.*;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.Vector;
 
 /**
  * Custom JDesktopPane to display the field
@@ -22,13 +22,11 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 @SuppressWarnings("ConstantConditions") class DS2DesktopPane extends JDesktopPane {
 
 	private static final long serialVersionUID = -6004681236445735439L;
-
+	private static final int dotSize = 9;
+	private static DS2Rectangle field = new DS2Rectangle(25, 3, 1892 - 25, 982 - 3);
 	private BufferedImage img = null;
 	private int imgWidth;
 	private int imgHeight;
-	private static DS2Rectangle field = new DS2Rectangle(25, 3, 1892 - 25, 982 - 3);
-	private static final int dotSize = 9;
-
 	private boolean first = true;
 
 	private DotDataFrame ddf;
@@ -51,12 +49,26 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	}
 
 	/**
+	 * @return the field boundaries as a rectangle
+	 */
+	protected static DS2Rectangle getField() {
+		return field;
+	}
+
+	/**
+	 * Returns the dot size
+	 */
+	public static int getDotSize() {
+		return dotSize;
+	}
+
+	/**
 	 * Initializes the image from the file. Sets the scaleFactor and field.
 	 *
 	 * @throws IOException if the file cannot be found
 	 */
 	private void getImage() throws IOException {
-		img = ImageIO.read(Main.getFile("field.png"));
+		img = ImageIO.read(Main.getFile("field.png", this));
 		double scaleFactor = Math.min(getSize().getWidth() / img.getWidth(), getSize().getHeight() / img.getHeight());
 		imgWidth = (int) (img.getWidth() * scaleFactor);
 		imgHeight = (int) (img.getHeight() * scaleFactor);
@@ -361,13 +373,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	}
 
 	/**
-	 * @return the field boundaries as a rectangle
-	 */
-	protected static DS2Rectangle getField() {
-		return field;
-	}
-
-	/**
 	 * Returns the active Points
 	 */
 	protected Vector<Point> getActivePoints() {
@@ -388,13 +393,6 @@ import main.java.com.evanbelcher.DrillSweet2.data.*;
 	 */
 	@SuppressWarnings("unused") public void clearActivePoints() {
 		io.clearActivePoints();
-	}
-
-	/**
-	 * Returns the dot size
-	 */
-	public static int getDotSize() {
-		return dotSize;
 	}
 
 	/**
