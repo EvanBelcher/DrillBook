@@ -163,21 +163,27 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				break;
 			case "printpage":
 				try {
+					desktop.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 					desktop.printCurrentPageToPdf();
+					desktop.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				break;
 			case "printshow":
 				try {
+					desktop.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 					desktop.printAllPagesToPdf();
+					desktop.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				break;
 			case "printdotsheets":
 				try {
+					desktop.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 					new DotSheetMaker().printDotSheets();
+					desktop.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

@@ -6,14 +6,14 @@
   <groupId>DrillSweet2</groupId>
   <artifactId>DrillSweet2</artifactId>
   <name>DrillSweet 2</name>
-    <version>1.2.0</version>
+  <version>1.2.1</version>
   <url>https://github.com/EbMinor3/DrillSweet2</url>
   <build>
-      <resources>
-          <resource>
-              <directory>src/main/resources</directory>
-          </resource>
-      </resources>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -35,11 +35,11 @@
             <configuration>
               <transformers>
                 <transformer>
-                    <mainClass>com.evanbelcher.DrillSweet2.Main</mainClass>
+                  <mainClass>com.evanbelcher.DrillSweet2.Main</mainClass>
                 </transformer>
-                  <transformer>
-                      <resource>resources</resource>
-                      <file>field.png</file>
+                <transformer>
+                  <resource>resources</resource>
+                  <file>field.png</file>
                 </transformer>
               </transformers>
             </configuration>
