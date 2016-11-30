@@ -129,8 +129,6 @@ public class GraphicsRunner extends JFrame implements Runnable {
 
 			@Override public void windowOpened(WindowEvent e) {
 			}
-
 		});
 	}
-
 }

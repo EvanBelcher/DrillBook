@@ -2,6 +2,7 @@ package com.evanbelcher.DrillSweet2.display;
 
 import com.evanbelcher.DrillSweet2.*;
 import com.evanbelcher.DrillSweet2.data.*;
+import com.evanbelcher.DrillSweet2.display.play.PagePlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,10 +104,22 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		menuItem.addActionListener(this);
 		add(menuItem);
 
+		menuItem = new JMenuItem("Play");
+		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
+		menuItem.setActionCommand("play");
+		menuItem.addActionListener(this);
+		add(menuItem);
+
 		menuItem = new JMenuItem("Undo");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
 		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("undo");
+		menuItem.addActionListener(this);
+		add(menuItem);
+		menuItem = new JMenuItem("Redo");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK));
+		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
+		menuItem.setActionCommand("redo");
 		menuItem.addActionListener(this);
 		add(menuItem);
 	}
@@ -194,8 +207,18 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			case "togglenames":
 				Main.getState().setShowNames(!Main.getState().isShowNames());
 				break;
+			case "play":
+				play();
+				break;
 			case "undo":
-				Main.getCurrentPage().setDots(desktop.getIO().getOldDots());
+				Main.getState().undo();
+				desktop.getIO().clearActivePoints();
+				desktop.getDotDataFrame().updateAll(desktop.getActivePoints());
+				break;
+			case "redo":
+				Main.getState().redo();
+				desktop.getIO().clearActivePoints();
+				desktop.getDotDataFrame().updateAll(desktop.getActivePoints());
 				break;
 			case "quit":
 			default:
@@ -319,5 +342,83 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				}
 			}
 		}
+	}
+
+	private void play() {
+		if (checkNoDuplicates() && checkNoMissing()) {
+			PagePlayer p = new PagePlayer(Main.getPages().get(Main.getState().getCurrentPage() - 1).getDots(), Main.getCurrentPage().getDots(), Main.getCurrentPage().getCounts(), desktop);
+			new Thread(p, "playerThread").start();
+		}
+	}
+
+	private boolean checkNoDuplicates() {
+		ArrayList<String> names = new ArrayList<>();
+		ArrayList<String> badNames = new ArrayList<>();
+		DS2ConcurrentHashMap<Point, String> dots = Main.getCurrentPage().getDots();
+		for (String s : dots.values()) {
+			if (!names.contains(s))
+				names.add(s);
+			else
+				badNames.add(s);
+		}
+		if (!badNames.isEmpty()) {
+			String str = "The following players have more than one dot on the page:\n";
+			for (String s : badNames)
+				str += s + "\n";
+			JOptionPane.showMessageDialog(this, str.trim(), "Conflicts!", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return checkNoDuplicates(Main.getState().getCurrentPage() - 1);
+	}
+
+	private boolean checkNoDuplicates(int pageNum) {
+		ArrayList<String> names = new ArrayList<>();
+		ArrayList<String> badNames = new ArrayList<>();
+		DS2ConcurrentHashMap<Point, String> dots;
+		try {
+			dots = Main.getPages().get(pageNum).getDots();
+		} catch (NullPointerException e) {
+			if (pageNum == 0)
+				JOptionPane.showMessageDialog(this, "To play from the first page to the second page, navigate to the second page and click \"Play\".", "Can't play the first page", JOptionPane.ERROR_MESSAGE);
+			else
+				JOptionPane.showMessageDialog(this, "Cannot find previous page", "Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		for (String s : dots.values()) {
+			if (!names.contains(s))
+				names.add(s);
+			else
+				badNames.add(s);
+		}
+		if (!badNames.isEmpty()) {
+			String str = "The following players have more than one dot on Page " + pageNum + ":\n";
+			for (String s : badNames)
+				str += s + "\n";
+			JOptionPane.showMessageDialog(this, str.trim(), "Conflicts!", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
+	}
+
+	private boolean checkNoMissing() {
+		int currentPageNum = Main.getState().getCurrentPage();
+		if (currentPageNum == 1) {
+			JOptionPane.showMessageDialog(this, "To play from the first page to the second page, navigate to the second page and click \"Play\".", "Can't play the first page", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		DS2ConcurrentHashMap<Point, String> currentDots = Main.getCurrentPage().getDots();
+		DS2ConcurrentHashMap<Point, String> previousDots = Main.getPages().get(currentPageNum - 1).getDots();
+		ArrayList<String> badNames = new ArrayList<>();
+		for (String name : previousDots.values()) {
+			if (!currentDots.containsValue(name))
+				badNames.add(name);
+		}
+		if (!badNames.isEmpty()) {
+			String str = "The following players from last page have disappeared on this page:\n";
+			for (String s : badNames)
+				str += s + "\n";
+			JOptionPane.showMessageDialog(this, str.trim(), "Missing Players!", JOptionPane.INFORMATION_MESSAGE);
+		}
+		return true;
 	}
 }

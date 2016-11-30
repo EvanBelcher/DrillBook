@@ -22,7 +22,6 @@ public class IOHandler implements MouseListener {
 	private boolean shiftDown = false;
 	private boolean ctrlDown = false;
 	private boolean altDown = false;
-	private DS2ConcurrentHashMap<Point, String> oldDots;
 
 	/**
 	 * Initializes variables and sets up key bindings
@@ -34,7 +33,6 @@ public class IOHandler implements MouseListener {
 		activePoints = new Vector<>();
 		activePoints.add(null);
 		setupKeyBindings();
-		updateOldDots();
 	}
 
 	/**
@@ -102,11 +100,12 @@ public class IOHandler implements MouseListener {
 			@Override public void actionPerformed(ActionEvent e) {
 				State.print("delete");
 				if (activePoints.get(0) != null) {
-					updateOldDots();
+					updateHistory();
 					for (Point activePoint : activePoints)
 						Main.getCurrentPage().getDots().remove(activePoint);
 					clearActivePoints();
 					ddp.getDotDataFrame().updateAll(activePoints);
+					updatePresent();
 				}
 			}
 		});
@@ -153,10 +152,11 @@ public class IOHandler implements MouseListener {
 								if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
 									intersects = true;
 									if (activePoints.contains(p)) {
-										updateOldDots();
+										updateHistory();
 										for (Point activePoint : activePoints)
 											Main.getCurrentPage().getDots().remove(activePoint);
 										clearActivePoints();
+										updatePresent();
 									}
 									break;
 								}
@@ -189,10 +189,11 @@ public class IOHandler implements MouseListener {
 							if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
 								intersects = true;
 								if (activePoints.contains(p)) {
-									updateOldDots();
+									updateHistory();
 									for (Point activePoint : activePoints)
 										Main.getCurrentPage().getDots().remove(activePoint);
 									clearActivePoints();
+									updatePresent();
 								} else
 									clearActivePoints();
 								break;
@@ -237,7 +238,7 @@ public class IOHandler implements MouseListener {
 						boolean intersects = false;
 						for (Point p : Main.getCurrentPage().getDots().keySet()) {
 							if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
-								updateOldDots();
+								updateHistory();
 								intersects = true;
 								String name = dotMap.get(p);
 								String letter = name.replaceAll("[0-9]", "");
@@ -246,7 +247,7 @@ public class IOHandler implements MouseListener {
 									clearActivePoints();
 
 								dotMap.keySet().removeIf(q -> dotMap.get(q).replaceAll("[0-9]", "").equals(letter));
-
+								updatePresent();
 								break;
 							}
 						}
@@ -280,7 +281,7 @@ public class IOHandler implements MouseListener {
 							}
 
 							if (!intersects) {
-								updateOldDots();
+								updateHistory();
 								String str = "A1";
 								Point activePoint = e.getPoint();
 								if (activePoints.get(0) != null) {
@@ -295,6 +296,7 @@ public class IOHandler implements MouseListener {
 
 								clearActivePoints();
 								addActivePoint(activePoint);
+								updatePresent();
 							}
 						}
 						break;
@@ -303,31 +305,17 @@ public class IOHandler implements MouseListener {
 							normalDragging = false;
 							ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 						} else {
-							/*
-							int dotSize = DS2DesktopPane.getDotSize();
-							Iterator<Point> iterator = Main.getCurrentPage().getDots().keySet().iterator();
-							while (iterator.hasNext()) {
-								Point p = new Point(iterator.next());
-								if (activePoints.contains(p))
-									clearActivePoints();
-								if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
-									oldDots = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
-									iterator.remove();
-									break;
-								}
-							}
-							*/
-
 							int dotSize = DS2DesktopPane.getDotSize();
 							boolean intersects = false;
 							for (Point p : Main.getCurrentPage().getDots().keySet()) {
 								if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
 									intersects = true;
 									if (activePoints.contains(p)) {
-										updateOldDots();
+										updateHistory();
 										for (Point activePoint : activePoints)
 											Main.getCurrentPage().getDots().remove(activePoint);
 										clearActivePoints();
+										updatePresent();
 									} else {
 										Main.getCurrentPage().getDots().remove(p);
 									}
@@ -369,7 +357,7 @@ public class IOHandler implements MouseListener {
 			shiftDragging = false;
 		} else if (normalDragging) {
 			if (e.getButton() == MouseEvent.BUTTON1) {
-				oldDots = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
+				updateHistory();
 				Dimension diff = new Dimension(clickPoint.x - dragStart.x, clickPoint.y - dragStart.y);
 
 				ListIterator<Point> iterator = activePoints.listIterator();
@@ -383,6 +371,7 @@ public class IOHandler implements MouseListener {
 					Main.getCurrentPage().getDots().put(p, s);
 					iterator.set(p);
 				}
+				updatePresent();
 			}
 			normalDragging = false;
 			ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -484,18 +473,11 @@ public class IOHandler implements MouseListener {
 	/**
 	 * Sets oldDots to be the current dots before it is changed
 	 */
-	private void updateOldDots() {
-		oldDots = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
+	private void updateHistory() {
+		Main.getState().addHistory();
 	}
 
-	/**
-	 * Deselects all points and returns oldDots
-	 *
-	 * @return oldDots
-	 */
-	public DS2ConcurrentHashMap<Point, String> getOldDots() {
-		clearActivePoints();
-		ddp.getDotDataFrame().updateAll(activePoints);
-		return oldDots;
+	private void updatePresent() {
+		Main.getState().addPresent();
 	}
 }

@@ -19,15 +19,14 @@ import java.util.Vector;
  *
  * @author Evan Belcher
  */
-@SuppressWarnings("ConstantConditions") class DS2DesktopPane extends JDesktopPane {
+@SuppressWarnings("ConstantConditions") public class DS2DesktopPane extends JDesktopPane {
 
 	private static final long serialVersionUID = -6004681236445735439L;
 
-	private BufferedImage img = null;
-	private int imgWidth;
-	private int imgHeight;
+	private BufferedImage fieldImage = null;
+	private Dimension imgSize;
 	private static DS2Rectangle field = new DS2Rectangle(25, 3, 1892 - 25, 982 - 3);
-	private static final int dotSize = 9;
+	private static final int DOT_SIZE = 9;
 
 	private boolean first = true;
 
@@ -56,7 +55,7 @@ import java.util.Vector;
 	private void getFieldSize() {
 		BufferedImage bi = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = bi.createGraphics();
-		g.drawImage(img, (getSize().width - imgWidth) / 2, (getSize().height - imgHeight) / 2, imgWidth, imgHeight, null);
+		g.drawImage(fieldImage, (getSize().width - imgSize.width) / 2, (getSize().height - imgSize.height) / 2, imgSize.width, imgSize.height, null);
 		g.dispose();
 
 		int startX = 0, startY = 0, endX = 0, endY = 0;
@@ -99,10 +98,9 @@ import java.util.Vector;
 	 * @throws IOException if the file cannot be found
 	 */
 	private void getImage() throws IOException {
-		img = ImageIO.read(Main.getFile("field.png", this));
-		double scaleFactor = Math.min(getSize().getWidth() / img.getWidth(), getSize().getHeight() / img.getHeight());
-		imgWidth = (int) (img.getWidth() * scaleFactor);
-		imgHeight = (int) (img.getHeight() * scaleFactor);
+		fieldImage = ImageIO.read(Main.getFile("field.png", this));
+		double scaleFactor = Math.min(getSize().getWidth() / fieldImage.getWidth(), getSize().getHeight() / fieldImage.getHeight());
+		imgSize = new Dimension((int) (fieldImage.getWidth() * scaleFactor), (int) (fieldImage.getHeight() * scaleFactor));
 	}
 
 	/**
@@ -133,9 +131,9 @@ import java.util.Vector;
 	 * Paints the dots, dot names, and page info
 	 */
 	@Override public void paintComponent(Graphics g) {
-		g.clearRect(0, 0, GraphicsRunner.SCREEN_SIZE.width, GraphicsRunner.SCREEN_SIZE.height);
+		g.clearRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, GraphicsRunner.SCREEN_SIZE.width, GraphicsRunner.SCREEN_SIZE.height);
+		g.fillRect(0, 0, getWidth(), getHeight());
 
 		//if it's the first thing, get the image and get the bounds of the field
 		if (first) {
@@ -151,7 +149,7 @@ import java.util.Vector;
 
 		if (Main.getState().isShowGrid()) {
 			//draw the grid
-			g.drawImage(img, (getSize().width - imgWidth) / 2, (getSize().height - imgHeight) / 2, imgWidth, imgHeight, null);
+			g.drawImage(fieldImage, (getSize().width - imgSize.width) / 2, (getSize().height - imgSize.height) / 2, imgSize.width, imgSize.height, null);
 
 			//draw the text
 			if (!PageDataFrame.getDeleting()) {
@@ -185,9 +183,9 @@ import java.util.Vector;
 		if (!PageDataFrame.getDeleting() && !DotDataFrame.isDeleting()) {
 			for (Point p : Main.getCurrentPage().getDots().keySet()) {
 				g.setColor((io.getActivePoints().contains(p)) ? (io.isNormalDragging() ? Color.PINK : Color.RED) : Color.BLACK);
-				g.fillOval(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize);
+				g.fillOval(p.x - DOT_SIZE / 2, p.y - DOT_SIZE / 2, DOT_SIZE, DOT_SIZE);
 				if (Main.getState().isShowNames())
-					g.drawString(Main.getCurrentPage().getDots().get(p), p.x, p.y - dotSize / 2);
+					g.drawString(Main.getCurrentPage().getDots().get(p), p.x, p.y - DOT_SIZE / 2);
 			}
 		}
 
@@ -200,7 +198,7 @@ import java.util.Vector;
 			Point activePoint = getActivePoints().get(0);
 			Dimension diff = new Dimension(p.x - activePoint.x, p.y - activePoint.y);
 			for (Point ap : io.getActivePoints())
-				g.fillOval((ap.x + diff.width) - dotSize / 2, (ap.y + diff.height) - dotSize / 2, dotSize, dotSize);
+				g.fillOval((ap.x + diff.width) - DOT_SIZE / 2, (ap.y + diff.height) - DOT_SIZE / 2, DOT_SIZE, DOT_SIZE);
 		}
 		if (io.isShiftDragging()) {
 			g.setColor(Color.BLACK);
@@ -363,7 +361,7 @@ import java.util.Vector;
 	/**
 	 * @return the field boundaries as a rectangle
 	 */
-	protected static DS2Rectangle getField() {
+	public static DS2Rectangle getField() {
 		return field;
 	}
 
@@ -394,7 +392,7 @@ import java.util.Vector;
 	 * Returns the dot size
 	 */
 	public static int getDotSize() {
-		return dotSize;
+		return DOT_SIZE;
 	}
 
 	/**
@@ -409,5 +407,13 @@ import java.util.Vector;
 	 */
 	public IOHandler getIO() {
 		return io;
+	}
+
+	public BufferedImage getFieldImage() {
+		return fieldImage;
+	}
+
+	public Dimension getImgSize() {
+		return imgSize;
 	}
 }

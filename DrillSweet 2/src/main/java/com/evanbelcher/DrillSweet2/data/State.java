@@ -1,5 +1,10 @@
 package com.evanbelcher.DrillSweet2.data;
 
+import com.evanbelcher.DrillSweet2.Main;
+
+import java.awt.*;
+import java.util.ArrayDeque;
+
 /**
  * Holds information about the current state of the application
  *
@@ -13,6 +18,10 @@ package com.evanbelcher.DrillSweet2.data;
 	private boolean showNames = true;
 	private String currentFileName;
 	private String filePath;
+	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> history;
+	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> future;
+	private transient boolean justUndid = false; //TODO really should fix
+	private transient boolean justRedid = false;
 
 	/**
 	 * Constructs the object with given current page.
@@ -23,6 +32,9 @@ package com.evanbelcher.DrillSweet2.data;
 		this.currentPage = currentPage;
 		this.filePath = filePath;
 		this.currentFileName = currentFileName;
+		history = new ArrayDeque<>();
+		future = new ArrayDeque<>();
+		justUndid = false;
 	}
 
 	/**
@@ -129,6 +141,62 @@ package com.evanbelcher.DrillSweet2.data;
 			for (Object o : objects)
 				System.out.println(o);
 		}
+	}
+
+	public void addHistory() {
+		checkVars();
+		history.offer(new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots()));
+		while (history.size() > 20)
+			history.pollFirst();
+		clearFuture();
+	}
+
+	public void addPresent() {
+		checkVars();
+		future.offer(new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots()));
+		while (future.size() > 20)
+			future.pollFirst();
+	}
+
+	public void undo() {
+		checkVars();
+		if (history.size() > 0) {
+			future.offer(history.pollLast());
+			while (future.size() > 20)
+				future.pollFirst();
+			Main.getCurrentPage().setDots(future.peekLast());
+			if (justRedid) {
+				justRedid = false;
+				undo();
+			}
+			justUndid = true;
+		}
+	}
+
+	public void redo() {
+		checkVars();
+		if (future.size() > 0) {
+			history.offer(future.pollLast());
+			while (history.size() > 20)
+				history.pollFirst();
+			Main.getCurrentPage().setDots(history.peekLast());
+			if (justUndid) {
+				justUndid = false;
+				redo();
+			}
+			justRedid = true;
+		}
+	}
+
+	private void checkVars() {
+		if (history == null)
+			history = new ArrayDeque<>();
+		if (future == null)
+			future = new ArrayDeque<>();
+	}
+
+	private void clearFuture() {
+		future.clear();
 	}
 
 }
