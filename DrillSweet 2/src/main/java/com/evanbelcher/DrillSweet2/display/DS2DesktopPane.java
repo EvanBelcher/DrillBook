@@ -416,4 +416,5 @@ import java.util.Vector;
 	public Dimension getImgSize() {
 		return imgSize;
 	}
+
 }

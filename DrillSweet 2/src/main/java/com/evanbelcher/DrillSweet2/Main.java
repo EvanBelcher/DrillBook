@@ -54,6 +54,7 @@ import java.util.concurrent.ConcurrentHashMap;
 		graphicsRunner = new GraphicsRunner();
 		graphicsRunner.setWindowTitle("DrillSweet 2 - " + getPagesFileName());
 		new Thread(graphicsRunner, "GraphicsThread").start();
+		//new Thread(new GraphicsRunner(), "GraphicsThread2").start();
 		new Thread(() -> {
 			//noinspection InfiniteLoopStatement
 			while (true) {

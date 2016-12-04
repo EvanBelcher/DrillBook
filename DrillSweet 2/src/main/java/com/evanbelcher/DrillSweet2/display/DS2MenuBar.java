@@ -2,7 +2,6 @@ package com.evanbelcher.DrillSweet2.display;
 
 import com.evanbelcher.DrillSweet2.*;
 import com.evanbelcher.DrillSweet2.data.*;
-import com.evanbelcher.DrillSweet2.display.play.PagePlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -346,8 +345,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 
 	private void play() {
 		if (checkNoDuplicates() && checkNoMissing()) {
-			PagePlayer p = new PagePlayer(Main.getPages().get(Main.getState().getCurrentPage() - 1).getDots(), Main.getCurrentPage().getDots(), Main.getCurrentPage().getCounts(), desktop);
-			new Thread(p, "playerThread").start();
+			gr.toPlayMode(desktop);
 		}
 	}
 
@@ -420,5 +418,15 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			JOptionPane.showMessageDialog(this, str.trim(), "Missing Players!", JOptionPane.INFORMATION_MESSAGE);
 		}
 		return true;
+	}
+
+	public void disableAll() {
+		for (Component c : getComponents())
+			c.setEnabled(false);
+	}
+
+	public void enableAll() {
+		for (Component c : getComponents())
+			c.setEnabled(true);
 	}
 }

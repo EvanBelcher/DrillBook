@@ -2,6 +2,7 @@ package com.evanbelcher.DrillSweet2.display;
 
 import com.evanbelcher.DrillSweet2.*;
 import com.evanbelcher.DrillSweet2.data.State;
+import com.evanbelcher.DrillSweet2.display.play.PagePlayer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,23 +19,24 @@ public class GraphicsRunner extends JFrame implements Runnable {
 
 	public static final Rectangle SCREEN_SIZE = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 	private static final long serialVersionUID = 9006087905794888130L;
+	private DS2MenuBar menuBar;
+	private DS2DesktopPane desktop;
+	private PagePlayer pagePlayer;
 
 	/**
 	 * Initializes and sets up frame
 	 */
 	@Override public void run() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
-
 		//set up the frame
-		DS2DesktopPane desktop = new DS2DesktopPane();
+		desktop = new DS2DesktopPane();
 		setContentPane(desktop);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(SCREEN_SIZE);
 		setResizable(false);
-
 		handleClosing();
-
-		setJMenuBar(new DS2MenuBar(this, desktop));
+		menuBar = new DS2MenuBar(this, desktop);
+		setJMenuBar(menuBar);
 
 		try {
 			setIconImage(ImageIO.read(Main.getFile("icon.png", this)));
@@ -66,6 +68,20 @@ public class GraphicsRunner extends JFrame implements Runnable {
 			}
 		}
 
+	}
+
+	public void toPlayMode(DS2DesktopPane desktop) {
+		pagePlayer = new PagePlayer(Main.getPages().get(Main.getState().getCurrentPage() - 1).getDots(), Main.getCurrentPage().getDots(), Main.getCurrentPage().getCounts(), desktop, this);
+		new Thread(pagePlayer).start();
+		menuBar.disableAll();
+		setContentPane(pagePlayer.getPlayerDesktopPane());
+	}
+
+	public void toNormalMode() {
+		if (pagePlayer != null)
+			pagePlayer.setStop(true);
+		menuBar.enableAll();
+		setContentPane(desktop);
 	}
 
 	/**

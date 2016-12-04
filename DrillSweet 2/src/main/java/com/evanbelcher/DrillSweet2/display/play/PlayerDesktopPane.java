@@ -7,23 +7,25 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-public class PlayerPanel extends JPanel {
+public class PlayerDesktopPane extends JDesktopPane {
 
-	private DS2DesktopPane desktopPane;
 	private BufferedImage fieldImage;
 	private Dimension imgSize;
 	private HashMap<MovingPoint, String> points;
 	private int dotSize;
 
-	public PlayerPanel(DS2DesktopPane desktopPane, HashMap<MovingPoint, String> points) {
+	public PlayerDesktopPane(PlayerInternalFrame pif, DS2DesktopPane desktopPane, HashMap<MovingPoint, String> points) {
 		super();
-		this.desktopPane = desktopPane;
 		this.points = points;
 		this.dotSize = DS2DesktopPane.getDotSize();
 		fieldImage = desktopPane.getFieldImage();
 		imgSize = desktopPane.getImgSize();
 		setFocusable(true);
-		setSize(desktopPane.getSize());
+		//setBounds(desktopPane.getX(), desktopPane.getY() + desktopPane.getGraphicsRunner().getJMenuBar().getHeight(), desktopPane.getWidth(), desktopPane.getHeight());
+		setMinimumSize(desktopPane.getSize());
+		setMaximumSize(desktopPane.getSize());
+		pif.setVisible(true);
+		add(pif);
 	}
 
 	@Override public void paintComponent(Graphics g) {
@@ -40,7 +42,7 @@ public class PlayerPanel extends JPanel {
 		}
 	}
 
-	public HashMap<MovingPoint, String> getPoints() {
+	@SuppressWarnings("unused") public HashMap<MovingPoint, String> getPoints() {
 		return points;
 	}
 }
