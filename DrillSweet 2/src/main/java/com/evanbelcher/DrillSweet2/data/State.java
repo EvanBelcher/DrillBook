@@ -12,7 +12,7 @@ import java.util.ArrayDeque;
  */
 @SuppressWarnings("unused") public class State {
 
-	private static final boolean DEBUG_MODE = true;
+	private static final boolean DEBUG_MODE = false;
 	private int currentPage;
 	private boolean showGrid = true;
 	private boolean showNames = true;
