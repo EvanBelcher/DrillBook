@@ -343,12 +343,18 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		}
 	}
 
+	/**
+	 * Opens the player
+	 */
 	private void play() {
 		if (checkNoDuplicates() && checkNoMissing()) {
 			gr.toPlayMode(desktop);
 		}
 	}
 
+	/**
+	 * Checks to make sure that the current page has no duplicate dots
+	 */
 	private boolean checkNoDuplicates() {
 		ArrayList<String> names = new ArrayList<>();
 		ArrayList<String> badNames = new ArrayList<>();
@@ -369,6 +375,11 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		return checkNoDuplicates(Main.getState().getCurrentPage() - 1);
 	}
 
+	/**
+	 * Checks to make sure that the given page has no duplciate dots
+	 *
+	 * @param pageNum the page number to check
+	 */
 	private boolean checkNoDuplicates(int pageNum) {
 		ArrayList<String> names = new ArrayList<>();
 		ArrayList<String> badNames = new ArrayList<>();
@@ -398,6 +409,9 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		return true;
 	}
 
+	/**
+	 * Check to make sure there are no points in the first page that aren't in the second page
+	 */
 	private boolean checkNoMissing() {
 		int currentPageNum = Main.getState().getCurrentPage();
 		if (currentPageNum == 1) {
@@ -420,13 +434,19 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		return true;
 	}
 
+	/**
+	 * Disables all menu items
+	 */
 	public void disableAll() {
-		for (Component c : getComponents())
-			c.setEnabled(false);
+		for (Component component : getComponents())
+			component.setEnabled(false);
 	}
 
+	/**
+	 * Enables all menu items
+	 */
 	public void enableAll() {
-		for (Component c : getComponents())
-			c.setEnabled(true);
+		for (Component component : getComponents())
+			component.setEnabled(true);
 	}
 }

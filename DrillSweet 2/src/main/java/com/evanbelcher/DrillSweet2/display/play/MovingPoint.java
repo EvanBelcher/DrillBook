@@ -4,68 +4,121 @@ import com.evanbelcher.DrillSweet2.display.DS2DesktopPane;
 
 import java.awt.*;
 
+/**
+ * Holds data for the motion of one point to another location
+ */
 public class MovingPoint {
 
 	private double dx;
 	private double dy;
 	private Point currentPoint;
-	private Point origin;
+	private Point start;
+	private Point end;
 	private int index;
 	private int subdivisions;
+	private Color color;
 
+	/**
+	 * @param oldPoint     the location the point starts at
+	 * @param newPoint     the location the point ends at
+	 * @param subdivisions the amount of subdivisions of that total motion
+	 */
 	public MovingPoint(Point oldPoint, Point newPoint, int subdivisions) {
 		dx = (newPoint.getX() - oldPoint.getX()) / (double) subdivisions;
 		dy = (newPoint.getY() - oldPoint.getY()) / (double) subdivisions;
 		currentPoint = new Point(oldPoint);
-		origin = new Point(oldPoint);
+		start = new Point(oldPoint);
+		end = new Point(newPoint);
 		index = 0;
 		this.subdivisions = subdivisions;
+
+		int counts = subdivisions / 30;
+		if (start.distance(start.getX() + subdivisions * dx, start.getY() + subdivisions * dy) / counts > 2 * (DS2DesktopPane.getField().getWidth() / 100))
+			color = Color.RED;
+		else
+			color = Color.BLACK;
 	}
 
-	public Point next() {
+	/**
+	 * Moves the point towards the end location by one subdivided amount
+	 */
+	public void next() {
 		if (index < subdivisions) {
 			index++;
 			updatePoint();
-			return currentPoint;
 		}
-		return null;
 	}
 
-	@SuppressWarnings("unused") public Point back() {
+	/**
+	 * Moves the point towards the starting location by one subdivided amount
+	 */
+	public void back() {
 		if (index > 0) {
 			index--;
 			updatePoint();
-			return currentPoint;
 		}
-		return null;
 	}
 
+	/**
+	 * Returns the current location of the point
+	 *
+	 * @return
+	 */
 	public Point current() {
 		return currentPoint;
 	}
 
+	/**
+	 * Sets the location to be accurate
+	 */
 	private void updatePoint() {
-		currentPoint.setLocation(origin.getX() + dx * index, origin.getY() + dy * index);
+		currentPoint.setLocation(start.getX() + dx * index, start.getY() + dy * index);
 	}
 
-	public void reset() {
-		currentPoint.setLocation(origin);
+	/**
+	 * Sends the point to the starting location
+	 */
+	public void start() {
+		currentPoint.setLocation(start);
 		index = 0;
 	}
 
+	/**
+	 * Sends the point to the ending location
+	 */
 	public void end() {
-		currentPoint.setLocation(origin.getX() + subdivisions * dx, origin.getY() + subdivisions * dy);
+		currentPoint.setLocation(end);
 		index = subdivisions;
 	}
 
+	/**
+	 * Returns the color of this dot
+	 */
 	public Color getColor() {
-		int counts = subdivisions / 30;
-		if (origin.distance(origin.getX() + subdivisions * dx, origin.getY() + subdivisions * dy) / counts > 2 * (DS2DesktopPane.getField().getWidth() / 100))
-			return Color.RED;
-		return Color.BLACK;
+		return color;
+	}
+
+	public void setCollides() {
+		if (color.equals(Color.BLACK))
+			color = Color.BLUE;
 	}
 
 	@Override public String toString() {
-		return "MovingPoint: " + (dx * subdivisions) + "x + " + (dy * subdivisions) + "y in " + subdivisions + " counts";
+		return "MovingPoint: " + start + " to " + end + " in " + subdivisions + " counts";
+	}
+
+	//	public void drawLine(Graphics2D g2d) {
+	//		GradientPaint gradient = new GradientPaint(start.x, start.y, Color.BLUE, (float) (start.x + subdivisions * dx), (float) (start.y + subdivisions * dy), Color.GREEN);
+	//		g2d.setPaint(gradient);
+	//		g2d.setStroke(new BasicStroke(1));
+	//		g2d.drawLine(start.x, start.y, (int) (start.x + subdivisions * dx), (int) (start.y + subdivisions * dy));
+	//	}
+
+	public Point getStart() {
+		return start;
+	}
+
+	public Point getEnd() {
+		return end;
 	}
 }

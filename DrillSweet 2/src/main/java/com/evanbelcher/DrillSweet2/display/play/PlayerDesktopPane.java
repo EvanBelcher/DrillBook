@@ -7,6 +7,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+/**
+ * The JDesktopPane that shows the dots
+ *
+ * @author Evan Belcher
+ */
 public class PlayerDesktopPane extends JDesktopPane {
 
 	private BufferedImage fieldImage;
@@ -14,6 +19,13 @@ public class PlayerDesktopPane extends JDesktopPane {
 	private HashMap<MovingPoint, String> points;
 	private int dotSize;
 
+	/**
+	 * Creates object. Sets up pane.
+	 *
+	 * @param pif         The playerInternalFrame to put inside this object
+	 * @param desktopPane The DS2DesktopPane to inherit the size from
+	 * @param points      The points to display
+	 */
 	public PlayerDesktopPane(PlayerInternalFrame pif, DS2DesktopPane desktopPane, HashMap<MovingPoint, String> points) {
 		super();
 		this.points = points;
@@ -21,13 +33,15 @@ public class PlayerDesktopPane extends JDesktopPane {
 		fieldImage = desktopPane.getFieldImage();
 		imgSize = desktopPane.getImgSize();
 		setFocusable(true);
-		//setBounds(desktopPane.getX(), desktopPane.getY() + desktopPane.getGraphicsRunner().getJMenuBar().getHeight(), desktopPane.getWidth(), desktopPane.getHeight());
 		setMinimumSize(desktopPane.getSize());
 		setMaximumSize(desktopPane.getSize());
 		pif.setVisible(true);
 		add(pif);
 	}
 
+	/**
+	 * Draws the points. Does not change their locations.
+	 */
 	@Override public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.WHITE);
@@ -42,6 +56,9 @@ public class PlayerDesktopPane extends JDesktopPane {
 		}
 	}
 
+	/**
+	 * Returns the points
+	 */
 	@SuppressWarnings("unused") public HashMap<MovingPoint, String> getPoints() {
 		return points;
 	}

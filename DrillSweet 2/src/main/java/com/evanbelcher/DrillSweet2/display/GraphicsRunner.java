@@ -70,6 +70,11 @@ public class GraphicsRunner extends JFrame implements Runnable {
 
 	}
 
+	/**
+	 * Makes a PlayerDesktopPane the contentPane
+	 *
+	 * @param desktop the current DS2DesktopPane
+	 */
 	public void toPlayMode(DS2DesktopPane desktop) {
 		pagePlayer = new PagePlayer(Main.getPages().get(Main.getState().getCurrentPage() - 1).getDots(), Main.getCurrentPage().getDots(), Main.getCurrentPage().getCounts(), desktop, this);
 		new Thread(pagePlayer).start();
@@ -77,6 +82,9 @@ public class GraphicsRunner extends JFrame implements Runnable {
 		setContentPane(pagePlayer.getPlayerDesktopPane());
 	}
 
+	/**
+	 * Makes the DS2DesktopPane the contentPane
+	 */
 	public void toNormalMode() {
 		if (pagePlayer != null)
 			pagePlayer.setStop(true);

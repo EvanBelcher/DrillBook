@@ -9,10 +9,21 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
+/**
+ * The JInternalFrame to hold the Player controls
+ *
+ * @author Evan Belcher
+ */
 public class PlayerInternalFrame extends JInternalFrame {
 
 	private String state;
 
+	/**
+	 * Creates the object. Creates and adds all of the buttons.
+	 *
+	 * @param pagePlayer     the PagePlayer that has the points
+	 * @param graphicsRunner the GraphicsRunner that put the application into Play mode
+	 */
 	public PlayerInternalFrame(PagePlayer pagePlayer, GraphicsRunner graphicsRunner) {
 		super("Player", false, false, false, true);
 
@@ -22,7 +33,7 @@ public class PlayerInternalFrame extends JInternalFrame {
 		start.addActionListener((ActionEvent e) -> {
 			state = "pause";
 			for (MovingPoint p : pagePlayer.getPoints().keySet())
-				p.reset();
+				p.start();
 		});
 		JButton rewind = new JButton(getIcon("rewind"));
 		rewind.addActionListener((ActionEvent e) -> state = "rewind");
@@ -30,6 +41,8 @@ public class PlayerInternalFrame extends JInternalFrame {
 		play.addActionListener((ActionEvent e) -> state = "play");
 		JButton pause = new JButton(getIcon("pause"));
 		pause.addActionListener((ActionEvent e) -> state = "pause");
+		JButton help = new JButton(getIcon("help"));
+		help.addActionListener((ActionEvent e) -> JOptionPane.showMessageDialog(this, "Black: Normal dot\nRed: Long distance move\nBlue: Colliding dot"));
 		JButton end = new JButton(getIcon("end"));
 		end.addActionListener((ActionEvent e) -> {
 			state = "pause";
@@ -46,15 +59,28 @@ public class PlayerInternalFrame extends JInternalFrame {
 		add(play);
 		add(pause);
 		add(end);
+		add(help);
 		add(exit);
 
 		pack();
 	}
 
+	/**
+	 * Returns the play state
+	 * "play" -> plays forward
+	 * "rewind" -> plays backward
+	 * "pause" -> stops playing in place
+	 */
 	public String getState() {
 		return state;
 	}
 
+	/**
+	 * Gets the icon from resources
+	 *
+	 * @param s the name of the file
+	 * @return the icon image
+	 */
 	public ImageIcon getIcon(String s) {
 		try {
 			return new ImageIcon(ImageIO.read(Main.getFile(s + ".png", this)));
