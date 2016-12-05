@@ -56,13 +56,16 @@ public class PlayerInternalFrame extends JInternalFrame {
 		setLayout(new MigLayout());
 		add(start);
 		add(rewind);
-		add(play);
 		add(pause);
+		add(play);
 		add(end);
 		add(help);
 		add(exit);
 
 		pack();
+
+		//Set the window's location.
+		setLocation(GraphicsRunner.SCREEN_SIZE.width - getSize().width, 0);
 	}
 
 	/**

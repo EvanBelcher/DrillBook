@@ -145,7 +145,19 @@ import java.awt.geom.*;
 		if (RcrossS == 0 && QminPcrossR == 0) {
 			double t0 = QminPcrossR / dot(r, r);
 			double t1 = t0 + dot(s, r) / dot(r, r);
-			return t1 < t0 || 0 <= t1 && t0 <= 1 && !(length(r) == length(s)) && 0 <= (s.getX1() - r.getX1()) / (length(r) - length(s)) && (s.getX1() - r.getX1()) / (length(r) - length(s)) <= 1;
+			if (t1 < t0)
+				return true;
+			else {
+				Point2D.Double pAtt0 = new Point2D.Double(p.getX() + (r.getX2() - r.getX1()) * t0, p.getY() + (r.getY2() - r.getY1()) * t0);
+				Point2D.Double pAtt1 = new Point2D.Double(p.getX() + (r.getX2() - r.getX1()) * t1, p.getY() + (r.getY2() - r.getY1()) * t1);
+				Point2D.Double qAtt0 = new Point2D.Double(q.getX() + (s.getX2() - s.getX1()) * t0, q.getY() + (s.getY2() - s.getY1()) * t0);
+				Point2D.Double qAtt1 = new Point2D.Double(q.getX() + (s.getX2() - s.getX1()) * t1, q.getY() + (s.getY2() - s.getY1()) * t1);
+				double distance = Math.min(pAtt0.distance(qAtt0), pAtt1.distance(qAtt1));
+				distance *= scale;
+				if (-delta <= distance && distance <= delta)
+					return true;
+			}
+			//return t1 < t0 || 0 <= t1 && t0 <= 1 && !(length(r) == length(s)) && 0 <= (s.getX1() - r.getX1()) / (length(r) - length(s)) && (s.getX1() - r.getX1()) / (length(r) - length(s)) <= 1;
 		} else if (RcrossS == 0) {
 			return false;
 		} else {

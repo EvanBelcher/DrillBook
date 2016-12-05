@@ -369,6 +369,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			String str = "The following players have more than one dot on the page:\n";
 			for (String s : badNames)
 				str += s + "\n";
+			str += "\nTo play from the first page to the second page, navigate to the second page and click \"Play\".";
 			JOptionPane.showMessageDialog(this, str.trim(), "Conflicts!", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -403,6 +404,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			String str = "The following players have more than one dot on Page " + pageNum + ":\n";
 			for (String s : badNames)
 				str += s + "\n";
+			str += "\nTo play from the first page to the second page, navigate to the second page and click \"Play\".";
 			JOptionPane.showMessageDialog(this, str.trim(), "Conflicts!", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
