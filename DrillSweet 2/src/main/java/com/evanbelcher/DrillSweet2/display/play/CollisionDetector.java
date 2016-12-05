@@ -1,5 +1,7 @@
 package com.evanbelcher.DrillSweet2.display.play;
 
+import com.evanbelcher.DrillSweet2.display.DS2DesktopPane;
+
 import java.awt.*;
 import java.awt.geom.*;
 
@@ -115,7 +117,8 @@ import java.awt.geom.*;
 	 * @param q2y
 	 */
 	private static boolean findCollision(double p1x, double p1y, double p2x, double p2y, double q1x, double q1y, double q2x, double q2y) {
-		final double delta = 0.1;
+		final double delta = 1;
+		final double scale = (100 / DS2DesktopPane.getField().getWidth());
 
 		Point2D.Double p = new Point2D.Double(p1x, p1y);
 		Point2D.Double q = new Point2D.Double(q1x, q1y);
@@ -148,9 +151,18 @@ import java.awt.geom.*;
 		} else {
 			double t = QminPcrossS / RcrossS;
 			double u = QminPcrossR / RcrossS;
-			if (0 <= t && t <= 1 && 0 <= u && u <= 1)
-				if (-delta <= t - u && t - u <= delta)
+
+			if (0 <= t && t <= 1 && 0 <= u && u <= 1) {
+				Point2D.Double pAtt = new Point2D.Double(p.getX() + (r.getX2() - r.getX1()) * t, p.getY() + (r.getY2() - r.getY1()) * t);
+				Point2D.Double pAtu = new Point2D.Double(p.getX() + (r.getX2() - r.getX1()) * u, p.getY() + (r.getY2() - r.getY1()) * u);
+				Point2D.Double qAtt = new Point2D.Double(q.getX() + (s.getX2() - s.getX1()) * t, q.getY() + (s.getY2() - s.getY1()) * t);
+				Point2D.Double qAtu = new Point2D.Double(q.getX() + (s.getX2() - s.getX1()) * u, q.getY() + (s.getY2() - s.getY1()) * u);
+				double distance = Math.min(pAtt.distance(qAtt), pAtu.distance(qAtu));
+				distance *= scale;
+
+				if (-delta <= distance && distance <= delta)
 					return true;
+			}
 		}
 		return false;
 	}

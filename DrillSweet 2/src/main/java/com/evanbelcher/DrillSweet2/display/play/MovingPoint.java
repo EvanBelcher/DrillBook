@@ -107,12 +107,12 @@ public class MovingPoint {
 		return "MovingPoint: " + start + " to " + end + " in " + subdivisions + " counts";
 	}
 
-	//	public void drawLine(Graphics2D g2d) {
-	//		GradientPaint gradient = new GradientPaint(start.x, start.y, Color.BLUE, (float) (start.x + subdivisions * dx), (float) (start.y + subdivisions * dy), Color.GREEN);
-	//		g2d.setPaint(gradient);
-	//		g2d.setStroke(new BasicStroke(1));
-	//		g2d.drawLine(start.x, start.y, (int) (start.x + subdivisions * dx), (int) (start.y + subdivisions * dy));
-	//	}
+	public void drawLine(Graphics2D g2d) {
+		GradientPaint gradient = new GradientPaint(start.x, start.y, Color.BLUE, (float) (start.x + subdivisions * dx), (float) (start.y + subdivisions * dy), Color.GREEN);
+		g2d.setPaint(gradient);
+		g2d.setStroke(new BasicStroke(1));
+		g2d.drawLine(start.x, start.y, (int) (start.x + subdivisions * dx), (int) (start.y + subdivisions * dy));
+	}
 
 	public Point getStart() {
 		return start;

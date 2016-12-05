@@ -1,5 +1,6 @@
 package com.evanbelcher.DrillSweet2.display.play;
 
+import com.evanbelcher.DrillSweet2.data.State;
 import com.evanbelcher.DrillSweet2.display.DS2DesktopPane;
 
 import javax.swing.*;
@@ -53,6 +54,10 @@ public class PlayerDesktopPane extends JDesktopPane {
 			g.setColor(p.getColor());
 			g.fillOval(p.current().x - dotSize / 2, p.current().y - dotSize / 2, dotSize, dotSize);
 			g.drawString(points.get(p), p.current().x, p.current().y - dotSize / 2);
+			if (State.isDebugMode()) {
+				Graphics2D g2d = (Graphics2D) g;
+				p.drawLine(g2d);
+			}
 		}
 	}
 

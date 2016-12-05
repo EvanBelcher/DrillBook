@@ -1,6 +1,6 @@
 package com.evanbelcher.DrillSweet2.display.play;
 
-import com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
+import com.evanbelcher.DrillSweet2.data.*;
 import com.evanbelcher.DrillSweet2.display.*;
 
 import javax.swing.*;
@@ -45,12 +45,13 @@ public class PagePlayer implements Runnable {
 		//			System.out.println(i + " " + mpList.get(i));
 
 		for (int i = 0; i < mpList.size() - 1; i++)
-			for (int j = i + 1; j < mpList.size(); j++)
+			for (int j = i + 1; j < mpList.size(); j++) {
+				State.print(points.get(mpList.get(i)) + " " + points.get(mpList.get(j)));
 				if (CollisionDetector.findCollision(mpList.get(i), mpList.get(j))) {
 					mpList.get(i).setCollides();
 					mpList.get(j).setCollides();
 				}
-
+			}
 		this.graphicsRunner = graphicsRunner;
 	}
 
