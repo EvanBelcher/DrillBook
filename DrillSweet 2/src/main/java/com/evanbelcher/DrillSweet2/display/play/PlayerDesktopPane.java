@@ -1,5 +1,6 @@
 package com.evanbelcher.DrillSweet2.display.play;
 
+import com.evanbelcher.DrillSweet2.Main;
 import com.evanbelcher.DrillSweet2.data.State;
 import com.evanbelcher.DrillSweet2.display.DS2DesktopPane;
 
@@ -48,12 +49,14 @@ public class PlayerDesktopPane extends JDesktopPane {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
 
-		g.drawImage(fieldImage, (getSize().width - imgSize.width) / 2, (getSize().height - imgSize.height) / 2, imgSize.width, imgSize.height, null);
+		if (Main.getState().isShowGrid())
+			g.drawImage(fieldImage, (getSize().width - imgSize.width) / 2, (getSize().height - imgSize.height) / 2, imgSize.width, imgSize.height, null);
 
 		for (MovingPoint p : points.keySet()) {
 			g.setColor(p.getColor());
 			g.fillOval(p.current().x - dotSize / 2, p.current().y - dotSize / 2, dotSize, dotSize);
-			g.drawString(points.get(p), p.current().x, p.current().y - dotSize / 2);
+			if (Main.getState().isShowNames())
+				g.drawString(points.get(p), p.current().x, p.current().y - dotSize / 2);
 			if (State.isDebugMode()) {
 				Graphics2D g2d = (Graphics2D) g;
 				p.drawLine(g2d);

@@ -42,7 +42,7 @@ public class PlayerInternalFrame extends JInternalFrame {
 		JButton pause = new JButton(getIcon("pause"));
 		pause.addActionListener((ActionEvent e) -> state = "pause");
 		JButton help = new JButton(getIcon("help"));
-		help.addActionListener((ActionEvent e) -> JOptionPane.showMessageDialog(this, "Black: Normal dot\nRed: Long distance move\nBlue: Colliding dot"));
+		help.addActionListener((ActionEvent e) -> JOptionPane.showMessageDialog(this, "Black: Normal dot\nRed: Long distance move\nBlue: Colliding dot", "Help", JOptionPane.INFORMATION_MESSAGE));
 		JButton end = new JButton(getIcon("end"));
 		end.addActionListener((ActionEvent e) -> {
 			state = "pause";

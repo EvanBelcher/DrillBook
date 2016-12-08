@@ -22,6 +22,7 @@ import java.util.ArrayDeque;
 	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> future;
 	private transient boolean justUndid = false; //TODO really should fix
 	private transient boolean justRedid = false;
+	public static final String VERSION = "v1.3.0";
 
 	/**
 	 * Constructs the object with given current page.
