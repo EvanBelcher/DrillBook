@@ -71,8 +71,12 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 	- Click it once and the grid disappears. Click it again and it's back. Abracadabra!
 - Toggle Dot Names
 	- Clap on. Dot names disappear. Clap off. Dot names re-appear.
+- **Play**
+	- Plays from the **previous to current** pages. Points that may collide appear in blue. Dots with extremely far moves (>2 steps per count) appear in red.
 - Undo
 	- Remember that thing you just did? Because I don't.
+- Redo
+	- Oh, it's back again.
 
 ## File menu
 - New
