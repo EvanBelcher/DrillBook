@@ -5,11 +5,11 @@
 
 ## Terminology
 - Page
-	- Individual sheet of drill paper. Also known as a set. A page has [a set of information](../master/Usage.md#editing-the-page) associated with it.
+	- Individual sheet of drill paper. Also known as a set. A page has [a set of information](../resources/Usage.md#editing-the-page) associated with it.
 - Show
 	- Set of pages. An entire show is stored in one DS2 file **which can be opened as a JSON file**.
 - Dot
-	- Individual person represented on a page. A dot has a [a set of information](../master/Usage.md#editing-dots) associated with it.
+	- Individual person represented on a page. A dot has a [a set of information](../resources/Usage.md#editing-dots) associated with it.
 - DrillSweet directory
 	- **Documents/DrillSweet 2/** by default
 
@@ -29,9 +29,9 @@ Controls:
 - Number
 	- Select any number 1 - infinity. This will be displayed above the dot on the page.
 - X Position
-	- Changed by clicking and dragging point as explained [above](../master/Usage.md#placing-and-moving-dots). Also editable with the controls.
+	- Changed by clicking and dragging point as explained [above](../resources/Usage.md#placing-and-moving-dots). Also editable with the controls.
 - Y Position
-	- Changed by clicking and dragging point as explained [above](../master/Usage.md#placing-and-moving-dots). Also editable with the controls.
+	- Changed by clicking and dragging point as explained [above](../resources/Usage.md#placing-and-moving-dots). Also editable with the controls.
 - Position Text
 	- Not editable. Displays the position of the dot in English.
 	
