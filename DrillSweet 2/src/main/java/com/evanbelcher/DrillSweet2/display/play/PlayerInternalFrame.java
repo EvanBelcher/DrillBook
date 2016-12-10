@@ -2,6 +2,7 @@ package com.evanbelcher.DrillSweet2.display.play;
 
 import com.evanbelcher.DrillSweet2.Main;
 import com.evanbelcher.DrillSweet2.display.GraphicsRunner;
+import com.evanbelcher.DrillSweet2.display.data.play.MovingPoint;
 import net.miginfocom.swing.MigLayout;
 
 import javax.imageio.ImageIO;

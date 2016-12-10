@@ -1,4 +1,4 @@
-package com.evanbelcher.DrillSweet2.display.play;
+package com.evanbelcher.DrillSweet2.display.data.play;
 
 import com.evanbelcher.DrillSweet2.display.DS2DesktopPane;
 

@@ -3,6 +3,7 @@ package com.evanbelcher.DrillSweet2.display.play;
 import com.evanbelcher.DrillSweet2.Main;
 import com.evanbelcher.DrillSweet2.data.State;
 import com.evanbelcher.DrillSweet2.display.DS2DesktopPane;
+import com.evanbelcher.DrillSweet2.display.data.play.MovingPoint;
 
 import javax.swing.*;
 import java.awt.*;

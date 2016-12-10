@@ -13,16 +13,19 @@ import java.util.ArrayDeque;
 @SuppressWarnings("unused") public class State {
 
 	private static final boolean DEBUG_MODE = false;
+	public static final String VERSION = "v1.3.0";
+
 	private int currentPage;
 	private boolean showGrid = true;
 	private boolean showNames = true;
 	private String currentFileName;
 	private String filePath;
+	private Rectangle field;
+
 	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> history;
 	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> future;
 	private transient boolean justUndid = false; //TODO really should fix
 	private transient boolean justRedid = false;
-	public static final String VERSION = "v1.3.0";
 
 	/**
 	 * Constructs the object with given current page.
@@ -126,6 +129,40 @@ import java.util.ArrayDeque;
 	}
 
 	/**
+	 * Sets the field to the given field
+	 *
+	 * @param field
+	 */
+	public void setField(Rectangle field) {
+		this.field = field;
+	}
+
+	/**
+	 * Adjusts all points to be scaled and translated properly to the new field size. Also sets the field to the given field (uses setField()).
+	 *
+	 * @param newField the new field rectangle
+	 */
+	public void fixPoints(Rectangle newField) {
+		if (field == null)
+			field = newField;
+		if (!newField.equals(field)) {
+			double xScale = newField.getWidth() / field.getWidth();
+			double yScale = newField.getHeight() / field.getHeight();
+
+			for (Page page : Main.getPages().values()) {
+				DS2ConcurrentHashMap<Point, String> dots = page.getDots();
+				DS2ConcurrentHashMap<Point, String> newDots = new DS2ConcurrentHashMap<>();
+				for (Point point : dots.keySet()) {
+					Point newPoint = new Point((int) Math.round((point.getX() - field.getX()) * xScale + newField.getX()), (int) Math.round((point.getY() - field.getY()) * yScale + newField.getY()));
+					newDots.put(newPoint, dots.get(point));
+				}
+				page.setDots(newDots);
+			}
+			setField(newField);
+		}
+	}
+
+	/**
 	 * Default toString()
 	 */
 	@Override public String toString() {
@@ -144,21 +181,30 @@ import java.util.ArrayDeque;
 		}
 	}
 
+	/**
+	 * Adds current page to history and makes sure the history is a maximum of 20 pages.
+	 */
 	public void addHistory() {
 		checkVars();
 		history.offer(new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots()));
 		while (history.size() > 20)
 			history.pollFirst();
-		clearFuture();
+		future.clear();
 	}
 
-	public void addPresent() {
+	/**
+	 * Adds current page to future and makes sure the future is a maximum of 20 pages.
+	 */
+	public void addFuture() {
 		checkVars();
 		future.offer(new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots()));
 		while (future.size() > 20)
 			future.pollFirst();
 	}
 
+	/**
+	 * Reverts the current page to the most recent page in history
+	 */
 	public void undo() {
 		checkVars();
 		if (history.size() > 0) {
@@ -174,6 +220,9 @@ import java.util.ArrayDeque;
 		}
 	}
 
+	/**
+	 * Reverts the current page to the most recent page in future
+	 */
 	public void redo() {
 		checkVars();
 		if (future.size() > 0) {
@@ -189,15 +238,14 @@ import java.util.ArrayDeque;
 		}
 	}
 
+	/**
+	 * Makes sure history and future are not null;
+	 */
 	private void checkVars() {
 		if (history == null)
 			history = new ArrayDeque<>();
 		if (future == null)
 			future = new ArrayDeque<>();
-	}
-
-	private void clearFuture() {
-		future.clear();
 	}
 
 }

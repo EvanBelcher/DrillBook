@@ -2,6 +2,7 @@ package com.evanbelcher.DrillSweet2.display;
 
 import com.evanbelcher.DrillSweet2.Main;
 import com.evanbelcher.DrillSweet2.data.*;
+import com.evanbelcher.DrillSweet2.display.data.DS2Rectangle;
 import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -90,6 +91,7 @@ import java.util.Vector;
 
 		field = new DS2Rectangle(startX, startY, endX - startX, endY - startY);
 		State.print(field);
+		Main.getState().fixPoints(field);
 	}
 
 	/**
@@ -409,10 +411,16 @@ import java.util.Vector;
 		return io;
 	}
 
+	/**
+	 * Returns the field image
+	 */
 	public BufferedImage getFieldImage() {
 		return fieldImage;
 	}
 
+	/**
+	 * Returns the size of the field image
+	 */
 	public Dimension getImgSize() {
 		return imgSize;
 	}

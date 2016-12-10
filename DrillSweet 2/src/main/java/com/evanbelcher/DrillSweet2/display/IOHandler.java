@@ -2,6 +2,7 @@ package com.evanbelcher.DrillSweet2.display;
 
 import com.evanbelcher.DrillSweet2.Main;
 import com.evanbelcher.DrillSweet2.data.*;
+import com.evanbelcher.DrillSweet2.display.data.DS2Rectangle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -471,13 +472,16 @@ public class IOHandler implements MouseListener {
 	}
 
 	/**
-	 * Sets oldDots to be the current dots before it is changed
+	 * Adds to undo queue
 	 */
 	private void updateHistory() {
 		Main.getState().addHistory();
 	}
 
+	/**
+	 * Adds to redo queue
+	 */
 	private void updatePresent() {
-		Main.getState().addPresent();
+		Main.getState().addFuture();
 	}
 }

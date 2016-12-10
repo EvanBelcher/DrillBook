@@ -1,4 +1,4 @@
-package com.evanbelcher.DrillSweet2.display.play;
+package com.evanbelcher.DrillSweet2.display.data.play;
 
 import com.evanbelcher.DrillSweet2.display.DS2DesktopPane;
 
@@ -6,6 +6,8 @@ import java.awt.*;
 
 /**
  * Holds data for the motion of one point to another location
+ *
+ * @author Evan Belcher
  */
 public class MovingPoint {
 
@@ -61,8 +63,6 @@ public class MovingPoint {
 
 	/**
 	 * Returns the current location of the point
-	 *
-	 * @return
 	 */
 	public Point current() {
 		return currentPoint;
@@ -98,6 +98,9 @@ public class MovingPoint {
 		return color;
 	}
 
+	/**
+	 * Sets the color to blue if it will collide with another point
+	 */
 	public void setCollides() {
 		if (color.equals(Color.BLACK))
 			color = Color.BLUE;
@@ -107,6 +110,11 @@ public class MovingPoint {
 		return "MovingPoint: " + start + " to " + end + " in " + subdivisions + " counts";
 	}
 
+	/**
+	 * Draws gradient line from start to end
+	 *
+	 * @param g2d
+	 */
 	public void drawLine(Graphics2D g2d) {
 		GradientPaint gradient = new GradientPaint(start.x, start.y, Color.BLUE, (float) (start.x + subdivisions * dx), (float) (start.y + subdivisions * dy), Color.GREEN);
 		g2d.setPaint(gradient);
@@ -114,10 +122,16 @@ public class MovingPoint {
 		g2d.drawLine(start.x, start.y, (int) (start.x + subdivisions * dx), (int) (start.y + subdivisions * dy));
 	}
 
+	/**
+	 * Returns the starting point
+	 */
 	public Point getStart() {
 		return start;
 	}
 
+	/**
+	 * Returns the ending point
+	 */
 	public Point getEnd() {
 		return end;
 	}
