@@ -24,8 +24,6 @@ import java.util.ArrayDeque;
 
 	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> history;
 	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> future;
-	private transient boolean justUndid = false; //TODO really should fix
-	private transient boolean justRedid = false;
 
 	/**
 	 * Constructs the object with given current page.
@@ -38,7 +36,6 @@ import java.util.ArrayDeque;
 		this.currentFileName = currentFileName;
 		history = new ArrayDeque<>();
 		future = new ArrayDeque<>();
-		justUndid = false;
 	}
 
 	/**
@@ -208,15 +205,14 @@ import java.util.ArrayDeque;
 	public void undo() {
 		checkVars();
 		if (history.size() > 0) {
-			future.offer(history.pollLast());
-			while (future.size() > 20)
-				future.pollFirst();
-			Main.getCurrentPage().setDots(future.peekLast());
-			if (justRedid) {
-				justRedid = false;
-				undo();
-			}
-			justUndid = true;
+			DS2ConcurrentHashMap<Point, String> current;
+			do {
+				current = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
+				future.offer(history.pollLast());
+				while (future.size() > 20)
+					future.pollFirst();
+				Main.getCurrentPage().setDots(future.peekLast());
+			} while (history.size() > 0 && Main.getCurrentPage().getDots().equals(current));
 		}
 	}
 
@@ -226,21 +222,21 @@ import java.util.ArrayDeque;
 	public void redo() {
 		checkVars();
 		if (future.size() > 0) {
-			history.offer(future.pollLast());
-			while (history.size() > 20)
-				history.pollFirst();
-			Main.getCurrentPage().setDots(history.peekLast());
-			if (justUndid) {
-				justUndid = false;
-				redo();
-			}
-			justRedid = true;
+			DS2ConcurrentHashMap<Point, String> current;
+			do {
+				current = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
+				history.offer(future.pollLast());
+				while (history.size() > 20)
+					history.pollFirst();
+				Main.getCurrentPage().setDots(history.peekLast());
+			} while (future.size() > 0 && Main.getCurrentPage().getDots().equals(current));
 		}
 	}
 
 	/**
 	 * Makes sure history and future are not null;
 	 */
+
 	private void checkVars() {
 		if (history == null)
 			history = new ArrayDeque<>();

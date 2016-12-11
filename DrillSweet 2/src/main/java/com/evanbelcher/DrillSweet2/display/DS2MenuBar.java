@@ -2,6 +2,7 @@ package com.evanbelcher.DrillSweet2.display;
 
 import com.evanbelcher.DrillSweet2.*;
 import com.evanbelcher.DrillSweet2.data.*;
+import net.miginfocom.swing.MigLayout;
 import org.apache.commons.io.IOUtils;
 import org.pegdown.PegDownProcessor;
 
@@ -38,7 +39,6 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 
 		//Set up the menu
 		JMenu menu = new JMenu("File");
-		menu.setMnemonic(KeyEvent.VK_D);
 		add(menu);
 
 		//Set up the menu items.
@@ -54,6 +54,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		menuItem.setActionCommand("open");
 		menuItem.addActionListener(this);
+		menuItem.setLayout(new MigLayout());
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Save");
@@ -92,52 +93,67 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
-		//add these to the menubar itself
+		menu = new JMenu("Edit");
+		add(menu);
+
+		menuItem = new JMenuItem("Undo");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
+		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
+		menuItem.setActionCommand("undo");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+
+		menuItem = new JMenuItem("Redo");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK));
+		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
+		menuItem.setActionCommand("redo");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+
+		menu = new JMenu("Settings");
+		add(menu);
+
 		menuItem = new JMenuItem("Toggle Gridlines");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
-		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
+		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("togglegrid");
 		menuItem.addActionListener(this);
-		add(menuItem);
+		menuItem.setForeground(Main.getState().isShowGrid() ? Color.BLACK : Color.RED);
+		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Toggle Dot Names");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
-		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
+		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("togglenames");
 		menuItem.addActionListener(this);
-		add(menuItem);
+		menuItem.setForeground(Main.getState().isShowNames() ? Color.BLACK : Color.RED);
+		menu.add(menuItem);
 
+		add(Box.createHorizontalStrut(menuItem.getPreferredSize().width));
+
+		//add these to the menubar itself
 		menuItem = new JMenuItem("Play");
 		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("play");
 		menuItem.addActionListener(this);
 		add(menuItem);
 
-		menuItem = new JMenuItem("Undo");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
-		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
-		menuItem.setActionCommand("undo");
-		menuItem.addActionListener(this);
-		add(menuItem);
+		add(Box.createHorizontalGlue());
 
-		menuItem = new JMenuItem("Redo");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK));
-		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
-		menuItem.setActionCommand("redo");
-		menuItem.addActionListener(this);
-		add(menuItem);
+		menu = new JMenu("Help");
+		add(menu);
 
 		menuItem = new JMenuItem("Help");
-		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
+		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("help");
 		menuItem.addActionListener(this);
-		add(menuItem);
+		menu.add(menuItem);
 
 		menuItem = new JMenuItem("About");
-		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
+		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("about");
 		menuItem.addActionListener(this);
-		add(menuItem);
+		menu.add(menuItem);
 	}
 
 	/**
@@ -219,9 +235,11 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				break;
 			case "togglegrid":
 				Main.getState().setShowGrid(!Main.getState().isShowGrid());
+				((JMenu) getComponent(2)).getMenuComponent(0).setForeground(Main.getState().isShowGrid() ? Color.BLACK : Color.RED);
 				break;
 			case "togglenames":
 				Main.getState().setShowNames(!Main.getState().isShowNames());
+				((JMenu) getComponent(2)).getMenuComponent(1).setForeground(Main.getState().isShowNames() ? Color.BLACK : Color.RED);
 				break;
 			case "play":
 				play();

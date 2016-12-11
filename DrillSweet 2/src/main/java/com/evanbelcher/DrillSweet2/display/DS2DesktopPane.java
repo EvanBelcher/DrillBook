@@ -184,8 +184,12 @@ import java.util.Vector;
 		//Draw the points and their names
 		if (!PageDataFrame.getDeleting() && !DotDataFrame.isDeleting()) {
 			for (Point p : Main.getCurrentPage().getDots().keySet()) {
-				g.setColor((io.getActivePoints().contains(p)) ? (io.isNormalDragging() ? Color.PINK : Color.RED) : Color.BLACK);
+				//g.setColor((io.getActivePoints().contains(p)) ? (io.isNormalDragging() ? Color.PINK : Color.RED) : Color.BLACK);
+				float hue = Character.getNumericValue(Main.getCurrentPage().getDots().get(p).charAt(0)) - 65;
+				hue *= 1.0 / 26.0;
+				g.setColor((io.getActivePoints().contains(p)) ? (io.isNormalDragging() ? Color.PINK : Color.RED) : new Color(Color.HSBtoRGB(hue, 1, 0.7f)));
 				g.fillOval(p.x - DOT_SIZE / 2, p.y - DOT_SIZE / 2, DOT_SIZE, DOT_SIZE);
+
 				if (Main.getState().isShowNames())
 					g.drawString(Main.getCurrentPage().getDots().get(p), p.x, p.y - DOT_SIZE / 2);
 			}
