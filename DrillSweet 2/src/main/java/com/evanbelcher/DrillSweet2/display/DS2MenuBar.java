@@ -8,6 +8,7 @@ import org.pegdown.PegDownProcessor;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
+import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -115,24 +116,24 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
 		menuItem.setActionCommand("togglegrid");
 		menuItem.addActionListener(this);
-		menuItem.setForeground(Main.getState().getSettings().isShowGrid() ? Color.BLACK : Color.RED);
+		menuItem.setForeground(Main.getState().getSettings().shouldShowGrid() ? Color.BLACK : Color.RED);
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Toggle Dot Names");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
 		menuItem.setActionCommand("togglenames");
 		menuItem.addActionListener(this);
-		menuItem.setForeground(Main.getState().getSettings().isShowNames() ? Color.BLACK : Color.RED);
+		menuItem.setForeground(Main.getState().getSettings().shouldShowNames() ? Color.BLACK : Color.RED);
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Color Code Dots by Instrument");
 		menuItem.setActionCommand("colordots");
 		menuItem.addActionListener(this);
-		menuItem.setForeground(Main.getState().getSettings().isColorDots() ? Color.BLACK : Color.RED);
+		menuItem.setForeground(Main.getState().getSettings().shouldColorDots() ? Color.BLACK : Color.RED);
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem();
-		menuItem.setText(Main.getState().getSettings().isCollegeHashes() ? "Change to High School Hashes" : "Change to College Hashes");
+		menuItem.setText(Main.getState().getSettings().useCollegeHashes() ? "Change to High School Hashes" : "Change to College Hashes");
 		menuItem.setActionCommand("changehash");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
@@ -245,20 +246,20 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				}
 				break;
 			case "togglegrid":
-				Main.getState().getSettings().setShowGrid(!Main.getState().getSettings().isShowGrid());
-				((JMenu) getComponent(2)).getMenuComponent(0).setForeground(Main.getState().getSettings().isShowGrid() ? Color.BLACK : Color.RED);
+				Main.getState().getSettings().setShowGrid(!Main.getState().getSettings().shouldShowGrid());
+				((JMenu) getComponent(2)).getMenuComponent(0).setForeground(Main.getState().getSettings().shouldShowGrid() ? Color.BLACK : Color.RED);
 				break;
 			case "togglenames":
-				Main.getState().getSettings().setShowNames(!Main.getState().getSettings().isShowNames());
-				((JMenu) getComponent(2)).getMenuComponent(1).setForeground(Main.getState().getSettings().isShowNames() ? Color.BLACK : Color.RED);
+				Main.getState().getSettings().setShowNames(!Main.getState().getSettings().shouldShowNames());
+				((JMenu) getComponent(2)).getMenuComponent(1).setForeground(Main.getState().getSettings().shouldShowNames() ? Color.BLACK : Color.RED);
 				break;
 			case "colordots":
-				Main.getState().getSettings().setColorDots(!Main.getState().getSettings().isColorDots());
-				((JMenu) getComponent(2)).getMenuComponent(2).setForeground(Main.getState().getSettings().isColorDots() ? Color.BLACK : Color.RED);
+				Main.getState().getSettings().setColorDots(!Main.getState().getSettings().shouldColorDots());
+				((JMenu) getComponent(2)).getMenuComponent(2).setForeground(Main.getState().getSettings().shouldColorDots() ? Color.BLACK : Color.RED);
 				break;
 			case "changehash":
-				Main.getState().getSettings().setCollegeHashes(!Main.getState().getSettings().isCollegeHashes());
-				((JMenuItem) (((JMenu) getComponent(2)).getMenuComponent(3))).setText(Main.getState().getSettings().isCollegeHashes() ? "Change to High School Hashes" : "Change to College Hashes");
+				Main.getState().getSettings().setCollegeHashes(!Main.getState().getSettings().useCollegeHashes());
+				((JMenuItem) (((JMenu) getComponent(2)).getMenuComponent(3))).setText(Main.getState().getSettings().useCollegeHashes() ? "Change to High School Hashes" : "Change to College Hashes");
 				try {
 					desktop.getImage();
 				} catch (IOException e) {
@@ -295,6 +296,9 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		desktop.getIO().fixControl();
 	}
 
+	/**
+	 * Changes the font size to what the user selects (between 8-30)
+	 */
 	private void changeFontSize() {
 		Integer[] nums = new Integer[23];
 		for (int i = 8; i <= 30; i++) {
@@ -302,7 +306,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		}
 		try {
 			int size = (int) JOptionPane.showInputDialog(this, "Choose a font size:", "Font Size", JOptionPane.PLAIN_MESSAGE, null, nums, Main.getState().getSettings().getFontSize());
-			javax.swing.plaf.FontUIResource font = new javax.swing.plaf.FontUIResource("Dialog", Font.BOLD, size);
+			FontUIResource font = new FontUIResource("Dialog", Font.BOLD, size);
 			Main.setUIFont(font);
 			Main.getState().getSettings().setFontSize(size);
 			SwingUtilities.updateComponentTreeUI(gr);

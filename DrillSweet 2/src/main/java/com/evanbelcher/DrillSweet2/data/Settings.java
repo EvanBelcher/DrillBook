@@ -1,5 +1,10 @@
 package com.evanbelcher.DrillSweet2.data;
 
+/**
+ * The settings object for non-essential user-defined settings
+ *
+ * @author Evan Belcher
+ */
 public class Settings {
 
 	private boolean showGrid;
@@ -17,14 +22,14 @@ public class Settings {
 	}
 
 	/**
-	 * Returns show grid?
+	 * Returns whether the grid should be shown
 	 */
-	public boolean isShowGrid() {
+	public boolean shouldShowGrid() {
 		return showGrid;
 	}
 
 	/**
-	 * Sets showGrid
+	 * Sets whether the grid should be shown to the given value
 	 *
 	 * @param showGrid whether the grid should be shown
 	 */
@@ -33,14 +38,14 @@ public class Settings {
 	}
 
 	/**
-	 * Returns show names?
+	 * Returns whether we should show dot names
 	 */
-	public boolean isShowNames() {
+	public boolean shouldShowNames() {
 		return showNames;
 	}
 
 	/**
-	 * Sets showNames
+	 * Sets whether we whould show dot names to the given value
 	 *
 	 * @param showNames whether the names should be shown
 	 */
@@ -48,26 +53,50 @@ public class Settings {
 		this.showNames = showNames;
 	}
 
-	public boolean isColorDots() {
+	/**
+	 * Returns whether the dots should be color coded
+	 */
+	public boolean shouldColorDots() {
 		return colorDots;
 	}
 
+	/**
+	 * Sets whether the dots should be color coded to the given value
+	 *
+	 * @param colorDots
+	 */
 	public void setColorDots(boolean colorDots) {
 		this.colorDots = colorDots;
 	}
 
-	public boolean isCollegeHashes() {
+	/**
+	 * Returns whether we should use college hashes (4 steps inside high school hashes)
+	 */
+	public boolean useCollegeHashes() {
 		return collegeHashes;
 	}
 
+	/**
+	 * Sets whether we should use college hashes (4 steps inside high school hashes)
+	 *
+	 * @param collegeHashes
+	 */
 	public void setCollegeHashes(boolean collegeHashes) {
 		this.collegeHashes = collegeHashes;
 	}
 
+	/**
+	 * Returns the font size
+	 */
 	public int getFontSize() {
 		return fontSize;
 	}
 
+	/**
+	 * Sets the font size to the given value
+	 *
+	 * @param fontSize
+	 */
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
 	}

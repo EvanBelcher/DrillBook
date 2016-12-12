@@ -62,6 +62,9 @@ import java.util.ArrayDeque;
 		this.currentPage = currentPage;
 	}
 
+	/**
+	 * Returns the settings object
+	 */
 	public Settings getSettings() {
 		if (settings == null)
 			settings = new Settings();
@@ -211,7 +214,6 @@ import java.util.ArrayDeque;
 	/**
 	 * Makes sure history and future are not null;
 	 */
-
 	private void checkVars() {
 		if (history == null)
 			history = new ArrayDeque<>();

@@ -114,7 +114,7 @@ public class DotDataFrame extends JInternalFrame {
 		distance = Integer.MAX_VALUE;
 		best = 0;
 		for (int i = 0; i <= 3; i++) {
-			if (Main.getState().getSettings().isCollegeHashes()) {
+			if (Main.getState().getSettings().useCollegeHashes()) {
 				if (Math.abs(collegeHashes[i] - y) < distance) {
 					distance = Math.abs(collegeHashes[i] - y);
 					best = i;
