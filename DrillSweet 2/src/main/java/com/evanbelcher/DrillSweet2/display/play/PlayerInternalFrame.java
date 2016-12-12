@@ -27,6 +27,7 @@ public class PlayerInternalFrame extends JInternalFrame {
 	 */
 	public PlayerInternalFrame(PagePlayer pagePlayer, GraphicsRunner graphicsRunner) {
 		super("Player", false, false, false, true);
+		setFrameIcon(null);
 
 		state = "pause";
 

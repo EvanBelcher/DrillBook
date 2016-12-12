@@ -16,11 +16,11 @@ import java.util.ArrayDeque;
 	public static final String VERSION = "v1.3.0";
 
 	private int currentPage;
-	private boolean showGrid = true;
-	private boolean showNames = true;
 	private String currentFileName;
 	private String filePath;
 	private Rectangle field;
+
+	private Settings settings;
 
 	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> history;
 	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> future;
@@ -36,6 +36,7 @@ import java.util.ArrayDeque;
 		this.currentFileName = currentFileName;
 		history = new ArrayDeque<>();
 		future = new ArrayDeque<>();
+		settings = new Settings();
 	}
 
 	/**
@@ -61,36 +62,10 @@ import java.util.ArrayDeque;
 		this.currentPage = currentPage;
 	}
 
-	/**
-	 * Returns show grid?
-	 */
-	public boolean isShowGrid() {
-		return showGrid;
-	}
-
-	/**
-	 * Sets showGrid
-	 *
-	 * @param showGrid whether the grid should be shown
-	 */
-	public void setShowGrid(boolean showGrid) {
-		this.showGrid = showGrid;
-	}
-
-	/**
-	 * Returns show names?
-	 */
-	public boolean isShowNames() {
-		return showNames;
-	}
-
-	/**
-	 * Sets showNames
-	 *
-	 * @param showNames whether the names should be shown
-	 */
-	public void setShowNames(boolean showNames) {
-		this.showNames = showNames;
+	public Settings getSettings() {
+		if (settings == null)
+			settings = new Settings();
+		return settings;
 	}
 
 	/**
@@ -163,7 +138,7 @@ import java.util.ArrayDeque;
 	 * Default toString()
 	 */
 	@Override public String toString() {
-		return "State{" + "currentPage=" + currentPage + ", showGrid=" + showGrid + ", showNames=" + showNames + ", currentFileName='" + currentFileName + '\'' + ", filePath='" + filePath + '\'' + '}';
+		return "State{" + "currentPage=" + currentPage + ", currentFileName='" + currentFileName + '\'' + ", filePath='" + filePath + '\'' + ", field=" + field + ", settings=" + settings + ", history=" + history + ", future=" + future + '}';
 	}
 
 	/**

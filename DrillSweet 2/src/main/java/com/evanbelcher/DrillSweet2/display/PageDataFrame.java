@@ -41,6 +41,7 @@ public class PageDataFrame extends JInternalFrame {
 				false, //closable
 				false, //maximizable
 				true);//iconifiable
+		setFrameIcon(null);
 
 		getCurrentPage();
 

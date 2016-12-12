@@ -98,14 +98,12 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 
 		menuItem = new JMenuItem("Undo");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
-		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("undo");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Redo");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK));
-		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("redo");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
@@ -115,21 +113,36 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 
 		menuItem = new JMenuItem("Toggle Gridlines");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
-		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("togglegrid");
 		menuItem.addActionListener(this);
-		menuItem.setForeground(Main.getState().isShowGrid() ? Color.BLACK : Color.RED);
+		menuItem.setForeground(Main.getState().getSettings().isShowGrid() ? Color.BLACK : Color.RED);
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Toggle Dot Names");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
-		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("togglenames");
 		menuItem.addActionListener(this);
-		menuItem.setForeground(Main.getState().isShowNames() ? Color.BLACK : Color.RED);
+		menuItem.setForeground(Main.getState().getSettings().isShowNames() ? Color.BLACK : Color.RED);
 		menu.add(menuItem);
 
-		add(Box.createHorizontalStrut(menuItem.getPreferredSize().width));
+		menuItem = new JMenuItem("Color Code Dots by Instrument");
+		menuItem.setActionCommand("colordots");
+		menuItem.addActionListener(this);
+		menuItem.setForeground(Main.getState().getSettings().isColorDots() ? Color.BLACK : Color.RED);
+		menu.add(menuItem);
+
+		menuItem = new JMenuItem();
+		menuItem.setText(Main.getState().getSettings().isCollegeHashes() ? "Change to High School Hashes" : "Change to College Hashes");
+		menuItem.setActionCommand("changehash");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+
+		menuItem = new JMenuItem("Change Font Size");
+		menuItem.setActionCommand("fontsize");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+
+		//add(Box.createHorizontalStrut(menu.getPreferredSize().width));
 
 		//add these to the menubar itself
 		menuItem = new JMenuItem("Play");
@@ -144,13 +157,11 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		add(menu);
 
 		menuItem = new JMenuItem("Help");
-		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("help");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("About");
-		//menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
 		menuItem.setActionCommand("about");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
@@ -234,12 +245,29 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				}
 				break;
 			case "togglegrid":
-				Main.getState().setShowGrid(!Main.getState().isShowGrid());
-				((JMenu) getComponent(2)).getMenuComponent(0).setForeground(Main.getState().isShowGrid() ? Color.BLACK : Color.RED);
+				Main.getState().getSettings().setShowGrid(!Main.getState().getSettings().isShowGrid());
+				((JMenu) getComponent(2)).getMenuComponent(0).setForeground(Main.getState().getSettings().isShowGrid() ? Color.BLACK : Color.RED);
 				break;
 			case "togglenames":
-				Main.getState().setShowNames(!Main.getState().isShowNames());
-				((JMenu) getComponent(2)).getMenuComponent(1).setForeground(Main.getState().isShowNames() ? Color.BLACK : Color.RED);
+				Main.getState().getSettings().setShowNames(!Main.getState().getSettings().isShowNames());
+				((JMenu) getComponent(2)).getMenuComponent(1).setForeground(Main.getState().getSettings().isShowNames() ? Color.BLACK : Color.RED);
+				break;
+			case "colordots":
+				Main.getState().getSettings().setColorDots(!Main.getState().getSettings().isColorDots());
+				((JMenu) getComponent(2)).getMenuComponent(2).setForeground(Main.getState().getSettings().isColorDots() ? Color.BLACK : Color.RED);
+				break;
+			case "changehash":
+				Main.getState().getSettings().setCollegeHashes(!Main.getState().getSettings().isCollegeHashes());
+				((JMenuItem) (((JMenu) getComponent(2)).getMenuComponent(3))).setText(Main.getState().getSettings().isCollegeHashes() ? "Change to High School Hashes" : "Change to College Hashes");
+				try {
+					desktop.getImage();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				desktop.getDotDataFrame().updatePosition();
+				break;
+			case "fontsize":
+				changeFontSize();
 				break;
 			case "play":
 				play();
@@ -265,6 +293,26 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				gr.dispatchEvent(new WindowEvent(gr, WindowEvent.WINDOW_CLOSING));
 		}
 		desktop.getIO().fixControl();
+	}
+
+	private void changeFontSize() {
+		Integer[] nums = new Integer[23];
+		for (int i = 8; i <= 30; i++) {
+			nums[i - 8] = i;
+		}
+		try {
+			int size = (int) JOptionPane.showInputDialog(this, "Choose a font size:", "Font Size", JOptionPane.PLAIN_MESSAGE, null, nums, Main.getState().getSettings().getFontSize());
+			javax.swing.plaf.FontUIResource font = new javax.swing.plaf.FontUIResource("Dialog", Font.BOLD, size);
+			Main.setUIFont(font);
+			Main.getState().getSettings().setFontSize(size);
+			SwingUtilities.updateComponentTreeUI(gr);
+
+			for (JInternalFrame i : desktop.getAllFrames())
+				i.pack();
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

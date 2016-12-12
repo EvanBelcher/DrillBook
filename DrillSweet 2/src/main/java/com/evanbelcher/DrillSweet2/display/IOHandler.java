@@ -311,15 +311,15 @@ public class IOHandler implements MouseListener {
 							for (Point p : Main.getCurrentPage().getDots().keySet()) {
 								if (new Rectangle(p.x - dotSize / 2, p.y - dotSize / 2, dotSize, dotSize).contains(clickPoint)) {
 									intersects = true;
+									updateHistory();
 									if (activePoints.contains(p)) {
-										updateHistory();
 										for (Point activePoint : activePoints)
 											Main.getCurrentPage().getDots().remove(activePoint);
 										clearActivePoints();
-										updatePresent();
 									} else {
 										Main.getCurrentPage().getDots().remove(p);
 									}
+									updatePresent();
 									break;
 								}
 							}

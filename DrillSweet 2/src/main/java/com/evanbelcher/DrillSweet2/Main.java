@@ -5,7 +5,9 @@ import com.evanbelcher.DrillSweet2.display.GraphicsRunner;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
+import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
+import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,7 +52,8 @@ import java.util.concurrent.ConcurrentHashMap;
 	/**
 	 * Initializes and starts the GraphicsRunner (Graphics Thread)
 	 */
-	private static void start() {
+	public static void start() {
+		setUIFont(new javax.swing.plaf.FontUIResource("Dialog", Font.BOLD, Main.getState().getSettings().getFontSize()));
 		graphicsRunner = new GraphicsRunner();
 		graphicsRunner.setWindowTitle("DrillSweet 2 - " + getPagesFileName());
 		new Thread(graphicsRunner, "GraphicsThread").start();
@@ -316,6 +319,16 @@ import java.util.concurrent.ConcurrentHashMap;
 	 */
 	@SuppressWarnings("ConstantConditions") public static InputStream getFile(String file, Object o) {
 		return o.getClass().getResourceAsStream("/" + file);
+	}
+
+	public static void setUIFont(javax.swing.plaf.FontUIResource f) {
+		java.util.Enumeration keys = UIManager.getDefaults().keys();
+		while (keys.hasMoreElements()) {
+			Object key = keys.nextElement();
+			Object value = UIManager.get(key);
+			if (value != null && value instanceof javax.swing.plaf.FontUIResource)
+				UIManager.put(key, f);
+		}
 	}
 
 }

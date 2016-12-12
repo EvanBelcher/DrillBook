@@ -99,8 +99,8 @@ import java.util.Vector;
 	 *
 	 * @throws IOException if the file cannot be found
 	 */
-	private void getImage() throws IOException {
-		fieldImage = ImageIO.read(Main.getFile("field.png", this));
+	public void getImage() throws IOException {
+		fieldImage = ImageIO.read(Main.getFile(Main.getState().getSettings().isCollegeHashes() ? "clgfield.png" : "hsfield.png", this));
 		double scaleFactor = Math.min(getSize().getWidth() / fieldImage.getWidth(), getSize().getHeight() / fieldImage.getHeight());
 		imgSize = new Dimension((int) (fieldImage.getWidth() * scaleFactor), (int) (fieldImage.getHeight() * scaleFactor));
 	}
@@ -149,7 +149,7 @@ import java.util.Vector;
 			}
 		}
 
-		if (Main.getState().isShowGrid()) {
+		if (Main.getState().getSettings().isShowGrid()) {
 			//draw the grid
 			g.drawImage(fieldImage, (getSize().width - imgSize.width) / 2, (getSize().height - imgSize.height) / 2, imgSize.width, imgSize.height, null);
 
@@ -187,10 +187,10 @@ import java.util.Vector;
 				//g.setColor((io.getActivePoints().contains(p)) ? (io.isNormalDragging() ? Color.PINK : Color.RED) : Color.BLACK);
 				float hue = Character.getNumericValue(Main.getCurrentPage().getDots().get(p).charAt(0)) - 65;
 				hue *= 1.0 / 26.0;
-				g.setColor((io.getActivePoints().contains(p)) ? (io.isNormalDragging() ? Color.PINK : Color.RED) : new Color(Color.HSBtoRGB(hue, 1, 0.7f)));
+				g.setColor((io.getActivePoints().contains(p)) ? (io.isNormalDragging() ? Color.PINK : Color.RED) : Main.getState().getSettings().isColorDots() ? new Color(Color.HSBtoRGB(hue, 1, 0.7f)) : Color.BLACK);
 				g.fillOval(p.x - DOT_SIZE / 2, p.y - DOT_SIZE / 2, DOT_SIZE, DOT_SIZE);
 
-				if (Main.getState().isShowNames())
+				if (Main.getState().getSettings().isShowNames())
 					g.drawString(Main.getCurrentPage().getDots().get(p), p.x, p.y - DOT_SIZE / 2);
 			}
 		}

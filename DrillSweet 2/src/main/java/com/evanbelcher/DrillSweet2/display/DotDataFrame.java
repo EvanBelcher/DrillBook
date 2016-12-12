@@ -36,6 +36,7 @@ public class DotDataFrame extends JInternalFrame {
 				false, //closable
 				false, //maximizable
 				true);//iconifiable
+		setFrameIcon(null);
 
 		getCurrentPage();
 		this.mdp = mdp;
@@ -78,6 +79,7 @@ public class DotDataFrame extends JInternalFrame {
 		double height = field.getHeight();
 		double fiveYards = width / 20.0;
 		double third = height / 3.0;
+		double[] collegeHashes = { 0, third + fiveYards / 2, 2 * third - fiveYards / 2, 3 * third };
 		double x = p.getX() - field.getX();
 		double y = p.getY() - field.getY();
 
@@ -112,9 +114,16 @@ public class DotDataFrame extends JInternalFrame {
 		distance = Integer.MAX_VALUE;
 		best = 0;
 		for (int i = 0; i <= 3; i++) {
-			if (Math.abs(third * i - y) < distance) {
-				distance = Math.abs(third * i - y);
-				best = i;
+			if (Main.getState().getSettings().isCollegeHashes()) {
+				if (Math.abs(collegeHashes[i] - y) < distance) {
+					distance = Math.abs(collegeHashes[i] - y);
+					best = i;
+				}
+			} else {
+				if (Math.abs(third * i - y) < distance) {
+					distance = Math.abs(third * i - y);
+					best = i;
+				}
 			}
 		}
 		String[] hashes = new String[] { "Back Sideline", "Back Hash", "Front Hash", "Front Sideline" };
@@ -259,7 +268,7 @@ public class DotDataFrame extends JInternalFrame {
 	/**
 	 * Sets position's text to be the position text of the current point
 	 */
-	private void updatePosition() {
+	public void updatePosition() {
 		position.setText(getPointText(mdp.getActivePoints().get(0)));
 	}
 

@@ -50,13 +50,13 @@ public class PlayerDesktopPane extends JDesktopPane {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
 
-		if (Main.getState().isShowGrid())
+		if (Main.getState().getSettings().isShowGrid())
 			g.drawImage(fieldImage, (getSize().width - imgSize.width) / 2, (getSize().height - imgSize.height) / 2, imgSize.width, imgSize.height, null);
 
 		for (MovingPoint p : points.keySet()) {
 			g.setColor(p.getColor());
 			g.fillOval(p.current().x - dotSize / 2, p.current().y - dotSize / 2, dotSize, dotSize);
-			if (Main.getState().isShowNames())
+			if (Main.getState().getSettings().isShowNames())
 				g.drawString(points.get(p), p.current().x, p.current().y - dotSize / 2);
 			if (State.isDebugMode()) {
 				Graphics2D g2d = (Graphics2D) g;
