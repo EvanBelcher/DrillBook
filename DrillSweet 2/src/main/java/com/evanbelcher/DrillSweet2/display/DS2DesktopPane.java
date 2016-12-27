@@ -152,7 +152,8 @@ import java.util.Vector;
 		if (Main.getState().getSettings().shouldShowGrid()) {
 			//draw the grid
 			g.drawImage(fieldImage, (getSize().width - imgSize.width) / 2, (getSize().height - imgSize.height) / 2, imgSize.width, imgSize.height, null);
-
+		}
+		if (Main.getState().getSettings().shouldShowText()) {
 			//draw the text
 			if (!PageDataFrame.getDeleting()) {
 				Page p = Main.getCurrentPage();
@@ -178,7 +179,6 @@ import java.util.Vector;
 				}
 				g.setFont(oldFont);
 			}
-
 		}
 
 		//Draw the points and their names

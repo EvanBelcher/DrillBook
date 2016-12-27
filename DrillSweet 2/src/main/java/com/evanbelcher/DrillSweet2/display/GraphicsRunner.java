@@ -78,7 +78,7 @@ public class GraphicsRunner extends JFrame implements Runnable {
 	public void toPlayMode(DS2DesktopPane desktop) {
 		pagePlayer = new PagePlayer(Main.getPages().get(Main.getState().getCurrentPage() - 1).getDots(), Main.getCurrentPage().getDots(), Main.getCurrentPage().getCounts(), desktop, this);
 		new Thread(pagePlayer).start();
-		menuBar.disableAll();
+		menuBar.disableMost();
 		setContentPane(pagePlayer.getPlayerDesktopPane());
 	}
 

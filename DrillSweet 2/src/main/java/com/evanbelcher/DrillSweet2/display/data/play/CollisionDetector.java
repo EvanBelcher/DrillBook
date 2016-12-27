@@ -126,7 +126,7 @@ import java.awt.geom.*;
 		Line2D.Double r = new Line2D.Double(p1x, p1y, p2x, p2y);
 		Line2D.Double s = new Line2D.Double(q1x, q1y, q2x, q2y);
 
-		if (p.distance(q) * scale <= delta || r.getP2().distance(s.getP2()) * scale <= delta)
+		if (p.distance(q) * scale < delta || r.getP2().distance(s.getP2()) * scale < delta)
 			return true;
 
 		if (p.getX() > q.getX()) {
@@ -157,7 +157,7 @@ import java.awt.geom.*;
 				Point2D.Double qAtt1 = new Point2D.Double(q.getX() + (s.getX2() - s.getX1()) * t1, q.getY() + (s.getY2() - s.getY1()) * t1);
 				double distance = Math.min(pAtt0.distance(qAtt0), pAtt1.distance(qAtt1));
 				distance *= scale;
-				if (distance <= delta)
+				if (distance < delta)
 					return true;
 			}
 			//return t1 < t0 || 0 <= t1 && t0 <= 1 && !(length(r) == length(s)) && 0 <= (s.getX1() - r.getX1()) / (length(r) - length(s)) && (s.getX1() - r.getX1()) / (length(r) - length(s)) <= 1;
@@ -175,7 +175,7 @@ import java.awt.geom.*;
 				double distance = Math.min(pAtt.distance(qAtt), pAtu.distance(qAtu));
 				distance *= scale;
 
-				if (-delta <= distance && distance <= delta)
+				if (distance < delta)
 					return true;
 			}
 		}

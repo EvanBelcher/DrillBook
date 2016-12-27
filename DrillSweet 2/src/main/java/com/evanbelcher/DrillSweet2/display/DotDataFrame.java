@@ -269,7 +269,8 @@ public class DotDataFrame extends JInternalFrame {
 	 * Sets position's text to be the position text of the current point
 	 */
 	public void updatePosition() {
-		position.setText(getPointText(mdp.getActivePoints().get(0)));
+		if (mdp.getActivePoints().get(0) != null)
+			position.setText(getPointText(mdp.getActivePoints().get(0)));
 	}
 
 	/**

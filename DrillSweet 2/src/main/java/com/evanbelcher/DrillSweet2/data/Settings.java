@@ -9,6 +9,7 @@ public class Settings {
 
 	private boolean showGrid;
 	private boolean showNames;
+	private boolean showText;
 	private boolean colorDots;
 	private boolean collegeHashes;
 	private int fontSize;
@@ -16,6 +17,7 @@ public class Settings {
 	public Settings() {
 		showGrid = true;
 		showNames = true;
+		showText = true;
 		colorDots = false;
 		collegeHashes = false;
 		fontSize = 12;
@@ -51,6 +53,22 @@ public class Settings {
 	 */
 	public void setShowNames(boolean showNames) {
 		this.showNames = showNames;
+	}
+
+	/**
+	 * Returns whether we should show the text box
+	 */
+	public boolean shouldShowText() {
+		return showText;
+	}
+
+	/**
+	 * Sets whether we should show the text box
+	 *
+	 * @param showText
+	 */
+	public void setShowText(boolean showText) {
+		this.showText = showText;
 	}
 
 	/**

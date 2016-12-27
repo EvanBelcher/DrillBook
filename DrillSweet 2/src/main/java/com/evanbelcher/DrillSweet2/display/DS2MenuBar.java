@@ -126,6 +126,12 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		menuItem.setForeground(Main.getState().getSettings().shouldShowNames() ? Color.BLACK : Color.RED);
 		menu.add(menuItem);
 
+		menuItem = new JMenuItem("Toggle Text Box");
+		menuItem.setActionCommand("toggletext");
+		menuItem.addActionListener(this);
+		menuItem.setForeground(Main.getState().getSettings().shouldShowText() ? Color.BLACK : Color.RED);
+		menu.add(menuItem);
+
 		menuItem = new JMenuItem("Color Code Dots by Instrument");
 		menuItem.setActionCommand("colordots");
 		menuItem.addActionListener(this);
@@ -253,13 +259,17 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				Main.getState().getSettings().setShowNames(!Main.getState().getSettings().shouldShowNames());
 				((JMenu) getComponent(2)).getMenuComponent(1).setForeground(Main.getState().getSettings().shouldShowNames() ? Color.BLACK : Color.RED);
 				break;
+			case "toggletext":
+				Main.getState().getSettings().setShowText(!Main.getState().getSettings().shouldShowText());
+				((JMenu) getComponent(2)).getMenuComponent(2).setForeground(Main.getState().getSettings().shouldShowText() ? Color.BLACK : Color.RED);
+				break;
 			case "colordots":
 				Main.getState().getSettings().setColorDots(!Main.getState().getSettings().shouldColorDots());
-				((JMenu) getComponent(2)).getMenuComponent(2).setForeground(Main.getState().getSettings().shouldColorDots() ? Color.BLACK : Color.RED);
+				((JMenu) getComponent(2)).getMenuComponent(3).setForeground(Main.getState().getSettings().shouldColorDots() ? Color.BLACK : Color.RED);
 				break;
 			case "changehash":
 				Main.getState().getSettings().setCollegeHashes(!Main.getState().getSettings().useCollegeHashes());
-				((JMenuItem) (((JMenu) getComponent(2)).getMenuComponent(3))).setText(Main.getState().getSettings().useCollegeHashes() ? "Change to High School Hashes" : "Change to College Hashes");
+				((JMenuItem) (((JMenu) getComponent(2)).getMenuComponent(4))).setText(Main.getState().getSettings().useCollegeHashes() ? "Change to High School Hashes" : "Change to College Hashes");
 				try {
 					desktop.getImage();
 				} catch (IOException e) {
@@ -582,11 +592,39 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	}
 
 	/**
-	 * Disables all menu items
+	 * Disables most menu items
 	 */
-	public void disableAll() {
+	public void disableMost() {
+		//		for (Component component : getComponents()) {
+		//			if (component instanceof JMenu && ((JMenu) component).getText().equals("Settings")) {
+		//				for (Component menuComponent : ((JMenu) component).getMenuComponents()) {
+		//					if (!(menuComponent instanceof JMenuItem) || (!((JMenuItem) menuComponent).getText().equals("Toggle Gridlines") && !((JMenuItem) menuComponent).getText().equals("Toggle Dot Names")))
+		//						menuComponent.setEnabled(false);
+		//				}
+		//			} else {
+		//				component.setEnabled(false);
+		//			}
+		//		}
 		for (Component component : getComponents()) {
-			if (!(component instanceof JMenuItem) || (!((JMenuItem) component).getText().equals("Toggle Gridlines") && !((JMenuItem) component).getText().equals("Toggle Dot Names")))
+			if (component instanceof JMenu) {
+				boolean enabled = false;
+				for (Component menuComponent : ((JMenu) component).getMenuComponents()) {
+					JMenuItem menuItem = (JMenuItem) menuComponent;
+					switch (menuItem.getText()) {
+						case "Quit":
+						case "Toggle Gridlines":
+						case "Toggle Dot Names":
+						case "Help":
+						case "About":
+							enabled = true;
+							break;
+						default:
+							menuItem.setEnabled(false);
+					}
+				}
+				if (!enabled)
+					component.setEnabled(false);
+			} else
 				component.setEnabled(false);
 		}
 	}
@@ -595,7 +633,12 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Enables all menu items
 	 */
 	public void enableAll() {
-		for (Component component : getComponents())
+		for (Component component : getComponents()) {
 			component.setEnabled(true);
+			if (component instanceof JMenu) {
+				for (Component menuComponent : ((JMenu) component).getMenuComponents())
+					menuComponent.setEnabled(true);
+			}
+		}
 	}
 }

@@ -6,7 +6,7 @@
   <groupId>DrillSweet2</groupId>
   <artifactId>DrillSweet2</artifactId>
   <name>DrillSweet 2</name>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
   <url>https://github.com/EbMinor3/DrillSweet2</url>
   <build>
     <resources>

@@ -1,5 +1,6 @@
 package com.evanbelcher.DrillSweet2;
 
+import com.evanbelcher.DrillSweet2.application.ApplicationInstanceManager;
 import com.evanbelcher.DrillSweet2.data.*;
 import com.evanbelcher.DrillSweet2.display.GraphicsRunner;
 import com.google.gson.*;
@@ -41,6 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	 * system
 	 */
 	private static void init() {
+		registerInstance();
 		gson = new GsonBuilder().enableComplexMapKeySerialization()/*.setPrettyPrinting()*/.create();
 		try {
 			System.setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
@@ -48,6 +50,26 @@ import java.util.concurrent.ConcurrentHashMap;
 			e.printStackTrace();
 		}
 		load(true);
+	}
+
+	/**
+	 * Registers a single instance of this application. If another is opened, the window simply requests access, and the subsequent application is closed.
+	 */
+	private static void registerInstance() {
+		if (!ApplicationInstanceManager.registerInstance()) {
+			// instance already running.
+			State.print("Another instance of this application is already running.  Exiting.");
+			System.exit(0);
+		}
+		ApplicationInstanceManager.setApplicationInstanceListener(() -> {
+			State.print("New instance detected...");
+			// this is where your handler code goes...
+			if (graphicsRunner != null) {
+				//get focus
+				graphicsRunner.setAlwaysOnTop(true);
+				graphicsRunner.setAlwaysOnTop(false);
+			}
+		});
 	}
 
 	/**
@@ -98,6 +120,8 @@ import java.util.concurrent.ConcurrentHashMap;
 				State.print("Pages file not found: " + getFilePath() + getPagesFileName());
 				pages = new ConcurrentHashMap<>();
 				savePages();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		if (pages.isEmpty())
@@ -116,6 +140,11 @@ import java.util.concurrent.ConcurrentHashMap;
 		File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + stateFileName);
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		state = gson.fromJson(br, State.class);
+		try {
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -124,7 +153,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	 * @throws FileNotFoundException if the json file cannot be found; this is handled by the load()
 	 *                               method
 	 */
-	public static void loadPages() throws FileNotFoundException {
+	public static void loadPages() throws IOException {
 		File f = new File(getFilePath() + getPagesFileName());
 		State.print("LOADING: " + f);
 		BufferedReader br = new BufferedReader(new FileReader(f));
@@ -133,6 +162,7 @@ import java.util.concurrent.ConcurrentHashMap;
 		}.getType();
 		pages = gson.fromJson(br, type);
 		State.print(pages);
+		br.close();
 	}
 
 	/**
