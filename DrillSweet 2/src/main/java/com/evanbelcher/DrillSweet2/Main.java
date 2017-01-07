@@ -4,14 +4,12 @@ import com.evanbelcher.DrillSweet2.application.ApplicationInstanceManager;
 import com.evanbelcher.DrillSweet2.data.*;
 import com.evanbelcher.DrillSweet2.display.GraphicsRunner;
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.io.*;
-import java.lang.reflect.Type;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -23,7 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("SynchronizeOnNonFinalField") public class Main {
 
 	private static final String stateFileName = "STATE";
-	private static ConcurrentHashMap<Integer, Page> pages;
+	//private static ConcurrentHashMap<Integer, Page> pageMap;
+	private static PagesConcurrentHashMap pageMap;
 	private static State state;
 	private static GraphicsRunner graphicsRunner;
 
@@ -38,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	}
 
 	/**
-	 * Initializes the gson and filePath variables and loads the pages and state from the file
+	 * Initializes the gson and filePath variables and loads the pageMap and state from the file
 	 * system
 	 */
 	private static void init() {
@@ -96,13 +95,13 @@ import java.util.concurrent.ConcurrentHashMap;
 	}
 
 	/**
-	 * Loads the state and pages from the file system
+	 * Loads the state and pageMap from the file system
 	 */
 	public static void load(boolean loadState) {
 		if (new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\").mkdirs()) {
 			state = new State(1, FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\", "show.ds2");
 			saveState();
-			pages = new ConcurrentHashMap<>();
+			pageMap = new PagesConcurrentHashMap();
 			savePages();
 		} else {
 			if (loadState) {
@@ -118,14 +117,14 @@ import java.util.concurrent.ConcurrentHashMap;
 				loadPages();
 			} catch (FileNotFoundException e) {
 				State.print("Pages file not found: " + getFilePath() + getPagesFileName());
-				pages = new ConcurrentHashMap<>();
+				pageMap = new PagesConcurrentHashMap();
 				savePages();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		if (pages.isEmpty())
-			pages.put(1, new Page(1));
+		if (pageMap.getPages().isEmpty())
+			pageMap.getPages().put(1, new Page(1));
 		if (graphicsRunner != null)
 			graphicsRunner.setWindowTitle("DrillSweet 2 - " + getPagesFileName());
 	}
@@ -148,7 +147,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	}
 
 	/**
-	 * Loads the pages from the json file
+	 * Loads the pageMap from the json file
 	 *
 	 * @throws FileNotFoundException if the json file cannot be found; this is handled by the load()
 	 *                               method
@@ -157,16 +156,16 @@ import java.util.concurrent.ConcurrentHashMap;
 		File f = new File(getFilePath() + getPagesFileName());
 		State.print("LOADING: " + f);
 		BufferedReader br = new BufferedReader(new FileReader(f));
-		Type type = new TypeToken<ConcurrentHashMap<Integer, Page>>() {
-
-		}.getType();
-		pages = gson.fromJson(br, type);
-		State.print(pages);
+		//		Type type = new TypeToken<PagesConcurrentHashMap>() {
+		//
+		//		}.getType();
+		pageMap = gson.fromJson(br, PagesConcurrentHashMap.class);
+		State.print(pageMap);
 		br.close();
 	}
 
 	/**
-	 * Saves the pages and state to the json files
+	 * Saves the pageMap and state to the json files
 	 */
 	public static void save(String... filenames) {
 		if (filenames.length != 0 && filenames.length != 2)
@@ -183,16 +182,16 @@ import java.util.concurrent.ConcurrentHashMap;
 	}
 
 	/**
-	 * Saves the pages in the json file
+	 * Saves the pageMap in the json file
 	 *
 	 * @param filename the filename, if not pagesFileName
-	 * @return the thread used to save the pages
+	 * @return the thread used to save the pageMap
 	 */
 	public static Thread savePages(String... filename) {
 		if (filename.length != 0 && filename.length != 1)
 			throw new IllegalArgumentException("You can only pass in one filename, or none at all.");
 		Runnable r = () -> {
-			String str = gson.toJson(pages);
+			String str = gson.toJson(pageMap);
 			File f = new File(getFilePath() + (filename.length == 0 ? getPagesFileName() : filename[0]));
 			State.print("Saving:" + getFilePath() + getPagesFileName());
 			BufferedWriter bw;
@@ -241,8 +240,8 @@ import java.util.concurrent.ConcurrentHashMap;
 	 */
 	public static void addPage() {
 		Page page = getPages().get(getPages().size());
-		pages.put(getPages().size() + 1, new Page(getPages().size() + 1, page.getSong(), page.getEndingMeasure() + 1, page.getDots()));
-		setCurrentPage(pages.size());
+		pageMap.getPages().put(getPages().size() + 1, new Page(getPages().size() + 1, page.getSong(), page.getEndingMeasure() + 1, page.getDots()));
+		setCurrentPage(pageMap.getPages().size());
 	}
 
 	/**
@@ -252,25 +251,32 @@ import java.util.concurrent.ConcurrentHashMap;
 	 * @param page  the page to be added
 	 */
 	@SuppressWarnings("unused") public static void addPage(int index, Page page) {
-		pages.put(index, page);
+		pageMap.getPages().put(index, page);
 	}
 
 	/**
 	 * Returns a copy of pages
 	 */
 	public static ConcurrentHashMap<Integer, Page> getPages() {
-		return new ConcurrentHashMap<>(pages);
+		return new ConcurrentHashMap<>(pageMap.getPages());
 	}
 
 	/**
 	 * Returns the actual pages object
 	 */
 	public static ConcurrentHashMap<Integer, Page> getRealPages() {
-		return pages;
+		return pageMap.getPages();
 	}
 
 	/**
-	 * The current page is determined by getting the page from pages corresponding to the
+	 * Returns the PagesConcurrentHashMap
+	 */
+	public static PagesConcurrentHashMap getPageMap() {
+		return pageMap;
+	}
+
+	/**
+	 * The current page is determined by getting the page from pageMap corresponding to the
 	 * currentPage stored in the State
 	 *
 	 * @return a copy of the current page
@@ -323,7 +329,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	}
 
 	/**
-	 * Returns the file name for the pages json file, should include .ds2
+	 * Returns the file name for the pageMap json file, should include .ds2
 	 */
 	public static String getPagesFileName() {
 		synchronized (state) {
@@ -332,7 +338,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	}
 
 	/**
-	 * Sets the file name for the pages json file
+	 * Sets the file name for the pageMap json file
 	 *
 	 * @param newPagesFileName the file name, should include .ds2
 	 */

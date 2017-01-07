@@ -205,7 +205,7 @@ public class IOHandler implements MouseListener {
 						break;
 				}
 			} else if (altDown) {
-				DS2ConcurrentHashMap<Point, String> dotMap = Main.getCurrentPage().getDots();
+				PointConcurrentHashMap<Point, String> dotMap = Main.getCurrentPage().getDots();
 				switch (e.getButton()) {
 					case MouseEvent.BUTTON1:
 						int dotSize = DS2DesktopPane.getDotSize();

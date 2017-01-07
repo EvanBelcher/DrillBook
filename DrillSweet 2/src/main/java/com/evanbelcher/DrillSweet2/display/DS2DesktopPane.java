@@ -91,7 +91,7 @@ import java.util.Vector;
 
 		field = new DS2Rectangle(startX, startY, endX - startX, endY - startY);
 		State.print(field);
-		Main.getState().fixPoints(field);
+		Main.getPageMap().fixPoints(field);
 	}
 
 	/**

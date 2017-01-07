@@ -513,7 +513,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	private boolean checkNoDuplicates() {
 		ArrayList<String> names = new ArrayList<>();
 		ArrayList<String> badNames = new ArrayList<>();
-		DS2ConcurrentHashMap<Point, String> dots = Main.getCurrentPage().getDots();
+		PointConcurrentHashMap<Point, String> dots = Main.getCurrentPage().getDots();
 		for (String s : dots.values()) {
 			if (!names.contains(s))
 				names.add(s);
@@ -539,7 +539,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	private boolean checkNoDuplicates(int pageNum) {
 		ArrayList<String> names = new ArrayList<>();
 		ArrayList<String> badNames = new ArrayList<>();
-		DS2ConcurrentHashMap<Point, String> dots;
+		PointConcurrentHashMap<Point, String> dots;
 		try {
 			dots = Main.getPages().get(pageNum).getDots();
 		} catch (NullPointerException e) {
@@ -575,8 +575,8 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			JOptionPane.showMessageDialog(this, "To play from the first page to the second page, navigate to the second page and click \"Play\".", "Can't play the first page", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		DS2ConcurrentHashMap<Point, String> currentDots = Main.getCurrentPage().getDots();
-		DS2ConcurrentHashMap<Point, String> previousDots = Main.getPages().get(currentPageNum - 1).getDots();
+		PointConcurrentHashMap<Point, String> currentDots = Main.getCurrentPage().getDots();
+		PointConcurrentHashMap<Point, String> previousDots = Main.getPages().get(currentPageNum - 1).getDots();
 		ArrayList<String> badNames = new ArrayList<>();
 		for (String name : previousDots.values()) {
 			if (!currentDots.containsValue(name))

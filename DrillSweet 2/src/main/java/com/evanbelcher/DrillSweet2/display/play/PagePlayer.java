@@ -30,7 +30,7 @@ public class PagePlayer implements Runnable {
 	 * @param desktopPane    the DS2DesktopPane
 	 * @param graphicsRunner the GraphicsRunner
 	 */
-	public PagePlayer(DS2ConcurrentHashMap<Point, String> previousMap, DS2ConcurrentHashMap<Point, String> currentMap, int counts, DS2DesktopPane desktopPane, GraphicsRunner graphicsRunner) {
+	public PagePlayer(PointConcurrentHashMap<Point, String> previousMap, PointConcurrentHashMap<Point, String> currentMap, int counts, DS2DesktopPane desktopPane, GraphicsRunner graphicsRunner) {
 		stop = false;
 		this.desktopPane = desktopPane;
 		for (Point p : previousMap.keySet()) {

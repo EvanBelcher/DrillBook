@@ -13,17 +13,17 @@ import java.util.ArrayDeque;
 @SuppressWarnings("unused") public class State {
 
 	private static final boolean DEBUG_MODE = false;
-	public static final String VERSION = "v1.3.0";
+	public static final String VERSION = "v1.4.0";
 
-	private int currentPage;
-	private String currentFileName;
 	private String filePath;
-	private Rectangle field;
+	private String currentFileName;
+	private int currentPage;
+
 
 	private Settings settings;
 
-	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> history;
-	private transient ArrayDeque<DS2ConcurrentHashMap<Point, String>> future;
+	private transient ArrayDeque<PointConcurrentHashMap<Point, String>> history;
+	private transient ArrayDeque<PointConcurrentHashMap<Point, String>> future;
 
 	/**
 	 * Constructs the object with given current page.
@@ -103,45 +103,13 @@ import java.util.ArrayDeque;
 		this.filePath = filePath;
 	}
 
-	/**
-	 * Sets the field to the given field
-	 *
-	 * @param field
-	 */
-	public void setField(Rectangle field) {
-		this.field = field;
-	}
 
-	/**
-	 * Adjusts all points to be scaled and translated properly to the new field size. Also sets the field to the given field (uses setField()).
-	 *
-	 * @param newField the new field rectangle
-	 */
-	public void fixPoints(Rectangle newField) {
-		if (field == null)
-			field = newField;
-		if (!newField.equals(field)) {
-			double xScale = newField.getWidth() / field.getWidth();
-			double yScale = newField.getHeight() / field.getHeight();
-
-			for (Page page : Main.getPages().values()) {
-				DS2ConcurrentHashMap<Point, String> dots = page.getDots();
-				DS2ConcurrentHashMap<Point, String> newDots = new DS2ConcurrentHashMap<>();
-				for (Point point : dots.keySet()) {
-					Point newPoint = new Point((int) Math.round((point.getX() - field.getX()) * xScale + newField.getX()), (int) Math.round((point.getY() - field.getY()) * yScale + newField.getY()));
-					newDots.put(newPoint, dots.get(point));
-				}
-				page.setDots(newDots);
-			}
-			setField(newField);
-		}
-	}
 
 	/**
 	 * Default toString()
 	 */
 	@Override public String toString() {
-		return "State{" + "currentPage=" + currentPage + ", currentFileName='" + currentFileName + '\'' + ", filePath='" + filePath + '\'' + ", field=" + field + ", settings=" + settings + ", history=" + history + ", future=" + future + '}';
+		return "State{" + "currentPage=" + currentPage + ", currentFileName='" + currentFileName + '\'' + ", filePath='" + filePath + '\'' + ", settings=" + settings + ", history=" + history + ", future=" + future + '}';
 	}
 
 	/**
@@ -161,7 +129,7 @@ import java.util.ArrayDeque;
 	 */
 	public void addHistory() {
 		checkVars();
-		history.offer(new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots()));
+		history.offer(new PointConcurrentHashMap<>(Main.getCurrentPage().getDots()));
 		while (history.size() > 20)
 			history.pollFirst();
 		future.clear();
@@ -172,7 +140,7 @@ import java.util.ArrayDeque;
 	 */
 	public void addFuture() {
 		checkVars();
-		future.offer(new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots()));
+		future.offer(new PointConcurrentHashMap<>(Main.getCurrentPage().getDots()));
 		while (future.size() > 20)
 			future.pollFirst();
 	}
@@ -183,9 +151,9 @@ import java.util.ArrayDeque;
 	public void undo() {
 		checkVars();
 		if (history.size() > 0) {
-			DS2ConcurrentHashMap<Point, String> current;
+			PointConcurrentHashMap<Point, String> current;
 			do {
-				current = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
+				current = new PointConcurrentHashMap<>(Main.getCurrentPage().getDots());
 				future.offer(history.pollLast());
 				while (future.size() > 20)
 					future.pollFirst();
@@ -200,9 +168,9 @@ import java.util.ArrayDeque;
 	public void redo() {
 		checkVars();
 		if (future.size() > 0) {
-			DS2ConcurrentHashMap<Point, String> current;
+			PointConcurrentHashMap<Point, String> current;
 			do {
-				current = new DS2ConcurrentHashMap<>(Main.getCurrentPage().getDots());
+				current = new PointConcurrentHashMap<>(Main.getCurrentPage().getDots());
 				history.offer(future.pollLast());
 				while (history.size() > 20)
 					history.pollFirst();

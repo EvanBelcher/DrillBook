@@ -2,7 +2,7 @@ package com.evanbelcher.DrillSweet2;
 
 import be.quodlibet.boxable.BaseTable;
 import be.quodlibet.boxable.datatable.DataTable;
-import com.evanbelcher.DrillSweet2.data.DS2ConcurrentHashMap;
+import com.evanbelcher.DrillSweet2.data.PointConcurrentHashMap;
 import com.evanbelcher.DrillSweet2.display.*;
 import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.font.*;
@@ -58,7 +58,7 @@ public class DotSheetMaker extends JPanel {
 	private void getDotSheetData() {
 		map = new HashMap<>();
 		for (int i = 1; i <= Main.getPages().size(); i++) {
-			DS2ConcurrentHashMap<Point, String> dots = Main.getPages().get(i).getDots();
+			PointConcurrentHashMap<Point, String> dots = Main.getPages().get(i).getDots();
 			for (Point p : dots.keySet()) {
 				String s = dots.get(p);
 				if (!map.containsKey(s))

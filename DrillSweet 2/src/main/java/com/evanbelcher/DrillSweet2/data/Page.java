@@ -17,7 +17,7 @@ import java.text.DecimalFormat;
 	private int counts;
 	private String notes;
 	private Point textPoint;
-	private DS2ConcurrentHashMap<Point, String> dots;
+	private PointConcurrentHashMap<Point, String> dots;
 
 	/**
 	 * Constructs the page object with the given number. All other fields are default.
@@ -32,7 +32,7 @@ import java.text.DecimalFormat;
 		setCounts(1);
 		setNotes("");
 		setTextPoint(new Point(0, 0));
-		dots = new DS2ConcurrentHashMap<>();
+		dots = new PointConcurrentHashMap<>();
 	}
 
 	/**
@@ -44,7 +44,7 @@ import java.text.DecimalFormat;
 	 * @param startingMeasure he starting measure number
 	 * @param dots            the map of dots
 	 */
-	public Page(int number, String song, int startingMeasure, DS2ConcurrentHashMap<Point, String> dots) {
+	public Page(int number, String song, int startingMeasure, PointConcurrentHashMap<Point, String> dots) {
 		setNumber(number);
 		setSong(song);
 		setStartingMeasure(startingMeasure);
@@ -52,7 +52,7 @@ import java.text.DecimalFormat;
 		setCounts(1);
 		setNotes("");
 		setTextPoint(new Point(0, 0));
-		this.dots = new DS2ConcurrentHashMap<>(dots);
+		this.dots = new PointConcurrentHashMap<>(dots);
 	}
 
 	/**
@@ -67,7 +67,7 @@ import java.text.DecimalFormat;
 	 * @param textPoint       the top-left corner for the page text to be drawn at
 	 * @param dots            the map of dots
 	 */
-	public Page(int number, String song, int startingMeasure, int endingMeasure, int counts, String notes, Point textPoint, DS2ConcurrentHashMap<Point, String> dots) {
+	public Page(int number, String song, int startingMeasure, int endingMeasure, int counts, String notes, Point textPoint, PointConcurrentHashMap<Point, String> dots) {
 		setNumber(number);
 		setSong(song);
 		setStartingMeasure(startingMeasure);
@@ -75,7 +75,7 @@ import java.text.DecimalFormat;
 		setCounts(counts);
 		setNotes(notes);
 		setTextPoint(textPoint);
-		this.dots = new DS2ConcurrentHashMap<>(dots);
+		this.dots = new PointConcurrentHashMap<>(dots);
 	}
 
 	/**
@@ -209,7 +209,7 @@ import java.text.DecimalFormat;
 	/**
 	 * Returns the map of dots
 	 */
-	public DS2ConcurrentHashMap<Point, String> getDots() {
+	public PointConcurrentHashMap<Point, String> getDots() {
 		return dots;
 	}
 
@@ -218,8 +218,8 @@ import java.text.DecimalFormat;
 	 *
 	 * @param dots
 	 */
-	public void setDots(DS2ConcurrentHashMap<Point, String> dots) {
-		this.dots = new DS2ConcurrentHashMap<>(dots);
+	public void setDots(PointConcurrentHashMap<Point, String> dots) {
+		this.dots = new PointConcurrentHashMap<>(dots);
 	}
 
 	/**
