@@ -5,6 +5,11 @@ import com.evanbelcher.DrillSweet2.Main;
 import java.awt.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Holds the pages as well as the field in order to scale properly among different screen sizes
+ *
+ * @author Evan Belcher
+ */
 public class PagesConcurrentHashMap {
 
 	private ConcurrentHashMap<Integer, Page> pages;
@@ -49,6 +54,9 @@ public class PagesConcurrentHashMap {
 		}
 	}
 
+	/**
+	 * Returns the pages map
+	 */
 	public ConcurrentHashMap<Integer, Page> getPages() {
 		return pages;
 	}

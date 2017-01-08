@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("SynchronizeOnNonFinalField") public class Main {
 
 	private static final String stateFileName = "STATE";
-	//private static ConcurrentHashMap<Integer, Page> pageMap;
 	private static PagesConcurrentHashMap pageMap;
 	private static State state;
 	private static GraphicsRunner graphicsRunner;

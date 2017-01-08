@@ -446,12 +446,11 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			do {
 				returnVal = fc.showOpenDialog(this);
 				file = fc.getSelectedFile();
-			} while (!file.exists());
-
-			String name, path;
-
+			}
+			while (returnVal != JFileChooser.CANCEL_OPTION && returnVal != JFileChooser.ERROR_OPTION && !file.exists());
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
+					String name, path;
 					path = file.getCanonicalPath();
 					path = path.substring(0, path.lastIndexOf('\\') + 1);
 					name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
