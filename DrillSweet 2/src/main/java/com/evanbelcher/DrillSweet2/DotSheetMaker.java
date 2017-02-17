@@ -1,7 +1,6 @@
 package com.evanbelcher.DrillSweet2;
 
-import be.quodlibet.boxable.BaseTable;
-import be.quodlibet.boxable.datatable.DataTable;
+import be.quodlibet.boxable.*;
 import com.evanbelcher.DrillSweet2.data.PointConcurrentHashMap;
 import com.evanbelcher.DrillSweet2.display.*;
 import org.apache.pdfbox.pdmodel.*;
@@ -13,10 +12,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
-import java.util.List;
 
 /**
  * Creates dot sheets for all dots
+ *
+ * @author Evan Belcher
  */
 public class DotSheetMaker extends JPanel {
 
@@ -26,6 +26,7 @@ public class DotSheetMaker extends JPanel {
 	private final int HEIGHT = 1600;
 	private HashMap<String, HashMap<Integer, String>> map;
 	private HashMap<Integer, String> currentMap;
+	private ArrayList<Integer> openingSets;
 	private String currentName;
 	private Comparator<String> nameComparator = (String o1, String o2) -> {
 		String name1 = o1.replaceAll("[0-9]", "");
@@ -36,6 +37,9 @@ public class DotSheetMaker extends JPanel {
 			return name1.compareTo(name2);
 		return (num1 > num2) ? 1 : -1;
 	};
+	private final Color HEADER_COLOR = Color.CYAN;
+	private final Color OPENING_SET_COLOR = Color.YELLOW;
+	private final Color NORMAL_COLOR = Color.WHITE;
 
 	/**
 	 * Constructs object. Automatically runs getDotSheetData().
@@ -57,8 +61,14 @@ public class DotSheetMaker extends JPanel {
 	 */
 	private void getDotSheetData() {
 		map = new HashMap<>();
+		openingSets = new ArrayList<>();
+		String currentSong = "";
 		for (int i = 1; i <= Main.getPages().size(); i++) {
 			PointConcurrentHashMap<Point, String> dots = Main.getPages().get(i).getDots();
+			if (!currentSong.equals(Main.getPages().get(i).getSong())) {
+				currentSong = Main.getPages().get(i).getSong();
+				openingSets.add(i);
+			}
 			for (Point p : dots.keySet()) {
 				String s = dots.get(p);
 				if (!map.containsKey(s))
@@ -160,13 +170,13 @@ public class DotSheetMaker extends JPanel {
 
 				ArrayList<String> list = new ArrayList<>(map.keySet());
 				list.sort(nameComparator);
+
 				for (String dotName : list) {
 					if (dotName.replaceAll("[0-9]", "").equals(letter)) {
 						int i = 0;
+
 						PDPage page = new PDPage();
 						doc.addPage(page);
-
-						@SuppressWarnings({ "rawtypes", "unchecked" }) List<List> data = new ArrayList();
 
 						PDFont font = PDType1Font.HELVETICA_BOLD;
 						PDPageContentStream contentStream = new PDPageContentStream(doc, page);
@@ -185,38 +195,59 @@ public class DotSheetMaker extends JPanel {
 						contentStream.beginText();
 						contentStream.setFont(font, 10.0f);
 						contentStream.newLineAtOffset(page.getMediaBox().getWidth() * 0.6f, page.getMediaBox().getHeight() - 20);
-						contentStream.showText("Name:");
+						contentStream.showText("Name: ______________________________");
 						contentStream.endText();
 						contentStream.close();
 
-						data.add(new ArrayList<>(Arrays.asList("Set #", "Horizontal", "Vertical")));
+						float margin = 10;
+						float tableWidth = page.getMediaBox().getWidth() - (2 * margin);
+						float yStartNewPage = page.getMediaBox().getHeight() - (3 * margin);
+						//noinspection UnnecessaryLocalVariable
+						float yStart = yStartNewPage;
+						float bottomMargin = 70;
 
-						for (int pageNum : map.get(dotName).keySet()) {
+						BaseTable table = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, true, true);
+						//Create Header row
+						Row<PDPage> headerRow = table.createRow(15f);
+						Cell<PDPage> headerCell = headerRow.createCell(100 / 7f, "Set #");
+						headerCell.setAlign(HorizontalAlignment.CENTER);
+						headerCell.setFillColor(HEADER_COLOR);
+						headerRow.createCell(300 / 7f, "Horizontal").copyCellStyle(headerCell);
+						headerRow.createCell(300 / 7f, "Vertical").copyCellStyle(headerCell);
+
+						table.addHeaderRow(headerRow);
+						for (int pageNum : new TreeSet<>(map.get(dotName).keySet())) {
 							String text = map.get(dotName).get(pageNum);
 							String[] lines = text.split("\\n");
 							String line1 = lines[0].replace("Horizontal - ", "");
 							String line2 = lines[1].replace("Vertical - ", "");
 
-							data.add(new ArrayList<>(Arrays.asList("" + pageNum, line1, line2)));
-							float margin = 10;
-							float tableWidth = page.getMediaBox().getWidth() - (2 * margin);
-							float yStartNewPage = page.getMediaBox().getHeight() - (3 * margin);
-							//noinspection UnnecessaryLocalVariable
-							float yStart = yStartNewPage;
-							float bottomMargin = 70;
+							Row<PDPage> row = table.createRow(10f);
+							Cell<PDPage> cell = row.createCell(100 / 7f, pageNum + "");
+							cell.setAlign(HorizontalAlignment.CENTER);
+							cell.setFillColor(openingSets.contains(pageNum) ? OPENING_SET_COLOR : NORMAL_COLOR);
+							row.createCell(300 / 7f, line1).copyCellStyle(cell);
+							row.createCell(300 / 7f, line2).copyCellStyle(cell);
 
-							BaseTable baseTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, true, true);
-							DataTable dataTable = new DataTable(baseTable, page);
-							dataTable.addListToTable(data, DataTable.HASHEADER);
-							baseTable.draw();
 							if (++i >= 35) {
+								table.draw();
 								page = new PDPage();
 								doc.addPage(page);
-								data.clear();
-								data.add(new ArrayList<>(Arrays.asList("Set #", "Horizontal", "Vertical")));
+								table = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, true, true);
+								//Create Header row
+								headerRow = table.createRow(15f);
+								headerCell = headerRow.createCell(100 / 7f, "Set #");
+								headerCell.setAlign(HorizontalAlignment.CENTER);
+								headerCell.setFillColor(HEADER_COLOR);
+								headerRow.createCell(300 / 7f, "Horizontal").copyCellStyle(headerCell);
+								headerRow.createCell(300 / 7f, "Vertical").copyCellStyle(headerCell);
+								table.addHeaderRow(headerRow);
+
 								i -= 35;
 							}
 						}
+						table.draw();
+
 					}
 				}
 				if (doc.getNumberOfPages() > 0)

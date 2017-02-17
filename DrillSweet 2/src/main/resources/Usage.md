@@ -73,6 +73,8 @@ The "Page Data" pane on the right side of the screen contains controls for the e
 	- Clap on. Dot names disappear. Clap off. Dot names re-appear.
 - Undo
 	- Remember that thing you just did? Because I don't.
+- Redo
+    - Yin and Yang
 
 ## File menu
 - New

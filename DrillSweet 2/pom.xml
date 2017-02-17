@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>DrillSweet2</groupId>
     <artifactId>DrillSweet2</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
     <build>
 
         <resources>
@@ -12,6 +12,7 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -118,4 +118,10 @@ public class Settings {
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
 	}
+
+}
+
+class Notifications {
+
+	private boolean openingInstructions;
 }

@@ -12,6 +12,8 @@ import java.util.*;
 
 /**
  * Mouse Listener and Key Bindings for DS2DesktopPane
+ *
+ * @author Evan Belcher
  */
 public class IOHandler implements MouseListener {
 
@@ -361,10 +363,13 @@ public class IOHandler implements MouseListener {
 				updateHistory();
 				Dimension diff = new Dimension(clickPoint.x - dragStart.x, clickPoint.y - dragStart.y);
 
+				Dimension oobFix = fixOutOfBounds(diff);
+				System.out.println(oobFix);
+
 				ListIterator<Point> iterator = activePoints.listIterator();
 				while (iterator.hasNext()) {
 					Point activePoint = iterator.next();
-					Point p = new Point(activePoint.x + diff.width, activePoint.y + diff.height);
+					Point p = new Point(activePoint.x + diff.width + oobFix.width, activePoint.y + diff.height + oobFix.height);
 					//Move the point to where you released
 					String s = Main.getCurrentPage().getDots().get(activePoint);
 					Main.getCurrentPage().getDots().remove(activePoint);
@@ -378,6 +383,38 @@ public class IOHandler implements MouseListener {
 			ddp.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 		ddp.getDotDataFrame().updateAll(activePoints);
+	}
+
+	/**
+	 * Prevents user from dragging points off of the field.
+	 * Makes assumption that neither the domain nor the range of points can be wider/taller than the field itself
+	 *
+	 * @param diff the offset to the prejected new locations of the points
+	 * @return the offset required to keep all points on the field
+	 */
+	private Dimension fixOutOfBounds(Dimension diff) {
+		Dimension ret = new Dimension(0, 0);
+
+		int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
+		for (Point p : activePoints) {
+			minX = Math.min(minX, p.x + diff.width);
+			minY = Math.min(minY, p.y + diff.height);
+			maxX = Math.max(maxX, p.x + diff.width);
+			maxY = Math.max(maxY, p.y + diff.height);
+		}
+
+		Rectangle field = DS2DesktopPane.getField();
+		if (minX < field.x)
+			ret.width = field.x - minX;
+		else if (maxX > field.x + field.width)
+			ret.width = field.x + field.width - maxX;
+
+		if (minY < field.y)
+			ret.height = field.y - minY;
+		else if (maxY > field.y + field.height)
+			ret.height = field.y + field.height - maxY;
+
+		return ret;
 	}
 
 	/**

@@ -2,7 +2,7 @@ package com.evanbelcher.DrillSweet2.display;
 
 import com.evanbelcher.DrillSweet2.*;
 import com.evanbelcher.DrillSweet2.data.State;
-import com.evanbelcher.DrillSweet2.display.play.PagePlayer;
+import com.evanbelcher.DrillSweet2.play.PagePlayer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

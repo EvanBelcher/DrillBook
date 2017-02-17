@@ -1,8 +1,8 @@
-package com.evanbelcher.DrillSweet2.display.play;
+package com.evanbelcher.DrillSweet2.play;
 
 import com.evanbelcher.DrillSweet2.data.*;
 import com.evanbelcher.DrillSweet2.display.*;
-import com.evanbelcher.DrillSweet2.display.data.play.*;
+import com.evanbelcher.DrillSweet2.play.data.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,7 +79,7 @@ public class PagePlayer implements Runnable {
 			} catch (NullPointerException e) {
 				e.printStackTrace();
 			}
-			if (playerInternalFrame.getState().equals("play"))
+			if (playerInternalFrame.getState().equals("data"))
 				for (MovingPoint p : points.keySet()) {
 					p.next();
 				}

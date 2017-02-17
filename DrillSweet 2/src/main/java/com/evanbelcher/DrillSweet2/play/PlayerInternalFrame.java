@@ -1,8 +1,8 @@
-package com.evanbelcher.DrillSweet2.display.play;
+package com.evanbelcher.DrillSweet2.play;
 
 import com.evanbelcher.DrillSweet2.Main;
 import com.evanbelcher.DrillSweet2.display.GraphicsRunner;
-import com.evanbelcher.DrillSweet2.display.data.play.MovingPoint;
+import com.evanbelcher.DrillSweet2.play.data.MovingPoint;
 import net.miginfocom.swing.MigLayout;
 
 import javax.imageio.ImageIO;
@@ -39,8 +39,8 @@ public class PlayerInternalFrame extends JInternalFrame {
 		});
 		JButton rewind = new JButton(getIcon("rewind"));
 		rewind.addActionListener((ActionEvent e) -> state = "rewind");
-		JButton play = new JButton(getIcon("play"));
-		play.addActionListener((ActionEvent e) -> state = "play");
+		JButton play = new JButton(getIcon("data"));
+		play.addActionListener((ActionEvent e) -> state = "data");
 		JButton pause = new JButton(getIcon("pause"));
 		pause.addActionListener((ActionEvent e) -> state = "pause");
 		JButton help = new JButton(getIcon("help"));
@@ -71,8 +71,8 @@ public class PlayerInternalFrame extends JInternalFrame {
 	}
 
 	/**
-	 * Returns the play state
-	 * "play" -> plays forward
+	 * Returns the data state
+	 * "data" -> plays forward
 	 * "rewind" -> plays backward
 	 * "pause" -> stops playing in place
 	 */

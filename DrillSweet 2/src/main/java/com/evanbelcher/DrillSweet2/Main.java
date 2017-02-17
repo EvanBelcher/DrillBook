@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	/**
 	 * Start stuff
 	 */
-	public static void main(String[] args) { //look i changed PLEASE WORK
+	public static void main(String[] args) {
 		init();
 		start();
 	}
@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	 */
 	private static void init() {
 		registerInstance();
-		gson = new GsonBuilder().enableComplexMapKeySerialization()/*.setPrettyPrinting()*/.create();
+		gson = new GsonBuilder().enableComplexMapKeySerialization().setLenient().setPrettyPrinting().create();
 		try {
 			System.setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
 		} catch (Exception e) {
@@ -59,6 +59,7 @@ import java.util.concurrent.ConcurrentHashMap;
 			State.print("Another instance of this application is already running.  Exiting.");
 			System.exit(0);
 		}
+
 		ApplicationInstanceManager.setApplicationInstanceListener(() -> {
 			State.print("New instance detected...");
 			// this is where your handler code goes...
@@ -353,7 +354,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	 * @param file the name of the file
 	 * @return requested file
 	 */
-	@SuppressWarnings("ConstantConditions") public static InputStream getFile(String file, Object o) {
+	public static InputStream getFile(String file, Object o) {
 		return o.getClass().getResourceAsStream("/" + file);
 	}
 

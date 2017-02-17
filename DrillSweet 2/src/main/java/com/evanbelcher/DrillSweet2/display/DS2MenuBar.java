@@ -154,7 +154,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		//add these to the menubar itself
 		menuItem = new JMenuItem("Play");
 		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
-		menuItem.setActionCommand("play");
+		menuItem.setActionCommand("data");
 		menuItem.addActionListener(this);
 		add(menuItem);
 
@@ -208,11 +208,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				}
 				break;
 			case "open": //Try to save work, get new show
-				try {
-					openShow();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				openShow();
 				break;
 			case "save":
 				Main.save();
@@ -280,7 +276,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			case "fontsize":
 				changeFontSize();
 				break;
-			case "play":
+			case "data":
 				play();
 				break;
 			case "undo":
@@ -432,10 +428,8 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 
 	/**
 	 * Gets the show to open and opens the respective json file.
-	 *
-	 * @throws InterruptedException if there is an error when waiting for the saves to finish
 	 */
-	private void openShow() throws InterruptedException {
+	private void openShow() {
 		if (askToSave()) {
 
 			File file;
@@ -523,7 +517,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			String str = "The following players have more than one dot on the page:\n";
 			for (String s : badNames)
 				str += s + "\n";
-			str += "\nTo play from the first page to the second page, navigate to the second page and click \"Play\".";
+			str += "\nTo data from the first page to the second page, navigate to the second page and click \"Play\".";
 			JOptionPane.showMessageDialog(this, str.trim(), "Conflicts!", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -543,7 +537,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			dots = Main.getPages().get(pageNum).getDots();
 		} catch (NullPointerException e) {
 			if (pageNum == 0)
-				JOptionPane.showMessageDialog(this, "To play from the first page to the second page, navigate to the second page and click \"Play\".", "Can't play the first page", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "To data from the first page to the second page, navigate to the second page and click \"Play\".", "Can't data the first page", JOptionPane.ERROR_MESSAGE);
 			else
 				JOptionPane.showMessageDialog(this, "Cannot find previous page", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
@@ -558,7 +552,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			String str = "The following players have more than one dot on Page " + pageNum + ":\n";
 			for (String s : badNames)
 				str += s + "\n";
-			str += "\nTo play from the first page to the second page, navigate to the second page and click \"Play\".";
+			str += "\nTo data from the first page to the second page, navigate to the second page and click \"Play\".";
 			JOptionPane.showMessageDialog(this, str.trim(), "Conflicts!", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -571,7 +565,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	private boolean checkNoMissing() {
 		int currentPageNum = Main.getState().getCurrentPage();
 		if (currentPageNum == 1) {
-			JOptionPane.showMessageDialog(this, "To play from the first page to the second page, navigate to the second page and click \"Play\".", "Can't play the first page", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "To data from the first page to the second page, navigate to the second page and click \"Play\".", "Can't data the first page", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		PointConcurrentHashMap<Point, String> currentDots = Main.getCurrentPage().getDots();

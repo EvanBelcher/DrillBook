@@ -92,8 +92,8 @@ public class PageDataFrame extends JInternalFrame {
 	/**
 	 * Returns whether a page is deleting
 	 */
-	public static boolean getDeleting() {
-		return deleting;
+	public static boolean getNotDeleting() {
+		return !deleting;
 	}
 
 	/**
@@ -176,6 +176,9 @@ public class PageDataFrame extends JInternalFrame {
 				update();
 			}
 
+			/**
+			 * Updates the song and navigation fields to match
+			 */
 			private void update() {
 				currentPage.setSong(song.getText());
 				State.print(currentPage);

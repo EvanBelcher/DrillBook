@@ -1,7 +1,6 @@
 package com.evanbelcher.DrillSweet2.display;
 
 import com.evanbelcher.DrillSweet2.Main;
-import com.evanbelcher.DrillSweet2.data.Page;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -146,11 +145,9 @@ public class DotDataFrame extends JInternalFrame {
 
 	/**
 	 * Sets and returns the current page
-	 *
-	 * @return current page
 	 */
-	public Page getCurrentPage() {
-		return Main.getCurrentPage();
+	public void getCurrentPage() {
+		Main.getCurrentPage();
 	}
 
 	/**

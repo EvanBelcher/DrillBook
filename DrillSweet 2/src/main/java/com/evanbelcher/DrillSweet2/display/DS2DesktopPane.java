@@ -20,7 +20,7 @@ import java.util.Vector;
  *
  * @author Evan Belcher
  */
-@SuppressWarnings("ConstantConditions") public class DS2DesktopPane extends JDesktopPane {
+public class DS2DesktopPane extends JDesktopPane {
 
 	private static final long serialVersionUID = -6004681236445735439L;
 
@@ -155,7 +155,7 @@ import java.util.Vector;
 		}
 		if (Main.getState().getSettings().shouldShowText()) {
 			//draw the text
-			if (!PageDataFrame.getDeleting()) {
+			if (PageDataFrame.getNotDeleting()) {
 				Page p = Main.getCurrentPage();
 				String str = "Page " + p.getNumber() + " - " + p.getSong() + "\nMeasures " + p.getStartingMeasure() + "-" + p.getEndingMeasure() + ", " + p.getCounts() + " count" + (p.getCounts() == 1 ? "" : "s") + "\n" + p.getNotes();
 				String[] lines = str.split("\\n");
@@ -182,7 +182,7 @@ import java.util.Vector;
 		}
 
 		//Draw the points and their names
-		if (!PageDataFrame.getDeleting() && !DotDataFrame.isDeleting()) {
+		if (PageDataFrame.getNotDeleting() && !DotDataFrame.isDeleting()) {
 			for (Point p : Main.getCurrentPage().getDots().keySet()) {
 				//g.setColor((io.getActivePoints().contains(p)) ? (io.isNormalDragging() ? Color.PINK : Color.RED) : Color.BLACK);
 				float hue = Character.getNumericValue(Main.getCurrentPage().getDots().get(p).charAt(0)) - 65;

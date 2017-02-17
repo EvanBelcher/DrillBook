@@ -5,6 +5,8 @@ import java.io.File;
 
 /**
  * FileFilter that allows directories and json files
+ *
+ * @author Evan Belcher
  */
 public class DS2FileFilter extends FileFilter {
 
