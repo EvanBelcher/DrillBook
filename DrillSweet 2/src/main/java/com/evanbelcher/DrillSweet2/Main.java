@@ -191,16 +191,29 @@ import java.util.concurrent.ConcurrentHashMap;
 		if (filename.length != 0 && filename.length != 1)
 			throw new IllegalArgumentException("You can only pass in one filename, or none at all.");
 		Runnable r = () -> {
-			String str = gson.toJson(pageMap);
-			File f = new File(getFilePath() + (filename.length == 0 ? getPagesFileName() : filename[0]));
-			State.print("Saving:" + getFilePath() + getPagesFileName());
-			BufferedWriter bw;
-			try {
-				bw = new BufferedWriter(new FileWriter(f));
-				bw.write(str);
-				bw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+			String easyFileName = (filename.length == 0 ? getPagesFileName() : filename[0]);
+			easyFileName = easyFileName.substring(0, easyFileName.indexOf('.'));
+			if (!new File(easyFileName + ".lock").exists()) {
+				File lock = new File(easyFileName + ".lock");
+				try {
+					lock.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				String str = gson.toJson(pageMap);
+				File f = new File(getFilePath() + (filename.length == 0 ? getPagesFileName() : filename[0]));
+				State.print("Saving:" + getFilePath() + (filename.length == 0 ? getPagesFileName() : filename[0]));
+				BufferedWriter bw;
+				try {
+					bw = new BufferedWriter(new FileWriter(f));
+					bw.write(str);
+					bw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				lock.delete();
 			}
 		};
 		Thread thread = new Thread(r, "SavePagesThread");
@@ -218,15 +231,28 @@ import java.util.concurrent.ConcurrentHashMap;
 			throw new IllegalArgumentException("You can only pass in one filename, or none at all.");
 		Runnable r = () -> {
 			synchronized (state) {
-				String str = gson.toJson(state);
-				File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + (filename.length == 0 ? stateFileName : filename[0]));
-				BufferedWriter bw;
-				try {
-					bw = new BufferedWriter(new FileWriter(f));
-					bw.write(str);
-					bw.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+				String easyFileName = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + (filename.length == 0 ? stateFileName : filename[0]);
+				if (easyFileName.indexOf('.') != -1)
+					easyFileName = easyFileName.substring(0, easyFileName.indexOf('.'));
+				if (!new File(easyFileName + ".lock").exists()) {
+					File lock = new File(easyFileName + ".lock");
+					try {
+						lock.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					String str = gson.toJson(state);
+					File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + (filename.length == 0 ? stateFileName : filename[0]));
+					BufferedWriter bw;
+					try {
+						bw = new BufferedWriter(new FileWriter(f));
+						bw.write(str);
+						bw.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+					lock.delete();
 				}
 			}
 		};
