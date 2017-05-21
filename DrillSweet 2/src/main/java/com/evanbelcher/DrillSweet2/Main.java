@@ -193,6 +193,15 @@ import java.util.concurrent.ConcurrentHashMap;
 		Runnable r = () -> {
 			String easyFileName = (filename.length == 0 ? getPagesFileName() : filename[0]);
 			easyFileName = easyFileName.substring(0, easyFileName.indexOf('.'));
+
+			while (new File(easyFileName + ".lock").exists()) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+
 			if (!new File(easyFileName + ".lock").exists()) {
 				File lock = new File(easyFileName + ".lock");
 				try {
@@ -234,6 +243,15 @@ import java.util.concurrent.ConcurrentHashMap;
 				String easyFileName = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + (filename.length == 0 ? stateFileName : filename[0]);
 				if (easyFileName.indexOf('.') != -1)
 					easyFileName = easyFileName.substring(0, easyFileName.indexOf('.'));
+
+				while (new File(easyFileName + ".lock").exists()) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
 				if (!new File(easyFileName + ".lock").exists()) {
 					File lock = new File(easyFileName + ".lock");
 					try {
