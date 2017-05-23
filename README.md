@@ -1,7 +1,7 @@
 # Drill Sweet 2
 Drill Sweet 2 is a marching band drill creation software. It is designed to help drill writers and band directors create, edit, and print drill pages with ease and control.
 
-##Features
+## Features
 - Pages saved in JSON format in DS2 files
 - Application state saved
 - Simple click to add a dot
@@ -22,20 +22,20 @@ Drill Sweet 2 is a marching band drill creation software. It is designed to help
 - Play the move from the previous to current pages. Get automatically notified about extremely far moves and possible collisions
 - Supports both High School and College hashes
 
-##[Usage](../master/DrillSweet 2/src/main/resources/Usage.md)
+## [Usage](../master/DrillSweet%202/src/main/resources/Usage.md)
 
-##Samples
-###UI Sample:
+## Samples
+### UI Sample:
 ![UI Sample](../master/ui-sample.png "UI Sample")
 
-###Page Sample:
+### Page Sample:
 ![Page Sample](../master/page-sample.png "Page Sample")
 
-###Dot Sheet Sample:
+### Dot Sheet Sample:
 ![Dot Sheet Sample](../master/dotsheet-sample.png "Dot Sheet Sample")
 
-##FAQ
-###What happened to Drill Sweet 1?
+## FAQ
+### What happened to Drill Sweet 1?
 Nobody needs to know.
 
-###Drill Sweet 2 was written by [Evan Belcher](http://evanbelcher.com) in [2016](https://www.youtube.com/watch?v=G9t2H1fC2hY).
+### Drill Sweet 2 was written by [Evan Belcher](http://evanbelcher.com) in [2016](https://www.youtube.com/watch?v=G9t2H1fC2hY).
