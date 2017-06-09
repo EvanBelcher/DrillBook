@@ -150,7 +150,7 @@
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
                                     <resource>resources</resource>
-                                    <file>field.png</file>
+                                    <file>field.png</file><!-- wowo -->
                                 </transformer>
                             </transformers>
                         </configuration>
