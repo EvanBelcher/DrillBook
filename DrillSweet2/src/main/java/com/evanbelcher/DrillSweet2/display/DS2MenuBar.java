@@ -154,7 +154,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		//add these to the menubar itself
 		menuItem = new JMenuItem("Play");
 		menuItem.setMaximumSize(new Dimension(menuItem.getPreferredSize().width, Integer.MAX_VALUE));
-		menuItem.setActionCommand("data");
+		menuItem.setActionCommand("play");
 		menuItem.addActionListener(this);
 		add(menuItem);
 
@@ -276,7 +276,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			case "fontsize":
 				changeFontSize();
 				break;
-			case "data":
+			case "play":
 				play();
 				break;
 			case "undo":
