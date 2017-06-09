@@ -1,6 +1,5 @@
 package com.evanbelcher.DrillSweet2;
 
-import com.evanbelcher.DrillSweet2.application.ApplicationInstanceManager;
 import com.evanbelcher.DrillSweet2.data.*;
 import com.evanbelcher.DrillSweet2.display.GraphicsRunner;
 import com.google.gson.*;
@@ -40,7 +39,6 @@ import java.util.concurrent.ConcurrentHashMap;
 	 * system
 	 */
 	private static void init() {
-		registerInstance();
 		gson = new GsonBuilder().enableComplexMapKeySerialization().setLenient().setPrettyPrinting().create();
 		try {
 			System.setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
@@ -48,27 +46,6 @@ import java.util.concurrent.ConcurrentHashMap;
 			e.printStackTrace();
 		}
 		load(true);
-	}
-
-	/**
-	 * Registers a single instance of this application. If another is opened, the window simply requests access, and the subsequent application is closed.
-	 */
-	private static void registerInstance() {
-		if (!ApplicationInstanceManager.registerInstance()) {
-			// instance already running.
-			State.print("Another instance of this application is already running.  Exiting.");
-			System.exit(0);
-		}
-
-		ApplicationInstanceManager.setApplicationInstanceListener(() -> {
-			State.print("New instance detected...");
-			// this is where your handler code goes...
-			if (graphicsRunner != null) {
-				//get focus
-				graphicsRunner.setAlwaysOnTop(true);
-				graphicsRunner.setAlwaysOnTop(false);
-			}
-		});
 	}
 
 	/**
