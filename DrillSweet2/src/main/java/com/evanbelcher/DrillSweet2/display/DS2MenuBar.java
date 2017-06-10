@@ -20,9 +20,12 @@ package com.evanbelcher.DrillSweet2.display;
 
 import com.evanbelcher.DrillSweet2.*;
 import com.evanbelcher.DrillSweet2.data.*;
+import com.vladsch.flexmark.ast.Node;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.options.MutableDataSet;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.io.IOUtils;
-import org.pegdown.PegDownProcessor;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -373,11 +376,16 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 	 * Displays help window
 	 */
 	private void help() {
-		String msg = null;
+		String msg = "";
+
+		MutableDataSet options = new MutableDataSet();
+		Parser parser = Parser.builder(options).build();
+		HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
 		try {
 			msg = IOUtils.toString(Main.getFile("Usage.md", this));
-			msg = new PegDownProcessor().markdownToHtml(msg);
+			Node document = parser.parse(msg);
+			msg = renderer.render(document);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
