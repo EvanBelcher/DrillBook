@@ -334,6 +334,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 		try {
 			int size = (int) JOptionPane.showInputDialog(this, "Choose a font size:", "Font Size", JOptionPane.PLAIN_MESSAGE, null, nums, Main.getState().getSettings().getFontSize());
 			FontUIResource font = new FontUIResource("Dialog", Font.BOLD, size);
+
 			Main.setUIFont(font);
 			Main.getState().getSettings().setFontSize(size);
 			SwingUtilities.updateComponentTreeUI(gr);

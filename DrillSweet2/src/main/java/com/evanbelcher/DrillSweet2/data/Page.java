@@ -71,6 +71,7 @@ import java.text.DecimalFormat;
 		setNotes("");
 		setTextPoint(new Point(0, 0));
 		this.dots = new PointConcurrentHashMap<>(dots);
+
 	}
 
 	/**
