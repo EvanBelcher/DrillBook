@@ -27,6 +27,7 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -41,6 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	private static PagesConcurrentHashMap pageMap;
 	private static State state;
 	private static GraphicsRunner graphicsRunner;
+	private static final String[] versions = { "1.0.0", "1.1.0", "1.2.0", "1.2.1", "1.3.0", "1.4.0", "1.4.1", "1.5.0" };
 
 	private static Gson gson;
 
@@ -48,8 +50,22 @@ import java.util.concurrent.ConcurrentHashMap;
 	 * Start stuff
 	 */
 	public static void main(String[] args) {
+		deleteOldVersions();
 		init();
 		start();
+	}
+
+	/**
+	 * Deletes all old DrillSweet 2 exe's
+	 */
+	private static void deleteOldVersions() {
+		File dir = Paths.get(".").toAbsolutePath().normalize().toFile();
+		File[] files = dir.listFiles();
+		if (files != null)
+			for (File f : files)
+				for (int i = 0; i < versions.length - 1; i++)
+					if (f.getName().equals("DrillSweet 2 v" + versions[i] + ".exe"))
+						f.delete();
 	}
 
 	/**
