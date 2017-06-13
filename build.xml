@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<project name="Sign DrillSweet 2" default="run">
+
+    <property file="build.properties"/>
+
+    <target name="run" depends="signJar,makeExe,signExe"/>
+
+    <target name="signJar">
+        <signjar jar="${ds2.dir}/DrillSweet2-${ds2.version}.jar"
+                 signedJar="${ds2.dir}/DrillSweet 2 v${ds2.version} Signed.jar"
+                 alias="${auth.alias}"
+                 keystore="${auth.keystore}"
+                 storepass="${auth.pass}"
+                 verbose="false"
+                 tsaurl="${auth.tsaurl}"
+                 force="true"
+        />
+
+    </target>
+
+    <target name="makeExe">
+        <taskdef name="launch4j"
+                 classname="net.sf.launch4j.ant.Launch4jTask"
+                 classpath="${launch4j.dir}/launch4j.jar
+			:${launch4j.dir}/lib/xtream.jar"
+        />
+
+        <launch4j configFile="${launch4j.config}"
+                  jar="${ds2.dir}/DrillSweet 2 v${ds2.version} Signed.jar"
+                  outfile="${ds2.dir}/DrillSweet 2 v${ds2.version}.exe"
+        />
+    </target>
+
+    <target name="signExe" depends="wait">
+        <exec executable="${launch4j.dir}/sign4j/sign4j.exe">
+            <arg line="--verbose java -jar &quot;${jsign.dir}/jsign-2.0.jar&quot; -s &quot;${auth.keystore}&quot; -a ${auth.alias} --storepass ${auth.pass} --tsaurl ${auth.tsaurl} &quot;${ds2.dir}/DrillSweet 2 v${ds2.version}.exe&quot;"/>
+        </exec>
+    </target>
+
+    <target name="wait">
+        <sleep seconds="5"/>
+    </target>
+
+</project>

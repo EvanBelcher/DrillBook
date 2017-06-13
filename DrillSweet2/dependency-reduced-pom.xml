@@ -3,24 +3,24 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-    <groupId>com.evanbelcher</groupId>
+  <groupId>com.evanbelcher</groupId>
   <artifactId>DrillSweet2</artifactId>
   <name>DrillSweet 2</name>
-    <version>1.4.1</version>
-    <description>DrillSweet 2 is a marching band drill creation software.</description>
+  <version>1.5.0</version>
+  <description>DrillSweet 2 is a marching band drill creation software.</description>
   <url>https://github.com/EbMinor3/DrillSweet2</url>
-    <licenses>
-        <license>
-            <name>GNU GENERAL PUBLIC LICENSE Version 3</name>
-            <url>http://www.gnu.org/licenses/gpl.html</url>
-            <distribution>manual</distribution>
-        </license>
-    </licenses>
+  <licenses>
+    <license>
+      <name>GNU GENERAL PUBLIC LICENSE Version 3</name>
+      <url>http://www.gnu.org/licenses/gpl.html</url>
+      <distribution>manual</distribution>
+    </license>
+  </licenses>
   <build>
     <resources>
       <resource>
-          <targetPath>.</targetPath>
-          <directory>${resourceDir}</directory>
+        <targetPath>.</targetPath>
+        <directory>${resourceDir}</directory>
       </resource>
     </resources>
     <plugins>
@@ -28,25 +28,25 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.5.1</version>
         <configuration>
-            <source>${minimumJreVersion}</source>
-            <target>${minimumJreVersion}</target>
+          <source>${minimumJreVersion}</source>
+          <target>${minimumJreVersion}</target>
         </configuration>
       </plugin>
-        <plugin>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.0.2</version>
-            <configuration>
-                <archive>
-                    <manifest>
-                        <mainClass>${mainClass}</mainClass>
-                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                    </manifest>
-                    <manifestEntries>
-                        <Implementation-Title>${project.version}</Implementation-Title>
-                        <Implementation-Version>${buildNumber}</Implementation-Version>
-                    </manifestEntries>
-                </archive>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>${mainClass}</mainClass>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+            <manifestEntries>
+              <Implementation-Title>${project.version}</Implementation-Title>
+              <Implementation-Version>${buildNumber}</Implementation-Version>
+            </manifestEntries>
+          </archive>
         </configuration>
       </plugin>
       <plugin>
@@ -61,7 +61,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                    <mainClass>${mainClass}</mainClass>
+                  <mainClass>${mainClass}</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -70,12 +70,12 @@
       </plugin>
     </plugins>
   </build>
-    <properties>
-        <buildNumber>0</buildNumber>
-        <mainClass>${project.groupId}.${project.artifactId}.Main</mainClass>
-        <resourceDir>src/main/resources</resourceDir>
-        <minimumJreVersion>1.8</minimumJreVersion>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+  <properties>
+    <buildNumber>0</buildNumber>
+    <mainClass>${project.groupId}.${project.artifactId}.Main</mainClass>
+    <resourceDir>src/main/resources</resourceDir>
+    <minimumJreVersion>1.8</minimumJreVersion>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 </project>
 

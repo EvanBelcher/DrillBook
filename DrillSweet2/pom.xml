@@ -6,7 +6,7 @@
     <!-- Project Information -->
     <groupId>com.evanbelcher</groupId>
     <artifactId>DrillSweet2</artifactId>
-    <version>1.4.1</version>
+    <version>1.5.0</version>
     <packaging>jar</packaging>
     <properties>
         <buildNumber>0</buildNumber>
