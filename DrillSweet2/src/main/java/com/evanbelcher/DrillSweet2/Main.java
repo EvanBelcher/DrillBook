@@ -128,7 +128,11 @@ import java.util.concurrent.ConcurrentHashMap;
 	 *                               load() method
 	 */
 	private static void loadState() throws FileNotFoundException {
-		File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/DrillSweet2/" + stateFileName);
+		File documentsDir = FileSystemView.getFileSystemView().getDefaultDirectory();
+		String documentsDirPath = documentsDir.getPath();
+		if (!documentsDir.getName().contains("Documents"))
+			documentsDirPath += "/Documents";
+		File f = new File(documentsDirPath + "/DrillSweet2/" + stateFileName);
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		state = gson.fromJson(br, State.class);
 		try {
