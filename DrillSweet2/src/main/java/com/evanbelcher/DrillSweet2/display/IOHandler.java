@@ -382,7 +382,6 @@ public class IOHandler implements MouseListener {
 				Dimension diff = new Dimension(clickPoint.x - dragStart.x, clickPoint.y - dragStart.y);
 
 				Dimension oobFix = fixOutOfBounds(diff);
-				System.out.println(oobFix);
 
 				ListIterator<Point> iterator = activePoints.listIterator();
 				while (iterator.hasNext()) {
