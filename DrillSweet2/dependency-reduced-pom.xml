@@ -23,6 +23,23 @@
       </resource>
     </resources>
     <plugins>
+        <plugin>
+            <groupId>sh.tak.appbundler</groupId>
+            <artifactId>appbundle-maven-plugin</artifactId>
+            <version>1.2.0</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>bundle</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <mainClass>${mainClass}</mainClass>
+                <generateDiskImageFile>true</generateDiskImageFile>
+            </configuration>
+        </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.5.1</version>

@@ -93,6 +93,24 @@
 
         <!-- Plugins -->
         <plugins>
+            <plugin>
+                <groupId>sh.tak.appbundler</groupId>
+                <artifactId>appbundle-maven-plugin</artifactId>
+                <version>1.2.0</version>
+                <configuration>
+                    <mainClass>${mainClass}</mainClass>
+                    <!--<jrePath>C:/Program Files/Java/jdk1.8.0_111</jrePath>-->
+                    <generateDiskImageFile>true</generateDiskImageFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Compile plugin -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
