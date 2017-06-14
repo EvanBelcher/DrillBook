@@ -24,7 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 	private static PagesConcurrentHashMap pageMap;
 	private static State state;
 	private static GraphicsRunner graphicsRunner;
-	private static final String[] versions = { "1.0.0", "1.1.0", "1.2.0", "1.2.1", "1.3.0", "1.4.0", "1.4.1", "1.5.0" };
+	private static final String[] versions = { "1.0.0", "1.1.0", "1.2.0", "1.2.1", "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.1" };
+	private static final String[] extensions = { ".exe", ".dmg", ".run", ".jar" };
 	private static Gson gson;
 	private static String documentsDirPath = "";
 
@@ -46,7 +47,8 @@ import java.util.concurrent.ConcurrentHashMap;
 		if (files != null)
 			for (File f : files)
 				for (int i = 0; i < versions.length - 1; i++)
-					if (f.getName().equals("DrillSweet.2.v" + versions[i] + ".exe"))
+					for (int j = 0; j < extensions.length; j++)
+						if (f.getName().equals("DrillSweet.2.v" + versions[i] + extensions[j]))
 						f.delete();
 	}
 

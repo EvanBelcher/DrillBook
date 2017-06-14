@@ -12,7 +12,7 @@
 
     <target name="signJar">
         <signjar jar="${code.dir}/DrillSweet2-${code.version}.jar"
-                 signedJar="${code.dir}/DrillSweet 2 v${code.version} Signed.jar"
+                 signedJar="${code.dir}/DrillSweet 2 v${code.version}.jar"
                  alias="${auth.alias}"
                  keystore="${auth.keystore}"
                  storepass="${auth.pass}"
@@ -31,7 +31,7 @@
         />
 
         <launch4j configFile="${launch4j.config}"
-                  jar="${code.dir}/DrillSweet 2 v${code.version} Signed.jar"
+                  jar="${code.dir}/DrillSweet 2 v${code.version}.jar"
                   outfile="${code.dir}/DrillSweet 2 v${code.version}.exe"
         />
     </target>
