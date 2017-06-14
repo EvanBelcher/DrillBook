@@ -30,6 +30,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyVetoException;
 import java.io.*;
 import java.util.Vector;
 
@@ -66,6 +67,22 @@ public class DS2DesktopPane extends JDesktopPane {
 		pdf = createPageDataFrame();
 		createDotDataFrame();
 		ddf.setLocation(pdf.getLocation().x, pdf.getLocation().y + pdf.getSize().height);
+	}
+
+	/**
+	 * Resets the Internal Frames (for file I/O)
+	 */
+	public void createNewInternalFrames() {
+		try {
+			io.clearActivePoints();
+			pdf.setClosed(true);
+			pdf = createPageDataFrame();
+			ddf.setClosed(true);
+			createDotDataFrame();
+			ddf.setLocation(pdf.getLocation().x, pdf.getLocation().y + pdf.getSize().height);
+		} catch (PropertyVetoException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

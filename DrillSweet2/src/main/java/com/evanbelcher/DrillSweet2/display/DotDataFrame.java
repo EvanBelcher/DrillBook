@@ -41,14 +41,14 @@ public class DotDataFrame extends JInternalFrame {
 	private JSpinner xPos;
 	private JSpinner yPos;
 	private JTextArea position;
-	private DS2DesktopPane mdp;
+	private DS2DesktopPane ddp;
 
 	/**
 	 * Constructs the object. Adds components.
 	 *
-	 * @param mdp the DesktopPane that constains this
+	 * @param ddp the DesktopPane that constains this
 	 */
-	public DotDataFrame(DS2DesktopPane mdp) {
+	public DotDataFrame(DS2DesktopPane ddp) {
 		super("Dot Data", false, //resizable
 				false, //closable
 				false, //maximizable
@@ -56,7 +56,7 @@ public class DotDataFrame extends JInternalFrame {
 		setFrameIcon(null);
 
 		getCurrentPage();
-		this.mdp = mdp;
+		this.ddp = ddp;
 
 		//set up components
 		instrument = getInstrument();
@@ -180,9 +180,9 @@ public class DotDataFrame extends JInternalFrame {
 			chars[i] = String.valueOf((char) (65 + i));
 		JComboBox<String> comboBox = new JComboBox<>(chars);
 
-		comboBox.addItemListener((ItemEvent e) -> Main.getCurrentPage().getDots().put(mdp.getActivePoints().get(0), (String) comboBox.getSelectedItem() + (int) number.getValue()));
-		if (mdp.getActivePoints().get(0) != null && mdp.getActivePoints().size() == 1) {
-			char c = Main.getCurrentPage().getDots().get(mdp.getActivePoints().get(0)).replaceAll("[0-9]", "").charAt(0);
+		comboBox.addItemListener((ItemEvent e) -> Main.getCurrentPage().getDots().put(ddp.getActivePoints().get(0), (String) comboBox.getSelectedItem() + (int) number.getValue()));
+		if (ddp.getActivePoints().get(0) != null && ddp.getActivePoints().size() == 1) {
+			char c = Main.getCurrentPage().getDots().get(ddp.getActivePoints().get(0)).replaceAll("[0-9]", "").charAt(0);
 			comboBox.setSelectedIndex(c - 65);
 		} else
 			comboBox.setEnabled(false);
@@ -196,14 +196,14 @@ public class DotDataFrame extends JInternalFrame {
 	 */
 	private JSpinner getNumber() {
 		JSpinner spinner;
-		if (mdp.getActivePoints().get(0) != null && mdp.getActivePoints().size() == 1)
-			spinner = new JSpinner(new SpinnerNumberModel(Integer.parseInt(Main.getCurrentPage().getDots().get(mdp.getActivePoints().get(0)).replaceAll("[A-Za-z]", "")), 1, Integer.MAX_VALUE, 1));
+		if (ddp.getActivePoints().get(0) != null && ddp.getActivePoints().size() == 1)
+			spinner = new JSpinner(new SpinnerNumberModel(Integer.parseInt(Main.getCurrentPage().getDots().get(ddp.getActivePoints().get(0)).replaceAll("[A-Za-z]", "")), 1, Integer.MAX_VALUE, 1));
 		else {
 			spinner = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 			spinner.setEnabled(false);
 		}
 
-		spinner.addChangeListener((ChangeEvent e) -> Main.getCurrentPage().getDots().put(mdp.getActivePoints().get(0), (String) instrument.getSelectedItem() + (int) spinner.getValue()));
+		spinner.addChangeListener((ChangeEvent e) -> Main.getCurrentPage().getDots().put(ddp.getActivePoints().get(0), (String) instrument.getSelectedItem() + (int) spinner.getValue()));
 		return spinner;
 	}
 
@@ -215,8 +215,8 @@ public class DotDataFrame extends JInternalFrame {
 	private JSpinner getXPos() {
 		Rectangle field = DS2DesktopPane.getField();
 		JSpinner spinner;
-		if (mdp.getActivePoints().get(0) != null && mdp.getActivePoints().size() == 1)
-			spinner = new JSpinner(new SpinnerNumberModel(mdp.getActivePoints().get(0).x, field.x, field.width + field.x, 1));
+		if (ddp.getActivePoints().get(0) != null && ddp.getActivePoints().size() == 1)
+			spinner = new JSpinner(new SpinnerNumberModel(ddp.getActivePoints().get(0).x, field.x, field.width + field.x, 1));
 		else {
 			spinner = new JSpinner(new SpinnerNumberModel(field.x, field.x, field.width + field.x, 1));
 			spinner.setEnabled(false);
@@ -224,12 +224,12 @@ public class DotDataFrame extends JInternalFrame {
 
 		spinner.addChangeListener((ChangeEvent e) -> {
 			deleting = true;
-			Point old = new Point(mdp.getActivePoints().get(0));
-			String str = Main.getCurrentPage().getDots().get(mdp.getActivePoints().get(0));
-			Main.getCurrentPage().getDots().remove(mdp.getActivePoints().get(0));
+			Point old = new Point(ddp.getActivePoints().get(0));
+			String str = Main.getCurrentPage().getDots().get(ddp.getActivePoints().get(0));
+			Main.getCurrentPage().getDots().remove(ddp.getActivePoints().get(0));
 			Point newPoint = new Point((int) xPos.getValue(), old.y);
 			Main.getCurrentPage().getDots().put(newPoint, str);
-			mdp.addActivePoint(newPoint);
+			ddp.addActivePoint(newPoint);
 			updatePosition();
 			deleting = false;
 		});
@@ -244,20 +244,20 @@ public class DotDataFrame extends JInternalFrame {
 	private JSpinner getYPos() {
 		Rectangle field = DS2DesktopPane.getField();
 		JSpinner spinner;
-		if (mdp.getActivePoints().get(0) != null && mdp.getActivePoints().size() == 1)
-			spinner = new JSpinner(new SpinnerNumberModel(mdp.getActivePoints().get(0).y, field.y, field.height + field.y, 1));
+		if (ddp.getActivePoints().get(0) != null && ddp.getActivePoints().size() == 1)
+			spinner = new JSpinner(new SpinnerNumberModel(ddp.getActivePoints().get(0).y, field.y, field.height + field.y, 1));
 		else {
 			spinner = new JSpinner(new SpinnerNumberModel(field.y, field.y, field.height + field.y, 1));
 			spinner.setEnabled(false);
 		}
 		spinner.addChangeListener((ChangeEvent e) -> {
 			deleting = true;
-			Point old = new Point(mdp.getActivePoints().get(0));
-			String str = Main.getCurrentPage().getDots().get(mdp.getActivePoints().get(0));
-			Main.getCurrentPage().getDots().remove(mdp.getActivePoints().get(0));
+			Point old = new Point(ddp.getActivePoints().get(0));
+			String str = Main.getCurrentPage().getDots().get(ddp.getActivePoints().get(0));
+			Main.getCurrentPage().getDots().remove(ddp.getActivePoints().get(0));
 			Point newPoint = new Point(old.x, (int) yPos.getValue());
 			Main.getCurrentPage().getDots().put(newPoint, str);
-			mdp.addActivePoint(newPoint);
+			ddp.addActivePoint(newPoint);
 			updatePosition();
 			deleting = false;
 		});
@@ -271,8 +271,8 @@ public class DotDataFrame extends JInternalFrame {
 	 */
 	private JTextArea getPositionText() {
 		JTextArea area;
-		if (mdp.getActivePoints().get(0) != null && mdp.getActivePoints().size() == 1)
-			area = new JTextArea(getPointText(mdp.getActivePoints().get(0)));
+		if (ddp.getActivePoints().get(0) != null && ddp.getActivePoints().size() == 1)
+			area = new JTextArea(getPointText(ddp.getActivePoints().get(0)));
 		else
 			area = new JTextArea(2, 40);
 		area.setEditable(false);
@@ -284,8 +284,8 @@ public class DotDataFrame extends JInternalFrame {
 	 * Sets position's text to be the position text of the current point
 	 */
 	public void updatePosition() {
-		if (mdp.getActivePoints().get(0) != null)
-			position.setText(getPointText(mdp.getActivePoints().get(0)));
+		if (ddp.getActivePoints().get(0) != null)
+			position.setText(getPointText(ddp.getActivePoints().get(0)));
 	}
 
 	/**
@@ -295,23 +295,23 @@ public class DotDataFrame extends JInternalFrame {
 		instrument.setEnabled(true);
 		instrument.removeItemListener(instrument.getItemListeners()[0]);
 		number.removeChangeListener(number.getChangeListeners()[0]);
-		instrument.setSelectedItem(String.valueOf(Main.getCurrentPage().getDots().get(mdp.getActivePoints().get(0)).replaceAll("[0-9]", "")));
+		instrument.setSelectedItem(String.valueOf(Main.getCurrentPage().getDots().get(ddp.getActivePoints().get(0)).replaceAll("[0-9]", "")));
 		number.setEnabled(true);
-		number.setValue(Integer.parseInt(Main.getCurrentPage().getDots().get(mdp.getActivePoints().get(0)).replaceAll("[A-Za-z]", "")));
+		number.setValue(Integer.parseInt(Main.getCurrentPage().getDots().get(ddp.getActivePoints().get(0)).replaceAll("[A-Za-z]", "")));
 
 		Rectangle field = DS2DesktopPane.getField();
 
 		xPos.setEnabled(true);
-		xPos.setModel(new SpinnerNumberModel(mdp.getActivePoints().get(0).x, field.x, field.width + field.x, 1));
-		xPos.setValue(mdp.getActivePoints().get(0).x);
+		xPos.setModel(new SpinnerNumberModel(ddp.getActivePoints().get(0).x, field.x, field.width + field.x, 1));
+		xPos.setValue(ddp.getActivePoints().get(0).x);
 		yPos.setEnabled(true);
-		yPos.setModel(new SpinnerNumberModel(mdp.getActivePoints().get(0).y, field.y, field.height + field.y, 1));
-		yPos.setValue(mdp.getActivePoints().get(0).y);
+		yPos.setModel(new SpinnerNumberModel(ddp.getActivePoints().get(0).y, field.y, field.height + field.y, 1));
+		yPos.setValue(ddp.getActivePoints().get(0).y);
 		position.setEnabled(true);
 		updatePosition();
 
-		instrument.addItemListener((ItemEvent e) -> Main.getCurrentPage().getDots().put(mdp.getActivePoints().get(0), (String) instrument.getSelectedItem() + (int) number.getValue()));
-		number.addChangeListener((ChangeEvent e) -> Main.getCurrentPage().getDots().put(mdp.getActivePoints().get(0), (String) instrument.getSelectedItem() + (int) number.getValue()));
+		instrument.addItemListener((ItemEvent e) -> Main.getCurrentPage().getDots().put(ddp.getActivePoints().get(0), (String) instrument.getSelectedItem() + (int) number.getValue()));
+		number.addChangeListener((ChangeEvent e) -> Main.getCurrentPage().getDots().put(ddp.getActivePoints().get(0), (String) instrument.getSelectedItem() + (int) number.getValue()));
 	}
 
 	/**

@@ -440,7 +440,9 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				try {
 					File file = fc.getSelectedFile();
 					path = file.getCanonicalPath();
-					path = path.substring(0, path.lastIndexOf('/') + 1);
+					System.out.println(path);
+					path = path.substring(0, Math.max(path.lastIndexOf('\\'), path.lastIndexOf('/')) + 1);
+					System.out.println(path);
 					name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
 					Main.setFilePath(path);
 					Main.setPagesFileName(name);
@@ -472,11 +474,12 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				try {
 					String name, path;
 					path = file.getCanonicalPath();
-					path = path.substring(0, path.lastIndexOf('/') + 1);
+					path = path.substring(0, Math.max(path.lastIndexOf('\\'), path.lastIndexOf('/')) + 1);
 					name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
 					Main.setFilePath(path);
 					Main.setPagesFileName(name);
 					Main.load(false);
+					desktop.createNewInternalFrames();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -503,7 +506,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
 					path = file.getCanonicalPath();
-					path = path.substring(0, path.lastIndexOf('/') + 1);
+					path = path.substring(0, Math.max(path.lastIndexOf('\\'), path.lastIndexOf('/')) + 1);
 					name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
 					Main.setFilePath(path);
 					Main.setPagesFileName(name);
