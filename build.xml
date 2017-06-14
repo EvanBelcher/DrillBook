@@ -40,4 +40,24 @@
         <sleep seconds="5"/>
     </target>
 
+    <target name="makeStub">
+        <echo file="${code.dir}/stub.sh">
+            "#!/bin/sh
+            MYSELF=`which "$0" 2>/dev/null`
+            [ $? -gt 0 -a -f "$0" ] &amp;&amp; MYSELF="./$0"
+            java=java
+            if test -n "$JAVA_HOME"; then
+            java="$JAVA_HOME/bin/java"
+            fi
+            exec "$java" $java_args -jar $MYSELF "$@"
+            exit 1"
+        </echo>
+    </target>
+
+    <target name="makeRun" depends="makeStub">
+        <exec executable="sh">
+            <arg line="cat stub.sh &quot;${code.dir}/DrillSweet 2 v${code.version} Signed.jar&quot; > &quot;${code.dir}/DrillSweet 2 v${code.version}.run&quot; &amp;&amp; chmod +x &quot;${code.dir}/DrillSweet 2 v${code.version}.run&quot;"/>
+        </exec>
+    </target>
+
 </project>
