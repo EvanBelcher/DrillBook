@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.evanbelcher</groupId>
   <artifactId>DrillSweet2</artifactId>
   <name>DrillSweet 2</name>
-  <version>1.5.0</version>
+  <version>1.5.1</version>
   <description>DrillSweet 2 is a marching band drill creation software.</description>
   <url>https://github.com/EbMinor3/DrillSweet2</url>
   <licenses>
@@ -23,23 +21,23 @@
       </resource>
     </resources>
     <plugins>
-        <plugin>
-            <groupId>sh.tak.appbundler</groupId>
-            <artifactId>appbundle-maven-plugin</artifactId>
-            <version>1.2.0</version>
-            <executions>
-                <execution>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>bundle</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <mainClass>${mainClass}</mainClass>
-                <generateDiskImageFile>true</generateDiskImageFile>
-            </configuration>
-        </plugin>
+      <plugin>
+        <groupId>sh.tak.appbundler</groupId>
+        <artifactId>appbundle-maven-plugin</artifactId>
+        <version>1.2.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>${mainClass}</mainClass>
+          <generateDiskImageFile>true</generateDiskImageFile>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.5.1</version>

@@ -3,7 +3,7 @@
 
     <property file="build.properties"/>
 
-    <target name="run" depends="signJar,makeExe,signExe"/>
+    <target name="run" depends="makeRun"/>
 
     <target name="signJar">
         <signjar jar="${code.dir}/DrillSweet2-${code.version}.jar"
@@ -16,6 +16,7 @@
                  force="true"
         />
     </target>
+
 
     <target name="makeExe">
         <taskdef name="launch4j"
@@ -54,9 +55,22 @@
         </echo>
     </target>
 
-    <target name="makeRun" depends="makeStub">
-        <exec executable="sh">
-            <arg line="cat stub.sh &quot;${code.dir}/DrillSweet 2 v${code.version} Signed.jar&quot; > &quot;${code.dir}/DrillSweet 2 v${code.version}.run&quot; &amp;&amp; chmod +x &quot;${code.dir}/DrillSweet 2 v${code.version}.run&quot;"/>
+    <target name="makeExec">
+        <echo file="${code.dir}/run.sh">
+            cat &quot;${code.dir}/stub.sh&quot; &quot;${code.dir}/DrillSweet2-${code.version}.jar&quot; > &quot;${code.dir}/DrillSweet 2 v${code.version}.run&quot;
+            sudo chmod +x &quot;${code.dir}/DrillSweet 2 v${code.version}.run
+        </echo>
+    </target>
+
+    <target name="runExec" depends="makeStub,makeExec">
+        <exec executable="/bin/bash">
+            <arg line="${code.dir}/run.sh"/>
+        </exec>
+    </target>
+
+    <target name="makeRun" depends="runExec">
+        <exec executable="sudo">
+            <arg line="chmod +x &quot;${code.dir}/DrillSweet 2 v${code.version}.run&quot;"/>
         </exec>
     </target>
 

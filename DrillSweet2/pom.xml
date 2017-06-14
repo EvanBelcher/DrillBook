@@ -6,7 +6,7 @@
     <!-- Project Information -->
     <groupId>com.evanbelcher</groupId>
     <artifactId>DrillSweet2</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.1</version>
     <packaging>jar</packaging>
     <properties>
         <buildNumber>0</buildNumber>
@@ -99,7 +99,7 @@
                 <version>1.2.0</version>
                 <configuration>
                     <mainClass>${mainClass}</mainClass>
-                    <!--<jrePath>C:/Program Files/Java/jdk1.8.0_111</jrePath>-->
+                    <!--<jrePath>${java.home}</jrePath>-->
                     <generateDiskImageFile>true</generateDiskImageFile>
                 </configuration>
                 <executions>
