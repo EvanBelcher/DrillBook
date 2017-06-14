@@ -90,8 +90,8 @@ import java.util.concurrent.ConcurrentHashMap;
 	 * Loads the state and pageMap from the file system
 	 */
 	public static void load(boolean loadState) {
-		if (new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\").mkdirs()) {
-			state = new State(1, FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\", "show.ds2");
+		if (new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/DrillSweet2/").mkdirs()) {
+			state = new State(1, FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/DrillSweet2/", "show.ds2");
 			saveState();
 			pageMap = new PagesConcurrentHashMap();
 			savePages();
@@ -100,8 +100,8 @@ import java.util.concurrent.ConcurrentHashMap;
 				try {
 					loadState();
 				} catch (FileNotFoundException e) {
-					State.print("State file not found: " + FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + stateFileName);
-					state = new State(1, FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\", "show.ds2");
+					State.print("State file not found: " + FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/DrillSweet2/" + stateFileName);
+					state = new State(1, FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/DrillSweet2/", "show.ds2");
 					saveState();
 				}
 			}
@@ -128,7 +128,7 @@ import java.util.concurrent.ConcurrentHashMap;
 	 *                               load() method
 	 */
 	private static void loadState() throws FileNotFoundException {
-		File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + stateFileName);
+		File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/DrillSweet2/" + stateFileName);
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		state = gson.fromJson(br, State.class);
 		try {
@@ -232,7 +232,7 @@ import java.util.concurrent.ConcurrentHashMap;
 			throw new IllegalArgumentException("You can only pass in one filename, or none at all.");
 		Runnable r = () -> {
 			synchronized (state) {
-				String easyFileName = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + (filename.length == 0 ? stateFileName : filename[0]);
+				String easyFileName = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/DrillSweet2/" + (filename.length == 0 ? stateFileName : filename[0]);
 				if (easyFileName.indexOf('.') != -1)
 					easyFileName = easyFileName.substring(0, easyFileName.indexOf('.'));
 
@@ -252,7 +252,7 @@ import java.util.concurrent.ConcurrentHashMap;
 						e.printStackTrace();
 					}
 					String str = gson.toJson(state);
-					File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\DrillSweet2\\" + (filename.length == 0 ? stateFileName : filename[0]));
+					File f = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "/DrillSweet2/" + (filename.length == 0 ? stateFileName : filename[0]));
 					BufferedWriter bw;
 					try {
 						bw = new BufferedWriter(new FileWriter(f));

@@ -440,7 +440,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				try {
 					File file = fc.getSelectedFile();
 					path = file.getCanonicalPath();
-					path = path.substring(0, path.lastIndexOf('\\') + 1);
+					path = path.substring(0, path.lastIndexOf('/') + 1);
 					name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
 					Main.setFilePath(path);
 					Main.setPagesFileName(name);
@@ -472,7 +472,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 				try {
 					String name, path;
 					path = file.getCanonicalPath();
-					path = path.substring(0, path.lastIndexOf('\\') + 1);
+					path = path.substring(0, path.lastIndexOf('/') + 1);
 					name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
 					Main.setFilePath(path);
 					Main.setPagesFileName(name);
@@ -503,7 +503,7 @@ public class DS2MenuBar extends JMenuBar implements ActionListener {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
 					path = file.getCanonicalPath();
-					path = path.substring(0, path.lastIndexOf('\\') + 1);
+					path = path.substring(0, path.lastIndexOf('/') + 1);
 					name = file.getName().toLowerCase().endsWith(".ds2") ? file.getName() : file.getName() + ".ds2";
 					Main.setFilePath(path);
 					Main.setPagesFileName(name);
