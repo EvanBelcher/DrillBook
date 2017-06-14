@@ -57,7 +57,7 @@ public class PlayerInternalFrame extends JInternalFrame {
 		});
 		JButton rewind = new JButton(getIcon("rewind"));
 		rewind.addActionListener((ActionEvent e) -> state = "rewind");
-		JButton play = new JButton(getIcon("data"));
+		JButton play = new JButton(getIcon("play"));
 		play.addActionListener((ActionEvent e) -> state = "data");
 		JButton pause = new JButton(getIcon("pause"));
 		pause.addActionListener((ActionEvent e) -> state = "pause");

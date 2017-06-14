@@ -88,8 +88,6 @@
         <resources>
             <resource>
                 <directory>${resourceDir}</directory>
-                <filtering>false</filtering>
-                <targetPath>.</targetPath>
             </resource>
         </resources>
 

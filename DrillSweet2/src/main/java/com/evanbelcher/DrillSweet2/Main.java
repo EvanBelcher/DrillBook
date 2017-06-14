@@ -1,21 +1,3 @@
-/*
-		Drill Sweet 2 is a marching band drill creation software.
-		Copyright (C) 2017  Evan Belcher
-
-		This program is free software: you can redistribute it and/or modify
-		it under the terms of the GNU General Public License as published by
-		the Free Software Foundation, either version 3 of the License, or
-		(at your option) any later version.
-
-		This program is distributed in the hope that it will be useful,
-		but WITHOUT ANY WARRANTY; without even the implied warranty of
-		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-		GNU General Public License for more details.
-
-		You should have received a copy of the GNU General Public License
-		along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 package com.evanbelcher.DrillSweet2;
 
 import com.evanbelcher.DrillSweet2.data.*;
@@ -43,7 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 	private static State state;
 	private static GraphicsRunner graphicsRunner;
 	private static final String[] versions = { "1.0.0", "1.1.0", "1.2.0", "1.2.1", "1.3.0", "1.4.0", "1.4.1", "1.5.0" };
-
 	private static Gson gson;
 
 	/**
@@ -64,7 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
 		if (files != null)
 			for (File f : files)
 				for (int i = 0; i < versions.length - 1; i++)
-					if (f.getName().equals("DrillSweet 2 v" + versions[i] + ".exe"))
+					if (f.getName().equals("DrillSweet.2.v" + versions[i] + ".exe"))
 						f.delete();
 	}
 

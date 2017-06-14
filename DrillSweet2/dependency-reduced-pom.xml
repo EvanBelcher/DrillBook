@@ -19,7 +19,6 @@
   <build>
     <resources>
       <resource>
-        <targetPath>.</targetPath>
         <directory>${resourceDir}</directory>
       </resource>
     </resources>
