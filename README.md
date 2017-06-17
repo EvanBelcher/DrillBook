@@ -1,5 +1,5 @@
-# Drill Sweet 2
-Drill Sweet 2 is a marching band drill creation software. It is designed to help drill writers and band directors create, edit, and print drill pages with ease and control.
+# DrillBook
+DrillBook is a marching band drill creation software. It is designed to help drill writers and band directors create, edit, and print drill pages with ease and control.
 
 ## Features
 - Pages saved in JSON format in DS2 files
@@ -34,8 +34,4 @@ Drill Sweet 2 is a marching band drill creation software. It is designed to help
 ### Dot Sheet Sample:
 ![Dot Sheet Sample](../master/dotsheet-sample.png "Dot Sheet Sample")
 
-## FAQ
-### What happened to Drill Sweet 1?
-Nobody needs to know.
-
-### Drill Sweet 2 was written by [Evan Belcher](http://evanbelcher.com) in [2016](https://www.youtube.com/watch?v=G9t2H1fC2hY).
+### DrillBook was written by [Evan Belcher](http://evanbelcher.com) starting in 2016. [Isaac Shiekh](http://www.isaacsheikh.com) was brought on to the project in mid-2017.
