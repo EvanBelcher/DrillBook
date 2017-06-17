@@ -34,4 +34,4 @@ DrillBook is a marching band drill creation software. It is designed to help dri
 ### Dot Sheet Sample:
 ![Dot Sheet Sample](../master/dotsheet-sample.png "Dot Sheet Sample")
 
-### Drill Sweet 2 was written by [Evan Belcher](http://evanbelcher.com) starting in 2016. [Isaac Shiekh](http://www.isaacsheikh.com) was brought on to the project in mid-2017.
+### DrillBook was written by [Evan Belcher](http://evanbelcher.com) starting in 2016. [Isaac Shiekh](http://www.isaacsheikh.com) was brought on to the project in mid-2017.
