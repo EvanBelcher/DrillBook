@@ -2,7 +2,7 @@
 DrillBook is a marching band drill creation software. It is designed to help drill writers and band directors create, edit, and print drill pages with ease and control.
 
 ## Features
-- Pages saved in JSON format in DS2 files
+- Pages saved in JSON format in .drill files
 - Application state saved
 - Simple click to add a dot
 - Click and drag dot to move
