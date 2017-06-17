@@ -11,8 +11,8 @@
     <target name="runUnix" depends="makeRun"/>
 
     <target name="signJar">
-        <signjar jar="${code.dir}/DrillSweet2-${code.version}.jar"
-                 signedJar="${code.dir}/DrillSweet 2 v${code.version}.jar"
+        <signjar jar="${code.dir}/${code.name}-${code.version}.jar"
+                 signedJar="${code.dir}/${code.name} v${code.version}.jar"
                  alias="${auth.alias}"
                  keystore="${auth.keystore}"
                  storepass="${auth.pass}"
@@ -31,14 +31,14 @@
         />
 
         <launch4j configFile="${launch4j.config}"
-                  jar="${code.dir}/DrillSweet 2 v${code.version}.jar"
-                  outfile="${code.dir}/DrillSweet 2 v${code.version}.exe"
+                  jar="${code.dir}/${code.name} v${code.version}.jar"
+                  outfile="${code.dir}/${code.name} v${code.version}.exe"
         />
     </target>
 
     <target name="signExe" depends="wait">
         <exec executable="${launch4j.dir}/sign4j/sign4j.exe">
-            <arg line="--verbose java -jar &quot;${jsign.dir}/jsign-2.0.jar&quot; -s &quot;${auth.keystore}&quot; -a ${auth.alias} --storepass ${auth.pass} --tsaurl ${auth.tsaurl} &quot;${code.dir}/DrillSweet 2 v${code.version}.exe&quot;"/>
+            <arg line="--verbose java -jar &quot;${jsign.dir}/jsign-2.0.jar&quot; -s &quot;${auth.keystore}&quot; -a ${auth.alias} --storepass ${auth.pass} --tsaurl ${auth.tsaurl} &quot;${code.dir}/${code.name} v${code.version}.exe&quot;"/>
         </exec>
     </target>
 
@@ -62,8 +62,8 @@
 
     <target name="makeExec">
         <echo file="${code.dir}/run.sh">
-            cat &quot;${code.dir}/stub.sh&quot; &quot;${code.dir}/DrillSweet2-${code.version}.jar&quot; > &quot;${code.dir}/DrillSweet 2 v${code.version}.run&quot;
-            sudo chmod +x &quot;${code.dir}/DrillSweet 2 v${code.version}.run
+            cat &quot;${code.dir}/stub.sh&quot; &quot;${code.dir}/${code.name}-${code.version}.jar&quot; > &quot;${code.dir}/${code.name} v${code.version}.run&quot;
+            sudo chmod +x &quot;${code.dir}/${code.name} v${code.version}.run
         </echo>
     </target>
 
@@ -75,7 +75,7 @@
 
     <target name="makeRun" depends="runExec">
         <exec executable="sudo">
-            <arg line="chmod +x &quot;${code.dir}/DrillSweet 2 v${code.version}.run&quot;"/>
+            <arg line="chmod +x &quot;${code.dir}/${code.name} v${code.version}.run&quot;"/>
         </exec>
     </target>
 

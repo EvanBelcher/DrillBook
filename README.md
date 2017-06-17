@@ -22,7 +22,7 @@ Drill Sweet 2 is a marching band drill creation software. It is designed to help
 - Play the move from the previous to current pages. Get automatically notified about extremely far moves and possible collisions
 - Supports both High School and College hashes
 
-## [Usage](../master/DrillSweet%202/src/main/resources/Usage.md)
+## [Usage](../master/DrillBook/src/main/resources/Usage.md)
 
 ## Samples
 ### UI Sample:
