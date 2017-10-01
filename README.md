@@ -1,3 +1,8 @@
+# Update
+You may be wondering about the seemingly-stagnant codebase of DrillBook over the past months. Don't fear -- this project is not dead. On the contrary, it's going through a glorious rebirth. We are recreating DrillBook using Electron instead of Java Swing. This will give the project a much (MUCH!) cleaner, more intuitive, and more flexible UI. It will also ease the cross-platform installation process. These benefits, plus the "now we know better" changes we're implementing in the new design means that DrillBook will be back and better than ever.
+
+### TL;DR: This repo hasn't been active because we're revamping the technology behind the scenes. Please be patient; you won't regret it!
+
 # DrillBook
 DrillBook is a marching band drill creation software. It is designed to help drill writers and band directors create, edit, and print drill pages with ease and control.
 
